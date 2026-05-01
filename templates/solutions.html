@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Solutions - BailKey Institutional</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "card": "oklch(1 0 0)",
+                            "on-surface-variant": "#3d4949",
+                            "on-secondary-fixed-variant": "#434749",
+                            "primary-fixed-dim": "#60d8d9",
+                            "border": "oklch(0.925 0.005 214.3)",
+                            "on-secondary-fixed": "#181c1e",
+                            "on-tertiary-fixed-variant": "#763306",
+                            "surface-tint": "#00696a",
+                            "surface-container-highest": "#dee4e3",
+                            "primary-fixed": "#7ff5f5",
+                            "on-secondary": "#ffffff",
+                            "surface-dim": "#d6dbda",
+                            "secondary-foreground": "oklch(0.21 0.006 285.885)",
+                            "on-tertiary-container": "#602600",
+                            "tertiary-fixed-dim": "#ffb691",
+                            "on-error": "#ffffff",
+                            "surface-variant": "#dee4e3",
+                            "primary-foreground": "oklch(0.984 0.014 180.72)",
+                            "primary": "oklch(0.511 0.096 186.391)",
+                            "on-error-container": "#93000a",
+                            "on-primary": "#ffffff",
+                            "surface-container": "#eaefee",
+                            "surface": "#f5fafa",
+                            "secondary-fixed": "#e0e3e5",
+                            "on-tertiary-fixed": "#341100",
+                            "surface-container-high": "#e4e9e8",
+                            "glass-border": "rgba(255, 255, 255, 0.6)",
+                            "secondary-container": "#dde0e2",
+                            "on-tertiary": "#ffffff",
+                            "surface-container-lowest": "#ffffff",
+                            "on-surface": "#171d1d",
+                            "primary-container": "#2eb1b2",
+                            "inverse-surface": "#2c3131",
+                            "foreground": "oklch(0.148 0.004 228.8)",
+                            "inverse-on-surface": "#ecf2f1",
+                            "inverse-primary": "#60d8d9",
+                            "secondary": "oklch(0.967 0.001 286.375)",
+                            "muted-foreground": "oklch(0.56 0.021 213.5)",
+                            "on-background": "#171d1d",
+                            "accent-foreground": "oklch(0.218 0.008 223.9)",
+                            "surface-container-low": "#eff5f4",
+                            "destructive": "oklch(0.577 0.245 27.325)",
+                            "accent": "oklch(0.963 0.002 197.1)",
+                            "on-primary-fixed": "#002020",
+                            "background": "oklch(1 0 0)",
+                            "ring": "oklch(0.723 0.014 214.4)",
+                            "on-primary-container": "#003e3f",
+                            "muted": "oklch(0.963 0.002 197.1)",
+                            "error": "#ba1a1a",
+                            "secondary-fixed-dim": "#c4c7c9",
+                            "tertiary-fixed": "#ffdbcb",
+                            "tertiary-container": "#e58957",
+                            "on-primary-fixed-variant": "#004f50",
+                            "tertiary": "#94491d",
+                            "error-container": "#ffdad6",
+                            "outline-variant": "#bcc9c9",
+                            "surface-bright": "#f5fafa",
+                            "on-secondary-container": "#5f6365",
+                            "outline": "#6d7a79"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0px",
+                            "lg": "0px",
+                            "xl": "0px",
+                            "full": "0px",
+                            "none": "0px"
+                    },
+                    "spacing": {
+                            "margin": "2rem",
+                            "sm": "1rem",
+                            "lg": "2.5rem",
+                            "gutter": "1.5rem",
+                            "base": "0.25rem",
+                            "md": "1.5rem",
+                            "xs": "0.5rem",
+                            "xl": "4rem"
+                    },
+                    "fontFamily": {
+                            "h2": ["Manrope"],
+                            "h1": ["Manrope"],
+                            "body-md": ["Inter"],
+                            "label-caps": ["Inter"],
+                            "h3": ["Manrope"],
+                            "display": ["Manrope"],
+                            "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                            "h2": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                            "h1": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                            "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                            "label-caps": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                            "h3": ["20px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                            "display": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                            "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.6));
+        }
+        .ambient-shadow {
+            box-shadow: 0 32px 64px -16px rgba(0, 105, 106, 0.1);
+        }
+        .glow-line {
+            background: linear-gradient(90deg, transparent, rgba(96, 216, 217, 0.8), transparent);
+            height: 1px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 shadow-[0_8px_32px_rgba(0,0,0,0.05)] font-['Manrope'] antialiased">
+<div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between rounded-none" id="nav-pill">
+<div class="flex items-center gap-2"><div class="flex items-center"><img alt="BailKey Logo" class="h-8 w-auto" id="logo-full" src="https://lh3.googleusercontent.com/aida/ADBb0uhAtIXlpoCNYlHTMZDfljkVC-sWu3Oo63hBJR3b7SxemL5p_c8I_cQ7WRu8mBlslOFkxjvYa76zYAWDGjqReF-HdJmVI-BVZaFoQ-NWnDIsaQ7TyMmYyHdJjOyP-EluuOhgUPAJ63IPR9Hdla2XgoAS7tUN0umfcpx6VkQUXJEvC-ji3mcJGnlDzp96ZIV69iZ_Q0FFD7CssynbNMFwWqXDSZEPwG19nShn_G3jl_7yUU0TjlL5HPat9G0b7Gh7lEMaweVO3EUR"/><img alt="BailKey Icon" class="h-8 w-auto hidden opacity-0" id="logo-icon" src="https://lh3.googleusercontent.com/aida/ADBb0ujcY3Ryu3PW2zs_SZLrSDPj20glEWciVBMQ8RWkR8zF4SgkqJ0i_0nGGRGAk7HHfkOlyPxIvRd3M8dgruauhFch87VjCvOKkV_U4SzLn1aMol5ed3jiaoecOsqCNdVaxb8Ru8QOmrC5q-f5pioWaIxnspU1szs34xPctLCWiFIZMdodrpXFs4PK-unv_Bm5rYbGZ3GnIKaF84fLdrMXrohesGFaG0hSqOQ0ek7TklicpahSyCkqqJ7kC8DvhVcKKUgHZfEQTUM7xg"/></div></div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300" href="#">Plateforme</a>
+<a class="text-teal-600 dark:text-teal-400 font-semibold border-b-2 border-teal-600 pb-1 hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300" href="#">Solutions</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300" href="#">Tarifs</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300" href="#">Ressources</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300">Connexion</button>
+<button class="bg-primary text-primary-foreground px-6 py-2 rounded-none font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">Commencer</button>
+</div>
+</div>
+</nav>
+<main class="pt-[88px]"> <!-- Offset for fixed header -->
+<!-- Hero Section -->
+<section class="relative bg-surface-container-lowest border-b border-border py-xl px-12 overflow-hidden flex items-center min-h-[716px]">
+<!-- Architectural grid overlay -->
+<div class="absolute inset-0 pointer-events-none opacity-[0.03]" style="background-image: linear-gradient(var(--on-surface) 1px, transparent 1px), linear-gradient(90deg, var(--on-surface) 1px, transparent 1px); background-size: 48px 48px;"></div>
+<div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+<div class="flex flex-col gap-6">
+<span class="font-label-caps text-label-caps text-primary uppercase">Architecture Institutionnelle</span>
+<h1 class="font-display text-display text-on-surface">Des solutions sur-mesure pour chaque bailleur.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                        Alliez efficacité opérationnelle et précision architecturale dans la gestion de votre parc immobilier. Une vision holistique pour un contrôle granulaire.
+                    </p>
+<div class="flex flex-wrap gap-4 mt-4">
+<button class="bg-primary text-primary-foreground font-h3 text-h3 px-8 py-3 hover:bg-primary-container hover:text-on-primary-container transition-all hover:shadow-lg">
+                            Découvrir Odoo 19
+                        </button>
+<button class="border border-outline text-on-surface font-h3 text-h3 px-8 py-3 hover:bg-surface-container transition-all">
+                            Voir l'Architecture
+                        </button>
+</div>
+</div>
+<div class="relative h-[500px] w-full ambient-shadow bg-surface-container border border-border">
+<img alt="Façade de bâtiment en verre moderne" class="w-full h-full object-cover grayscale-[20%] contrast-[1.1]" data-alt="Modern glass building facade reflecting sky, clean architectural lines, corporate premium real estate, daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF0ouT2rMGlbbWFQDjetX0rAyvrbM_-7cfZW8yL7x9FTQmXglB8GPmHUL-SRvYJcMIdHgAPmTpnRuxM-X7zh1Bn0zctpXyn9ifm5LmnQsbaJ8nkA8HX244If7vgyxXNvFR0s9WQ_9Wcyq171aHkzkoMroLI4DGV6XQlZ7IApiNyQ2Ddj95EKbVb79OwKQcnd-vtUHpgwe3jTkhgNYq40yeVM2eRVJspBwn9qAA4xkqEXH36SRSozWiTibQDH_ENej-3IxsfE6_uU4"/>
+<!-- Floating Data Card -->
+<div class="absolute bottom-8 -left-8 glass-panel p-6 border-l-4 border-l-primary w-72">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Taux d'occupation</span>
+<span class="material-symbols-outlined text-primary" data-icon="show_chart">show_chart</span>
+</div>
+<div class="font-h1 text-h1 text-on-surface">98.4%</div>
+<div class="glow-line my-4"></div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">+1.2% ce trimestre</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 1: Gestion des Baux -->
+<section class="py-xl px-12 bg-surface">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+<div class="max-w-2xl">
+<h2 class="font-h2 text-h2 text-on-surface mb-4">Gestion des Baux &amp; Automatisation</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">La fondation de votre architecture de gestion. Centralisez, automatisez et sécurisez l'ensemble du cycle de vie de vos contrats de location avec Odoo 19.</p>
+</div>
+<span class="font-label-caps text-label-caps text-primary border border-primary px-4 py-2 uppercase tracking-widest">Module Odoo 19</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Feature Card 1 -->
+<div class="bg-surface-container border border-border p-8 hover:-translate-y-1 transition-transform duration-300 group">
+<div class="w-12 h-12 bg-primary-container text-on-primary-container flex items-center justify-center mb-6">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-3">Contrats Intelligents</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Génération dynamique de baux commerciaux et d'habitation, signatures électroniques intégrées.</p>
+<div class="mt-6 w-8 h-1 bg-primary group-hover:w-full transition-all duration-500"></div>
+</div>
+<!-- Feature Card 2 -->
+<div class="bg-surface-container border border-border p-8 hover:-translate-y-1 transition-transform duration-300 group">
+<div class="w-12 h-12 bg-primary-container text-on-primary-container flex items-center justify-center mb-6">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-3">Quittances Automatisées</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Émission et envoi planifiés des avis d'échéance et quittances. Historique traçable.</p>
+<div class="mt-6 w-8 h-1 bg-primary group-hover:w-full transition-all duration-500"></div>
+</div>
+<!-- Feature Card 3 -->
+<div class="bg-surface-container border border-border p-8 hover:-translate-y-1 transition-transform duration-300 group">
+<div class="w-12 h-12 bg-primary-container text-on-primary-container flex items-center justify-center mb-6">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-3">Indexation ILAT/ICC</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Calcul automatique des révisions de loyer basées sur les indices de référence officiels.</p>
+<div class="mt-6 w-8 h-1 bg-primary group-hover:w-full transition-all duration-500"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Suivi Financier (Bento Layout) -->
+<section class="py-xl px-12 bg-surface-container-lowest border-y border-border">
+<div class="max-w-7xl mx-auto">
+<div class="mb-12">
+<h2 class="font-h2 text-h2 text-on-surface mb-4">Suivi Financier &amp; Trésorerie</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Une visibilité chirurgicale sur les flux de trésorerie. De l'encaissement au traitement des moratoires, gardez le contrôle total.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-4 h-auto md:h-[600px]">
+<!-- Bento Large Image -->
+<div class="md:col-span-2 md:row-span-2 relative bg-surface-container border border-border overflow-hidden">
+<img alt="Tableau de bord financier" class="w-full h-full object-cover opacity-80 mix-blend-luminosity" data-alt="Close up of a computer screen showing complex financial data graphs and charts in a dark mode interface, sharp focus" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8kPcKu1oiKoIQ06mQB3l_1lIxWQlNRSORyF-v2OgQj3QqRPWtu-gW1PYjESLygeBNYMAePgOzCbc-Y4IiItDEaEUy5LZ17BV0J1hpM9HtjA2b4ci6k8dxS1OI21h4obxcgLpLdT-a0C1zAoBMy1H0ao3sjy0dOJ7GNhaWdVvvqevHMLQ6tOKXPRBqCqKQUz4yDI7pg1jmZkSXbcNL_suElNMxBLq_2G6C5-gE7HnX6h2G_gF7pIgrr44FbEWV6ukSJbj-q6fy2yc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8">
+<div class="font-label-caps text-label-caps text-primary mb-2">Module Cashbox</div>
+<h3 class="font-h2 text-h2 text-on-surface">Rapprochement Bancaire</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Synchronisation en temps réel avec vos comptes de gestion.</p>
+</div>
+</div>
+<!-- Bento Small 1 -->
+<div class="md:col-span-2 md:row-span-1 bg-surface-container border border-border p-6 flex flex-col justify-center">
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 bg-error-container text-on-error-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+</div>
+<div>
+<h3 class="font-h3 text-h3 text-on-surface mb-2">Gestion des Impayés</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Workflows de relance automatisés et transmission au contentieux.</p>
+</div>
+</div>
+</div>
+<!-- Bento Small 2 -->
+<div class="md:col-span-1 md:row-span-1 bg-primary text-primary-foreground p-6 flex flex-col justify-between">
+<span class="material-symbols-outlined text-3xl" data-icon="account_balance">account_balance</span>
+<div>
+<div class="font-h1 text-h1">2.4M€</div>
+<div class="font-label-caps text-label-caps mt-1 opacity-80">Encaissements Mensuels</div>
+</div>
+</div>
+<!-- Bento Small 3 -->
+<div class="md:col-span-1 md:row-span-1 bg-surface-container border border-border p-6 flex flex-col justify-center">
+<h3 class="font-h3 text-h3 text-on-surface mb-2">Moratoires</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">Échéanciers structurés et suivi des paiements partiels.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Maintenance & Opérations -->
+<section class="py-xl px-12 bg-surface">
+<div class="max-w-7xl mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="order-2 lg:order-1 relative p-8 bg-surface-container border border-border">
+<!-- Technical diagram representation -->
+<div class="space-y-6">
+<div class="flex items-center gap-4 p-4 bg-surface border-l-2 border-primary">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="engineering">engineering</span>
+<div class="flex-1">
+<div class="font-label-caps text-label-caps text-on-surface">Intervention Plomberie - Bât. A</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">Prestataire: Aquatech SAS</div>
+</div>
+<span class="px-2 py-1 bg-surface-container-high text-xs font-semibold">En cours</span>
+</div>
+<div class="glow-line"></div>
+<div class="flex items-center gap-4 p-4 bg-surface border-l-2 border-surface-dim">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="hvac">hvac</span>
+<div class="flex-1">
+<div class="font-label-caps text-label-caps text-on-surface">Maintenance CVC Annuelle</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">Planifiée: 12 Nov 2024</div>
+</div>
+<span class="px-2 py-1 bg-surface-container-low text-xs font-semibold">À venir</span>
+</div>
+<div class="glow-line"></div>
+<div class="flex items-center gap-4 p-4 bg-surface border-l-2 border-surface-dim">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="cleaning_services">cleaning_services</span>
+<div class="flex-1">
+<div class="font-label-caps text-label-caps text-on-surface">Nettoyage Parties Communes</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">Rapport quotidien validé</div>
+</div>
+<span class="px-2 py-1 bg-primary text-primary-foreground text-xs font-semibold">Terminé</span>
+</div>
+</div>
+</div>
+<div class="order-1 lg:order-2">
+<h2 class="font-h2 text-h2 text-on-surface mb-6">Maintenance &amp; Opérations</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-8">Coordonnez les interventions techniques avec une précision d'horloger. Gérez vos prestataires et optimisez la récupération des charges.</p>
+<ul class="space-y-6">
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-primary mt-1" data-icon="check_box">check_box</span>
+<div>
+<strong class="font-h3 text-h3 text-on-surface block mb-1">Gestion des Travaux</strong>
+<span class="font-body-md text-body-md text-on-surface-variant">Du devis à la réception, suivez chaque étape des interventions lourdes.</span>
+</div>
+</li>
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-primary mt-1" data-icon="check_box">check_box</span>
+<div>
+<strong class="font-h3 text-h3 text-on-surface block mb-1">Personnel de Terrain</strong>
+<span class="font-body-md text-body-md text-on-surface-variant">Plannings, bons d'intervention mobiles et validation des passages.</span>
+</div>
+</li>
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-primary mt-1" data-icon="check_box">check_box</span>
+<div>
+<strong class="font-h3 text-h3 text-on-surface block mb-1">Charges Récupérables</strong>
+<span class="font-body-md text-body-md text-on-surface-variant">Ventilation analytique et reddition annuelle automatisée.</span>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: Digitalisation & Expérience -->
+<section class="py-xl px-12 bg-on-surface text-surface-container-lowest">
+<div class="max-w-7xl mx-auto text-center mb-16">
+<h2 class="font-h2 text-h2 mb-4">Digitalisation &amp; Expérience</h2>
+<p class="font-body-md text-body-md text-surface-variant max-w-2xl mx-auto">Offrez une expérience premium à vos locataires grâce à nos interfaces connectées, développées sous Flutter pour une fluidité absolue.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<div class="text-center group">
+<div class="w-20 h-20 mx-auto bg-surface/10 border border-surface/20 flex items-center justify-center mb-6 group-hover:bg-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-3xl" data-icon="smartphone">smartphone</span>
+</div>
+<h3 class="font-h3 text-h3 mb-3">App Mobile Flutter</h3>
+<p class="font-body-md text-body-md text-surface-dim">Application native iOS &amp; Android pour un accès instantané aux documents et demandes d'intervention.</p>
+</div>
+<div class="text-center group">
+<div class="w-20 h-20 mx-auto bg-surface/10 border border-surface/20 flex items-center justify-center mb-6 group-hover:bg-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-3xl" data-icon="web">web</span>
+</div>
+<h3 class="font-h3 text-h3 mb-3">Portail Locataire</h3>
+<p class="font-body-md text-body-md text-surface-dim">Espace web sécurisé pour le paiement des loyers, l'historique et la communication avec le gestionnaire.</p>
+</div>
+<div class="text-center group">
+<div class="w-20 h-20 mx-auto bg-surface/10 border border-surface/20 flex items-center justify-center mb-6 group-hover:bg-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-3xl" data-icon="notifications_active">notifications_active</span>
+</div>
+<h3 class="font-h3 text-h3 mb-3">Notifications Push</h3>
+<p class="font-body-md text-body-md text-surface-dim">Alertes en temps réel pour les échéances, travaux dans l'immeuble ou colis en attente.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant/30 pt-16 pb-8 rounded-none" id="footer">
+<div class="container mx-auto px-12 max-w-7xl">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+<div class="lg:col-span-2">
+<img alt="BailKey Logo" class="h-8 w-auto mb-6" src="https://lh3.googleusercontent.com/aida/ADBb0uhAtIXlpoCNYlHTMZDfljkVC-sWu3Oo63hBJR3b7SxemL5p_c8I_cQ7WRu8mBlslOFkxjvYa76zYAWDGjqReF-HdJmVI-BVZaFoQ-NWnDIsaQ7TyMmYyHdJjOyP-EluuOhgUPAJ63IPR9Hdla2XgoAS7tUN0umfcpx6VkQUXJEvC-ji3mcJGnlDzp96ZIV69iZ_Q0FFD7CssynbNMFwWqXDSZEPwG19nShn_G3jl_7yUU0TjlL5HPat9G0b7Gh7lEMaweVO3EUR"/>
+<p class="text-sm text-on-surface-variant mb-6 max-w-sm">
+                        La plateforme logicielle de référence pour les gestionnaires de patrimoine immobilier. Centralisez, analysez et optimisez vos actifs en toute sécurité.
+                    </p>
+<div class="flex gap-4">
+<a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors gsap-button rounded-none" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="language">language</span>
+</a>
+<a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors gsap-button rounded-none" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="mail">mail</span>
+</a>
+<a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors gsap-button rounded-none" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="phone">phone</span>
+</a>
+</div>
+</div>
+<div>
+<h4 class="font-h3 text-base font-semibold text-on-surface mb-6">Produit</h4>
+<ul class="flex flex-col gap-3 text-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" href="#">Solutions</a></li><li><a class="hover:text-primary transition-colors" href="#">Fonctionnalités</a></li><li><a class="hover:text-primary transition-colors" href="#">Tarifs</a></li><li><a class="hover:text-primary transition-colors" href="#">Témoignages</a></li><li><a class="hover:text-primary transition-colors" href="#">Sécurité</a></li></ul>
+</div>
+<div>
+<h4 class="font-h3 text-base font-semibold text-on-surface mb-6">Ressources</h4>
+<ul class="flex flex-col gap-3 text-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" href="#">Centre d'aide</a></li><li><a class="hover:text-primary transition-colors" href="#">Études de cas</a></li><li><a class="hover:text-primary transition-colors" href="#">Blog</a></li><li><a class="hover:text-primary transition-colors" href="#">Webinaires</a></li></ul>
+</div>
+<div>
+<h4 class="font-h3 text-base font-semibold text-on-surface mb-6">Société</h4>
+<ul class="flex flex-col gap-3 text-sm text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">À propos</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Carrières</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Partenaires</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-outline-variant/30 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-on-surface-variant">
+                    © 2024 BailKey Asset Management. Tous droits réservés.
+                </p>
+<div class="flex gap-6 text-xs text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="#">Mentions Légales</a>
+<a class="hover:text-primary transition-colors" href="#">Politique de Confidentialité</a>
+<a class="hover:text-primary transition-colors" href="#">CGU</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+    gsap.registerPlugin(ScrollTrigger);
+    
+    const navTimeline = gsap.timeline({
+        scrollTrigger: {
+            trigger: "body",
+            start: "top top",
+            end: "top -100",
+            scrub: 1,
+        }
+    });
+
+    navTimeline.to("#nav-pill", { 
+        width: "70%", 
+        paddingTop: "0.75rem", 
+        paddingBottom: "0.75rem",
+        boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+        backgroundColor: "rgba(255, 255, 255, 0.95)",
+        ease: "power2.inOut",
+        borderRadius: "0px"
+    }, 0);
+
+    navTimeline.to("#logo-full", { opacity: 0, display: "none", duration: 0.2 }, 0);
+    navTimeline.to("#logo-icon", { opacity: 1, display: "block", duration: 0.2 }, 0.1);
+</script>
+</body></html>

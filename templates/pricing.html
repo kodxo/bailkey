@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BailKey - Tarification</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script><script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#ffdbcb",
+                      "ring": "oklch(0.723 0.014 214.4)",
+                      "surface-bright": "#f5fafa",
+                      "on-tertiary-fixed": "#341100",
+                      "on-tertiary-container": "#602600",
+                      "surface": "#f5fafa",
+                      "error-container": "#ffdad6",
+                      "surface-container-low": "#eff5f4",
+                      "on-primary": "#ffffff",
+                      "surface-container-highest": "#dee4e3",
+                      "secondary-container": "#dde0e2",
+                      "surface-container-lowest": "#ffffff",
+                      "muted": "oklch(0.963 0.002 197.1)",
+                      "surface-dim": "#d6dbda",
+                      "tertiary": "#94491d",
+                      "secondary-fixed-dim": "#c4c7c9",
+                      "secondary-fixed": "#e0e3e5",
+                      "on-primary-fixed-variant": "#004f50",
+                      "on-background": "#171d1d",
+                      "on-primary-fixed": "#002020",
+                      "border": "oklch(0.925 0.005 214.3)",
+                      "on-secondary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "inverse-surface": "#2c3131",
+                      "surface-tint": "#00696a",
+                      "secondary-foreground": "oklch(0.21 0.006 285.885)",
+                      "tertiary-fixed-dim": "#ffb691",
+                      "tertiary-container": "#e58957",
+                      "primary-container": "#2eb1b2",
+                      "accent-foreground": "oklch(0.218 0.008 223.9)",
+                      "muted-foreground": "oklch(0.56 0.021 213.5)",
+                      "on-tertiary-fixed-variant": "#763306",
+                      "on-secondary-fixed-variant": "#434749",
+                      "inverse-primary": "#60d8d9",
+                      "glass-border": "rgba(255, 255, 255, 0.6)",
+                      "primary-foreground": "oklch(0.984 0.014 180.72)",
+                      "outline": "#6d7a79",
+                      "background": "oklch(1 0 0)",
+                      "on-secondary-fixed": "#181c1e",
+                      "accent": "oklch(0.963 0.002 197.1)",
+                      "primary": "oklch(0.511 0.096 186.391)",
+                      "surface-variant": "#dee4e3",
+                      "surface-container-high": "#e4e9e8",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "oklch(0.967 0.001 286.375)",
+                      "on-secondary-container": "#5f6365",
+                      "surface-container": "#eaefee",
+                      "card": "oklch(1 0 0)",
+                      "primary-fixed-dim": "#60d8d9",
+                      "on-primary-container": "#003e3f",
+                      "destructive": "oklch(0.577 0.245 27.325)",
+                      "on-error": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-surface": "#171d1d",
+                      "outline-variant": "#bcc9c9",
+                      "inverse-on-surface": "#ecf2f1",
+                      "primary-fixed": "#7ff5f5",
+                      "on-surface-variant": "#3d4949",
+                      "foreground": "oklch(0.148 0.004 228.8)"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px",
+                      "none": "0px"
+              },
+              "spacing": {
+                      "lg": "2.5rem",
+                      "xl": "4rem",
+                      "base": "0.25rem",
+                      "margin": "2rem",
+                      "xs": "0.5rem",
+                      "sm": "1rem",
+                      "md": "1.5rem",
+                      "gutter": "1.5rem"
+              },
+              "fontFamily": {
+                      "h2": [
+                              "Manrope"
+                      ],
+                      "h3": [
+                              "Manrope"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "h1": [
+                              "Manrope"
+                      ],
+                      "display": [
+                              "Manrope"
+                      ]
+              },
+              "fontSize": {
+                      "h2": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "h3": [
+                              "20px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "h1": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+      </style>
+</head>
+<body class="bg-background text-on-background antialiased font-body-md overflow-x-hidden selection:bg-primary selection:text-primary-foreground">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 shadow-[0_8px_32px_rgba(0,0,0,0.05)] font-['Manrope'] antialiased">
+<div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between" id="nav-pill">
+<div class="flex items-center gap-2"><div class="flex items-center"><img alt="BailKey Logo" class="h-8 w-auto" id="logo-full" src="https://lh3.googleusercontent.com/aida/ADBb0uhAtIXlpoCNYlHTMZDfljkVC-sWu3Oo63hBJR3b7SxemL5p_c8I_cQ7WRu8mBlslOFkxjvYa76zYAWDGjqReF-HdJmVI-BVZaFoQ-NWnDIsaQ7TyMmYyHdJjOyP-EluuOhgUPAJ63IPR9Hdla2XgoAS7tUN0umfcpx6VkQUXJEvC-ji3mcJGnlDzp96ZIV69iZ_Q0FFD7CssynbNMFwWqXDSZEPwG19nShn_G3jl_7yUU0TjlL5HPat9G0b7Gh7lEMaweVO3EUR"/><img alt="BailKey Icon" class="h-8 w-auto hidden opacity-0" id="logo-icon" src="https://lh3.googleusercontent.com/aida/ADBb0ujcY3Ryu3PW2zs_SZLrSDPj20glEWciVBMQ8RWkR8zF4SgkqJ0i_0nGGRGAk7HHfkOlyPxIvRd3M8dgruauhFch87VjCvOKkV_U4SzLn1aMol5ed3jiaoecOsqCNdVaxb8Ru8QOmrC5q-f5pioWaIxnspU1szs34xPctLCWiFIZMdodrpXFs4PK-unv_Bm5rYbGZ3GnIKaF84fLdrMXrohesGFaG0hSqOQ0ek7TklicpahSyCkqqJ7kC8DvhVcKKUgHZfEQTUM7xg"/></div></div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300" href="#">Plateforme</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300" href="#">Solutions</a>
+<a class="text-teal-600 dark:text-teal-400 font-semibold border-b-2 border-teal-600 pb-1 hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300" href="#">Tarifs</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300" href="#">Ressources</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300">Connexion</button>
+<button class="bg-primary text-primary-foreground px-6 py-2 rounded-none font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">Commencer</button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="pt-32 pb-16 px-6 max-w-7xl mx-auto text-center">
+<h1 class="font-display text-display text-on-background mb-4 max-w-4xl mx-auto tracking-tight">Une tarification transparente pour votre patrimoine.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-12">Choisissez le plan adapté à vos besoins de gestion locative.</p>
+<!-- Toggle -->
+<div class="inline-flex items-center bg-surface-container p-1 rounded-none border border-outline-variant">
+<button class="px-6 py-2 bg-background shadow-sm text-on-background font-body-md font-medium rounded-none">Mensuel</button>
+<button class="px-6 py-2 text-on-surface-variant font-body-md font-medium rounded-none flex items-center gap-2">
+                Annuel <span class="bg-tertiary-container text-on-tertiary-container font-label-caps text-label-caps px-2 py-0.5 rounded-none">Économisez 20%</span>
+</button>
+</div>
+</section>
+<!-- Pricing Cards -->
+<section class="px-6 max-w-7xl mx-auto pb-xl relative z-10">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter items-stretch">
+<!-- Starter -->
+<div class="bg-surface border border-outline-variant p-8 flex flex-col rounded-none relative">
+<div class="mb-8">
+<h3 class="font-h3 text-h3 text-on-surface mb-2">Starter</h3>
+<p class="font-body-md text-body-md text-on-surface-variant min-h-[48px]">Idéal pour démarrer avec un petit portefeuille immobilier.</p>
+</div>
+<div class="mb-8">
+<span class="font-display text-display text-on-background">Gratuit</span>
+</div>
+<button class="w-full border-2 border-primary text-primary font-body-md font-semibold py-3 rounded-none mb-8 hover:bg-primary/5 transition-colors">Commencer</button>
+<ul class="space-y-4 flex-1">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">check</span>
+<span class="font-body-md text-body-md text-on-surface">Gestion des Baux</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">check</span>
+<span class="font-body-md text-body-md text-on-surface">Quittances de Loyer</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">check</span>
+<span class="font-body-md text-body-md text-on-surface">Tableau de Bord Basique</span>
+</li>
+<li class="flex items-start gap-3"><span class="material-symbols-outlined text-primary text-[20px]">check</span><span class="font-body-md text-body-md text-on-surface">Nombre Max de Biens: 3</span></li><li class="flex items-start gap-3"><span class="material-symbols-outlined text-primary text-[20px]">check</span><span class="font-body-md text-body-md text-on-surface">Nombre Max d'Utilisateurs: 1</span></li></ul>
+</div>
+<!-- Pro -->
+<div class="bg-background border-2 border-primary p-8 flex flex-col rounded-none relative shadow-[0_32px_64px_-16px_rgba(46,177,178,0.15)] transform md:-translate-y-4">
+<div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground font-label-caps text-label-caps px-4 py-1 rounded-none">
+                    LE PLUS POPULAIRE
+                </div>
+<div class="mb-8 mt-4">
+<h3 class="font-h3 text-h3 text-on-background mb-2">Pro</h3>
+<p class="font-body-md text-body-md text-on-surface-variant min-h-[48px]">Pour les gestionnaires professionnels — toutes les automatisations incluses.</p>
+</div>
+<div class="mb-8">
+<span class="font-display text-display text-on-background">15 000</span>
+<span class="font-body-md text-body-md text-on-surface-variant"> FCFA/mois</span>
+</div>
+<button class="w-full bg-primary text-primary-foreground font-body-md font-semibold py-3 rounded-none mb-8 hover:shadow-lg transition-shadow">Essai Gratuit 14 Jours</button>
+<ul class="space-y-4 flex-1">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">check</span>
+<span class="font-body-md text-body-md text-on-surface">Gestion des Baux &amp; Quittances</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">check</span>
+<span class="font-body-md text-body-md text-on-surface">Relances &amp; Facturation Automatiques</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">check</span>
+<span class="font-body-md text-body-md text-on-surface">GED Complète</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">check</span>
+<span class="font-body-md text-body-md text-on-surface">Tableau de Bord Avancé &amp; CRG</span>
+</li>
+<li class="flex items-start gap-3"><span class="material-symbols-outlined text-primary text-[20px]">check</span><span class="font-body-md text-body-md text-on-surface">Nombre Max de Biens: 20</span></li><li class="flex items-start gap-3"><span class="material-symbols-outlined text-primary text-[20px]">check</span><span class="font-body-md text-body-md text-on-surface">Nombre Max d'Utilisateurs: 3</span></li></ul>
+</div>
+<!-- Agence -->
+<div class="bg-surface-container-low border border-outline-variant p-8 flex flex-col rounded-none relative">
+<div class="mb-8">
+<h3 class="font-h3 text-h3 text-on-surface mb-2">Agence</h3>
+<p class="font-body-md text-body-md text-on-surface-variant min-h-[48px]">Solution complète pour les agences immobilières — sur devis, biens illimités.</p>
+</div>
+<div class="mb-8">
+<span class="font-h2 text-h2 text-on-background">Sur devis</span>
+</div>
+<button class="w-full bg-inverse-surface text-inverse-on-surface font-body-md font-semibold py-3 rounded-none mb-8 hover:bg-on-surface transition-colors">Contacter les ventes</button>
+<ul class="space-y-4 flex-1">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">check</span>
+<span class="font-body-md text-body-md text-on-surface">Toutes les fonctionnalités Pro</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">check</span>
+<span class="font-body-md text-body-md text-on-surface">API &amp; Intégrations</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">check</span>
+<span class="font-body-md text-body-md text-on-surface">Multi-Utilisateurs &amp; Support Prioritaire</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">check</span>
+<span class="font-body-md text-body-md text-on-surface">Onboarding Dédié</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Feature Comparison -->
+<section class="bg-surface-bright py-xl border-t border-outline-variant">
+<div class="max-w-7xl mx-auto px-6">
+<h2 class="font-h2 text-h2 text-center text-on-background mb-12">Comparaison détaillée des fonctionnalités</h2>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b-2 border-outline-variant">
+<th class="py-4 px-4 font-label-caps text-label-caps text-on-surface-variant w-1/4 uppercase tracking-wider">Fonctionnalité</th>
+<th class="py-4 px-4 font-h3 text-h3 text-on-background w-1/4 text-center">Starter</th>
+<th class="py-4 px-4 font-h3 text-h3 text-on-background w-1/4 text-center bg-primary/5 border-b-2 border-primary">Pro</th>
+<th class="py-4 px-4 font-h3 text-h3 text-on-background w-1/4 text-center">Agence</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<!-- Fonctionnalités de base -->
+<tr class="bg-surface-container-low">
+<td class="py-3 px-4 font-h3 text-h3 text-on-background border-b border-outline-variant" colspan="4">Fonctionnalités Clés</td>
+</tr><tr class="border-b border-outline-variant hover:bg-surface transition-colors"><td class="py-4 px-4 text-on-surface">Nombre Max de Biens</td><td class="py-4 px-4 text-center text-on-surface-variant">3</td><td class="py-4 px-4 text-center text-on-background font-medium bg-primary/5">20</td><td class="py-4 px-4 text-center text-on-surface-variant">Illimités</td></tr>
+<tr class="border-b border-outline-variant hover:bg-surface transition-colors">
+<td class="py-4 px-4 text-on-surface">Gestion des Baux</td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-primary">check</span></td>
+<td class="py-4 px-4 text-center bg-primary/5"><span class="material-symbols-outlined text-primary">check</span></td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-primary">check</span></td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface transition-colors">
+<td class="py-4 px-4 text-on-surface">Quittances de Loyer</td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-primary">check</span></td>
+<td class="py-4 px-4 text-center bg-primary/5"><span class="material-symbols-outlined text-primary">check</span></td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-primary">check</span></td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface transition-colors">
+<td class="py-4 px-4 text-on-surface">Tableau de Bord</td>
+<td class="py-4 px-4 text-center text-on-surface-variant">Basique</td>
+<td class="py-4 px-4 text-center text-on-background font-medium bg-primary/5">Avancé</td>
+<td class="py-4 px-4 text-center text-on-surface-variant">Avancé</td>
+</tr>
+<!-- Automatisations -->
+<tr class="bg-surface-container-low">
+<td class="py-3 px-4 font-h3 text-h3 text-on-background border-b border-outline-variant" colspan="4">Automatisations &amp; GED</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface transition-colors">
+<td class="py-4 px-4 text-on-surface">Relances Automatiques</td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-outline">remove</span></td>
+<td class="py-4 px-4 text-center bg-primary/5"><span class="material-symbols-outlined text-primary">check</span></td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-primary">check</span></td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface transition-colors">
+<td class="py-4 px-4 text-on-surface">Facturation Automatique</td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-outline">remove</span></td>
+<td class="py-4 px-4 text-center bg-primary/5"><span class="material-symbols-outlined text-primary">check</span></td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-primary">check</span></td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface transition-colors">
+<td class="py-4 px-4 text-on-surface">GED Complète</td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-outline">remove</span></td>
+<td class="py-4 px-4 text-center bg-primary/5"><span class="material-symbols-outlined text-primary">check</span></td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-primary">check</span></td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface transition-colors">
+<td class="py-4 px-4 text-on-surface">Comptes Rendus de Gestion</td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-outline">remove</span></td>
+<td class="py-4 px-4 text-center bg-primary/5"><span class="material-symbols-outlined text-primary">check</span></td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-primary">check</span></td>
+</tr>
+<!-- Entreprise -->
+<tr class="bg-surface-container-low">
+<td class="py-3 px-4 font-h3 text-h3 text-on-background border-b border-outline-variant" colspan="4">Fonctions Agence</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface transition-colors">
+<td class="py-4 px-4 text-on-surface">API &amp; Intégrations</td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-outline">remove</span></td>
+<td class="py-4 px-4 text-center bg-primary/5"><span class="material-symbols-outlined text-outline">remove</span></td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-primary">check</span></td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface transition-colors"><td class="py-4 px-4 text-on-surface">Nombre Max d'Utilisateurs</td><td class="py-4 px-4 text-center text-on-surface-variant">1</td><td class="py-4 px-4 text-center text-on-background font-medium bg-primary/5">3</td><td class="py-4 px-4 text-center text-on-surface-variant">Illimités</td></tr>
+<tr class="border-b border-outline-variant hover:bg-surface transition-colors">
+<td class="py-4 px-4 text-on-surface">Support Prioritaire &amp; Onboarding</td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-outline">remove</span></td>
+<td class="py-4 px-4 text-center bg-primary/5"><span class="material-symbols-outlined text-outline">remove</span></td>
+<td class="py-4 px-4 text-center"><span class="material-symbols-outlined text-primary">check</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- FAQ -->
+<section class="py-xl px-6 max-w-4xl mx-auto">
+<div class="text-center mb-12">
+<h2 class="font-h2 text-h2 text-on-background mb-4">Questions Fréquentes</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Tout ce que vous devez savoir sur notre tarification.</p>
+</div>
+<div class="space-y-4">
+<!-- FAQ Item 1 -->
+<div class="border border-outline-variant p-6 rounded-none bg-surface">
+<h3 class="font-h3 text-h3 text-on-surface mb-2 flex justify-between items-center cursor-pointer">
+                    Comment fonctionne l'intégration Odoo 19 ?
+                    <span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-4 pt-4 border-t border-outline-variant/50">L'intégration Odoo 19, disponible dans le plan Entreprise, permet une synchronisation bidirectionnelle en temps réel de vos données locatives avec votre système comptable global, assurant une intégrité totale des données.</p>
+</div>
+<!-- FAQ Item 2 -->
+<div class="border border-outline-variant p-6 rounded-none bg-surface">
+<h3 class="font-h3 text-h3 text-on-surface mb-2 flex justify-between items-center cursor-pointer">
+                    Mes données sont-elles sécurisées ?
+                    <span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-4 pt-4 border-t border-outline-variant/50 hidden">Absolument. Nous utilisons un chiffrement de bout en bout et nos serveurs sont hébergés en Europe, en stricte conformité avec le RGPD.</p>
+</div>
+<!-- FAQ Item 3 -->
+<div class="border border-outline-variant p-6 rounded-none bg-surface">
+<h3 class="font-h3 text-h3 text-on-surface mb-2 flex justify-between items-center cursor-pointer">
+                    Proposez-vous une assistance à la configuration ?
+                    <span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-4 pt-4 border-t border-outline-variant/50 hidden">Oui, pour les plans Agence et Entreprise, un expert dédié vous accompagne lors de l'onboarding pour importer vos données existantes.</p>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant/30 pt-16 pb-8" id="footer">
+<div class="container mx-auto px-gutter max-w-7xl">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+<div class="lg:col-span-2">
+<img alt="BailKey Logo" class="h-8 w-auto mb-6" src="https://lh3.googleusercontent.com/aida/ADBb0uhAtIXlpoCNYlHTMZDfljkVC-sWu3Oo63hBJR3b7SxemL5p_c8I_cQ7WRu8mBlslOFkxjvYa76zYAWDGjqReF-HdJmVI-BVZaFoQ-NWnDIsaQ7TyMmYyHdJjOyP-EluuOhgUPAJ63IPR9Hdla2XgoAS7tUN0umfcpx6VkQUXJEvC-ji3mcJGnlDzp96ZIV69iZ_Q0FFD7CssynbNMFwWqXDSZEPwG19nShn_G3jl_7yUU0TjlL5HPat9G0b7Gh7lEMaweVO3EUR"/>
+<p class="text-body-sm text-on-surface-variant mb-6 max-w-sm">
+                        La plateforme logicielle de référence pour les gestionnaires de patrimoine immobilier. Centralisez, analysez et optimisez vos actifs en toute sécurité.
+                    </p>
+<div class="flex gap-4">
+<a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors gsap-button" href="#">
+<span class="material-symbols-outlined text-[20px]">language</span>
+</a>
+<a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors gsap-button" href="#">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</a>
+<a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors gsap-button" href="#">
+<span class="material-symbols-outlined text-[20px]">phone</span>
+</a>
+</div>
+</div>
+<div>
+<h4 class="font-h3 text-body-md font-semibold text-on-surface mb-6">Produit</h4>
+<ul class="flex flex-col gap-3 text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" href="#">Solutions</a></li><li><a class="hover:text-primary transition-colors" href="#">Fonctionnalités</a></li><li><a class="hover:text-primary transition-colors" href="#">Tarifs</a></li><li><a class="hover:text-primary transition-colors" href="#">Témoignages</a></li><li><a class="hover:text-primary transition-colors" href="#">Sécurité</a></li></ul>
+</div>
+<div>
+<h4 class="font-h3 text-body-md font-semibold text-on-surface mb-6">Ressources</h4>
+<ul class="flex flex-col gap-3 text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" href="#">Centre d'aide</a></li><li><a class="hover:text-primary transition-colors" href="#">Études de cas</a></li><li><a class="hover:text-primary transition-colors" href="#">Blog</a></li><li><a class="hover:text-primary transition-colors" href="#">Webinaires</a></li></ul>
+</div>
+<div>
+<h4 class="font-h3 text-body-md font-semibold text-on-surface mb-6">Société</h4>
+<ul class="flex flex-col gap-3 text-body-sm text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">À propos</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Carrières</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Partenaires</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-outline-variant/30 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-on-surface-variant">
+                    © 2024 BailKey Asset Management. Tous droits réservés.
+                </p>
+<div class="flex gap-6 text-xs text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="#">Mentions Légales</a>
+<a class="hover:text-primary transition-colors" href="#">Politique de Confidentialité</a>
+<a class="hover:text-primary transition-colors" href="#">CGU</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+    gsap.registerPlugin(ScrollTrigger);
+    
+    const navTimeline = gsap.timeline({
+        scrollTrigger: {
+            trigger: "body",
+            start: "top top",
+            end: "top -100",
+            scrub: 1,
+        }
+    });
+
+    navTimeline.to("#nav-pill", { 
+        width: "70%", 
+        paddingTop: "0.75rem", 
+        paddingBottom: "0.75rem",
+        boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+        backgroundColor: "rgba(255, 255, 255, 0.95)",
+        ease: "power2.inOut" 
+    }, 0);
+
+    navTimeline.to("#logo-full", { opacity: 0, display: "none", duration: 0.2 }, 0);
+    navTimeline.to("#logo-icon", { opacity: 1, display: "block", duration: 0.2 }, 0.1);
+</script></body></html>

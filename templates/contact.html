@@ -1,0 +1,630 @@
+<!doctype html>
+
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>BailKey - Contact</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@500;600;700;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-highest": "#dee4e3",
+              "on-tertiary": "#ffffff",
+              "secondary-foreground": "oklch(0.21 0.006 285.885)",
+              primary: "oklch(0.511 0.096 186.391)",
+              "on-secondary-fixed-variant": "#434749",
+              "on-background": "#171d1d",
+              "on-primary-fixed-variant": "#004f50",
+              "surface-bright": "#f5fafa",
+              foreground: "oklch(0.148 0.004 228.8)",
+              "secondary-container": "#dde0e2",
+              "tertiary-container": "#e58957",
+              "primary-fixed": "#7ff5f5",
+              "on-surface-variant": "#3d4949",
+              "on-secondary": "#ffffff",
+              "surface-tint": "#00696a",
+              "outline-variant": "#bcc9c9",
+              "muted-foreground": "oklch(0.56 0.021 213.5)",
+              muted: "oklch(0.963 0.002 197.1)",
+              "primary-foreground": "oklch(0.984 0.014 180.72)",
+              "on-secondary-fixed": "#181c1e",
+              accent: "oklch(0.963 0.002 197.1)",
+              background: "oklch(1 0 0)",
+              "tertiary-fixed": "#ffdbcb",
+              secondary: "oklch(0.967 0.001 286.375)",
+              border: "oklch(0.925 0.005 214.3)",
+              "on-tertiary-fixed-variant": "#763306",
+              tertiary: "#94491d",
+              "inverse-on-surface": "#ecf2f1",
+              "accent-foreground": "oklch(0.218 0.008 223.9)",
+              "on-tertiary-container": "#602600",
+              "inverse-surface": "#2c3131",
+              "on-error": "#ffffff",
+              "secondary-fixed-dim": "#c4c7c9",
+              "surface-container-high": "#e4e9e8",
+              "primary-fixed-dim": "#60d8d9",
+              "surface-variant": "#dee4e3",
+              "on-primary-container": "#003e3f",
+              "secondary-fixed": "#e0e3e5",
+              "on-secondary-container": "#5f6365",
+              "on-error-container": "#93000a",
+              surface: "#f5fafa",
+              ring: "oklch(0.723 0.014 214.4)",
+              "tertiary-fixed-dim": "#ffb691",
+              "on-surface": "#171d1d",
+              "on-tertiary-fixed": "#341100",
+              card: "oklch(1 0 0)",
+              "surface-container-low": "#eff5f4",
+              "inverse-primary": "#60d8d9",
+              "on-primary": "#ffffff",
+              "error-container": "#ffdad6",
+              "surface-container": "#eaefee",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed": "#002020",
+              outline: "#6d7a79",
+              error: "#ba1a1a",
+              "primary-container": "#2eb1b2",
+              destructive: "oklch(0.577 0.245 27.325)",
+              "surface-dim": "#d6dbda",
+              "glass-border": "rgba(255, 255, 255, 0.6)",
+            },
+            borderRadius: {
+              DEFAULT: "0px",
+              lg: "0px",
+              xl: "0px",
+              full: "0px",
+              none: "0px",
+            },
+            spacing: {
+              lg: "2.5rem",
+              xl: "4rem",
+              margin: "2rem",
+              gutter: "1.5rem",
+              xs: "0.5rem",
+              md: "1.5rem",
+              base: "0.25rem",
+              sm: "1rem",
+            },
+            fontFamily: {
+              h1: ["Manrope", "sans-serif"],
+              "label-caps": ["Inter", "sans-serif"],
+              "body-lg": ["Inter", "sans-serif"],
+              h3: ["Manrope", "sans-serif"],
+              h2: ["Manrope", "sans-serif"],
+              display: ["Manrope", "sans-serif"],
+              "body-md": ["Inter", "sans-serif"],
+            },
+            fontSize: {
+              h1: [
+                "32px",
+                {
+                  lineHeight: "1.2",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+              "label-caps": [
+                "12px",
+                {
+                  lineHeight: "1.0",
+                  letterSpacing: "0.05em",
+                  fontWeight: "600",
+                },
+              ],
+              "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+              h3: ["20px", { lineHeight: "1.4", fontWeight: "500" }],
+              h2: ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+              display: [
+                "48px",
+                {
+                  lineHeight: "1.1",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.6));
+      }
+    </style>
+  </head>
+  <body
+    class="bg-surface text-on-surface font-body-md text-body-md antialiased min-h-screen flex flex-col"
+  >
+    <!-- TopNavBar -->
+    <nav
+      class="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 shadow-[0_8px_32px_rgba(0,0,0,0.05)] font-['Manrope'] antialiased"
+    >
+      <div
+        class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between rounded-none"
+        id="nav-pill"
+      >
+        <div class="flex items-center gap-2">
+          <div class="flex items-center">
+            <img
+              alt="BailKey Logo"
+              class="h-8 w-auto"
+              id="logo-full"
+              src="https://lh3.googleusercontent.com/aida/ADBb0uhAtIXlpoCNYlHTMZDfljkVC-sWu3Oo63hBJR3b7SxemL5p_c8I_cQ7WRu8mBlslOFkxjvYa76zYAWDGjqReF-HdJmVI-BVZaFoQ-NWnDIsaQ7TyMmYyHdJjOyP-EluuOhgUPAJ63IPR9Hdla2XgoAS7tUN0umfcpx6VkQUXJEvC-ji3mcJGnlDzp96ZIV69iZ_Q0FFD7CssynbNMFwWqXDSZEPwG19nShn_G3jl_7yUU0TjlL5HPat9G0b7Gh7lEMaweVO3EUR"
+            />
+            <img
+              alt="BailKey Icon"
+              class="h-8 w-auto hidden opacity-0"
+              id="logo-icon"
+              src="https://lh3.googleusercontent.com/aida/ADBb0ujcY3Ryu3PW2zs_SZLrSDPj20glEWciVBMQ8RWkR8zF4SgkqJ0i_0nGGRGAk7HHfkOlyPxIvRd3M8dgruauhFch87VjCvOKkV_U4SzLn1aMol5ed3jiaoecOsqCNdVaxb8Ru8QOmrC5q-f5pioWaIxnspU1szs34xPctLCWiFIZMdodrpXFs4PK-unv_Bm5rYbGZ3GnIKaF84fLdrMXrohesGFaG0hSqOQ0ek7TklicpahSyCkqqJ7kC8DvhVcKKUgHZfEQTUM7xg"
+            />
+          </div>
+        </div>
+        <div class="hidden md:flex items-center gap-8">
+          <a
+            class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300"
+            href="#"
+            >Plateforme</a
+          >
+          <a
+            class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300"
+            href="#"
+            >Solutions</a
+          >
+          <a
+            class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300"
+            href="#"
+            >Tarifs</a
+          >
+          <a
+            class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300"
+            href="#"
+            >Ressources</a
+          >
+          <a
+            class="text-teal-600 dark:text-teal-400 font-semibold border-b-2 border-teal-600 pb-1 hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300"
+            href="#"
+            >Contact</a
+          >
+        </div>
+        <div class="flex items-center gap-4">
+          <button
+            class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300"
+          >
+            Connexion
+          </button>
+          <button
+            class="bg-primary text-primary-foreground px-6 py-2 rounded-none font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+          >
+            Commencer
+          </button>
+        </div>
+      </div>
+    </nav>
+    <!-- Main Content Canvas -->
+    <main class="flex-grow pt-32 pb-xl px-gutter max-w-[1440px] mx-auto w-full">
+      <!-- Header Section -->
+      <header class="mb-xl max-w-3xl">
+        <h1
+          class="font-display text-display text-on-surface mb-xs uppercase tracking-tight"
+        >
+          Contactez l'Expertise BailKey
+        </h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant">
+          Nos experts sont à votre disposition pour optimiser votre gestion
+          immobilière.
+        </p>
+      </header>
+      <!-- Bento Grid Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+        <!-- Contact Form Area (Left Column, 7 spans) -->
+        <section
+          class="lg:col-span-7 bg-surface-container-lowest border border-outline-variant p-lg rounded-none shadow-[0_32px_64px_-16px_rgba(0,105,106,0.05)] relative overflow-hidden"
+        >
+          <!-- Architectural subtle accent -->
+          <div class="absolute top-0 left-0 w-full h-1 bg-primary"></div>
+          <h2 class="font-h2 text-h2 text-on-surface mb-md">
+            Envoyer un message
+          </h2>
+          <form action="#" class="space-y-md" method="POST">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-sm">
+              <div class="flex flex-col gap-base">
+                <label
+                  class="font-label-caps text-label-caps text-on-surface-variant uppercase"
+                  for="name"
+                  >Nom Complet</label
+                >
+                <input
+                  class="bg-surface font-body-md text-body-md text-on-surface border border-outline-variant rounded-none p-3 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-colors"
+                  id="name"
+                  name="name"
+                  placeholder="Jean Dupont"
+                  type="text"
+                />
+              </div>
+              <div class="flex flex-col gap-base">
+                <label
+                  class="font-label-caps text-label-caps text-on-surface-variant uppercase"
+                  for="email"
+                  >Adresse Email</label
+                >
+                <input
+                  class="bg-surface font-body-md text-body-md text-on-surface border border-outline-variant rounded-none p-3 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-colors"
+                  id="email"
+                  name="email"
+                  placeholder="jean.dupont@entreprise.fr"
+                  type="email"
+                />
+              </div>
+            </div>
+            <div class="flex flex-col gap-base">
+              <label
+                class="font-label-caps text-label-caps text-on-surface-variant uppercase"
+                for="subject"
+                >Sujet</label
+              >
+              <select
+                class="bg-surface font-body-md text-body-md text-on-surface border border-outline-variant rounded-none p-3 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-colors appearance-none"
+                id="subject"
+                name="subject"
+              >
+                <option>Demande de démonstration</option>
+                <option>Support technique</option>
+                <option>Informations tarifaires</option>
+                <option>Autre</option>
+              </select>
+            </div>
+            <div class="flex flex-col gap-base">
+              <label
+                class="font-label-caps text-label-caps text-on-surface-variant uppercase"
+                for="message"
+                >Message</label
+              >
+              <textarea
+                class="bg-surface font-body-md text-body-md text-on-surface border border-outline-variant rounded-none p-3 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-colors resize-none"
+                id="message"
+                name="message"
+                placeholder="Décrivez votre besoin..."
+                rows="5"
+              ></textarea>
+            </div>
+            <div class="pt-sm">
+              <button
+                class="bg-primary text-on-primary font-label-caps text-label-caps uppercase px-8 py-4 rounded-none hover:bg-surface-tint transition-colors w-full md:w-auto shadow-sm active:scale-[0.98]"
+                type="submit"
+              >
+                Envoyer la demande
+              </button>
+            </div>
+          </form>
+        </section>
+        <!-- Contact Info & Map Area (Right Column, 5 spans) -->
+        <section class="lg:col-span-5 flex flex-col gap-gutter">
+          <!-- Info Card -->
+          <div
+            class="bg-surface-container border border-outline-variant p-md rounded-none relative"
+          >
+            <div
+              class="absolute -left-[1px] top-md bottom-md w-[2px] bg-primary-container"
+            ></div>
+            <h3 class="font-h3 text-h3 text-on-surface mb-sm">Coordonnées</h3>
+            <ul class="space-y-sm">
+              <li class="flex items-start gap-3">
+                <span
+                  class="material-symbols-outlined text-primary mt-1"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >location_on</span
+                >
+                <div>
+                  <span
+                    class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1"
+                    >Siège Social</span
+                  >
+                  <span class="block font-body-md text-body-md text-on-surface"
+                    >128 Rue du Faubourg Saint-Honoré<br />75008 Paris,
+                    France</span
+                  >
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="material-symbols-outlined text-primary mt-1"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >call</span
+                >
+                <div>
+                  <span
+                    class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1"
+                    >Téléphone</span
+                  >
+                  <span class="block font-body-md text-body-md text-on-surface"
+                    >+33 (0)1 42 68 53 00</span
+                  >
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="material-symbols-outlined text-primary mt-1"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >mail</span
+                >
+                <div>
+                  <span
+                    class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1"
+                    >Email Général</span
+                  >
+                  <span class="block font-body-md text-body-md text-on-surface"
+                    >contact@bailkey.fr</span
+                  >
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="material-symbols-outlined text-primary mt-1"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >schedule</span
+                >
+                <div>
+                  <span
+                    class="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1"
+                    >Heures d'Ouverture</span
+                  >
+                  <span class="block font-body-md text-body-md text-on-surface"
+                    >Lun - Ven : 09h00 - 18h30<br />Support technique 24/7 pour
+                    les clients Enterprise.</span
+                  >
+                </div>
+              </li>
+            </ul>
+          </div>
+          <!-- Map Mockup -->
+          <div
+            class="flex-grow bg-surface-container-highest border border-outline-variant rounded-none relative overflow-hidden min-h-[300px]"
+            data-location="Paris"
+          >
+            <img
+              alt="Carte de localisation"
+              class="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-60"
+              data-alt="Desaturated aerial map view of Paris streets with a subtle teal hue overlay, architectural and precise mood"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlSDfUklxw88bQwqU3Sfjm_3DUOk29h9jsHMyW-hKLGvUHIgiTxLX3lUg9PaQp6-UGxy6UlJZZ8FZOmdWHp8VkjqByT_cimGLPE-cD3mevZ2UbVgFoqBf2F3mmlAh4L1-x7WT_AhzSL0ered0y6mfj8kJWEUF923i3teYjfd5NXM54UUC5ftTTefWy6dELhqWVvmb7nRfsH-g5vVHCB_exlDAbdFwAKOzNzm0djmy6hxjOFZq3i0-5n8y11o-0k1TmIEYfw1hoclI"
+            />
+            <!-- Map Pin -->
+            <div
+              class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
+            >
+              <div
+                class="bg-primary text-on-primary p-2 rounded-none shadow-lg mb-1 relative border border-white/20 backdrop-blur-sm"
+              >
+                <span
+                  class="material-symbols-outlined block"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >domain</span
+                >
+                <div
+                  class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-primary"
+                ></div>
+              </div>
+            </div>
+            <!-- decorative grid overlay -->
+            <div
+              class="absolute inset-0 bg-[linear-gradient(rgba(0,105,106,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,105,106,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"
+            ></div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!-- Footer -->
+    <footer
+      class="bg-surface-container-lowest border-t border-outline-variant/30 pt-16 pb-8 rounded-none"
+      id="footer"
+    >
+      <div class="container mx-auto px-12 max-w-7xl">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16"
+        >
+          <div class="lg:col-span-2">
+            <img
+              alt="BailKey Logo"
+              class="h-8 w-auto mb-6"
+              src="https://lh3.googleusercontent.com/aida/ADBb0uhAtIXlpoCNYlHTMZDfljkVC-sWu3Oo63hBJR3b7SxemL5p_c8I_cQ7WRu8mBlslOFkxjvYa76zYAWDGjqReF-HdJmVI-BVZaFoQ-NWnDIsaQ7TyMmYyHdJjOyP-EluuOhgUPAJ63IPR9Hdla2XgoAS7tUN0umfcpx6VkQUXJEvC-ji3mcJGnlDzp96ZIV69iZ_Q0FFD7CssynbNMFwWqXDSZEPwG19nShn_G3jl_7yUU0TjlL5HPat9G0b7Gh7lEMaweVO3EUR"
+            />
+            <p class="text-sm text-on-surface-variant mb-6 max-w-sm">
+              La plateforme logicielle de référence pour les gestionnaires de
+              patrimoine immobilier. Centralisez, analysez et optimisez vos
+              actifs en toute sécurité.
+            </p>
+            <div class="flex gap-4">
+              <a
+                class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors rounded-none"
+                href="#"
+              >
+                <span class="material-symbols-outlined text-[20px]"
+                  >language</span
+                >
+              </a>
+              <a
+                class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors rounded-none"
+                href="#"
+              >
+                <span class="material-symbols-outlined text-[20px]">mail</span>
+              </a>
+              <a
+                class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors rounded-none"
+                href="#"
+              >
+                <span class="material-symbols-outlined text-[20px]">phone</span>
+              </a>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-h3 text-base font-semibold text-on-surface mb-6">
+              Produit
+            </h4>
+            <ul class="flex flex-col gap-3 text-sm text-on-surface-variant">
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Solutions</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Fonctionnalités</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Tarifs</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Témoignages</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Sécurité</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-h3 text-base font-semibold text-on-surface mb-6">
+              Ressources
+            </h4>
+            <ul class="flex flex-col gap-3 text-sm text-on-surface-variant">
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Centre d'aide</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Études de cas</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Blog</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Webinaires</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-h3 text-base font-semibold text-on-surface mb-6">
+              Société
+            </h4>
+            <ul class="flex flex-col gap-3 text-sm text-on-surface-variant">
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >À propos</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Carrières</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Contact</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Partenaires</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          class="border-t border-outline-variant/30 pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
+        >
+          <p class="text-xs text-on-surface-variant">
+            © 2024 BailKey Asset Management. Tous droits réservés.
+          </p>
+          <div class="flex gap-6 text-xs text-on-surface-variant">
+            <a class="hover:text-primary transition-colors" href="#"
+              >Mentions Légales</a
+            >
+            <a class="hover:text-primary transition-colors" href="#"
+              >Politique de Confidentialité</a
+            >
+            <a class="hover:text-primary transition-colors" href="#">CGU</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script>
+      gsap.registerPlugin(ScrollTrigger);
+
+      const navTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: "body",
+          start: "top top",
+          end: "top -100",
+          scrub: 1,
+        },
+      });
+
+      navTimeline.to(
+        "#nav-pill",
+        {
+          width: "70%",
+          paddingTop: "0.75rem",
+          paddingBottom: "0.75rem",
+          boxShadow:
+            "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+          backgroundColor: "rgba(255, 255, 255, 0.95)",
+          ease: "power2.inOut",
+          borderRadius: "0px",
+        },
+        0,
+      );
+
+      navTimeline.to(
+        "#logo-full",
+        { opacity: 0, display: "none", duration: 0.2 },
+        0,
+      );
+      navTimeline.to(
+        "#logo-icon",
+        { opacity: 1, display: "block", duration: 0.2 },
+        0.1,
+      );
+    </script>
+  </body>
+</html>

@@ -1,0 +1,565 @@
+<!doctype html>
+
+<html class="light" lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>
+      Optimiser la rentabilité de votre parc immobilier avec Odoo 19 | BailKey
+    </title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@500;600;700;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-low": "#eff5f4",
+              "accent-foreground": "oklch(0.218 0.008 223.9)",
+              "secondary-fixed-dim": "#c4c7c9",
+              "on-primary-fixed": "#002020",
+              "on-error-container": "#93000a",
+              "on-surface": "#171d1d",
+              "surface-dim": "#d6dbda",
+              "on-tertiary-fixed": "#341100",
+              ring: "oklch(0.723 0.014 214.4)",
+              accent: "oklch(0.963 0.002 197.1)",
+              primary: "oklch(0.511 0.096 186.391)",
+              "inverse-primary": "#60d8d9",
+              "on-surface-variant": "#3d4949",
+              "on-secondary-container": "#5f6365",
+              "outline-variant": "#bcc9c9",
+              "primary-fixed": "#7ff5f5",
+              foreground: "oklch(0.148 0.004 228.8)",
+              "secondary-foreground": "oklch(0.21 0.006 285.885)",
+              "surface-container": "#eaefee",
+              border: "oklch(0.925 0.005 214.3)",
+              "on-tertiary-container": "#602600",
+              "on-secondary-fixed": "#181c1e",
+              muted: "oklch(0.963 0.002 197.1)",
+              error: "#ba1a1a",
+              tertiary: "#94491d",
+              "tertiary-fixed-dim": "#ffb691",
+              "tertiary-container": "#e58957",
+              "on-primary": "#ffffff",
+              "surface-container-high": "#e4e9e8",
+              "secondary-fixed": "#e0e3e5",
+              secondary: "oklch(0.967 0.001 286.375)",
+              "on-background": "#171d1d",
+              outline: "#6d7a79",
+              "inverse-surface": "#2c3131",
+              "surface-bright": "#f5fafa",
+              "on-primary-container": "#003e3f",
+              "muted-foreground": "oklch(0.56 0.021 213.5)",
+              destructive: "oklch(0.577 0.245 27.325)",
+              "surface-container-highest": "#dee4e3",
+              "surface-variant": "#dee4e3",
+              "surface-tint": "#00696a",
+              "on-error": "#ffffff",
+              "primary-fixed-dim": "#60d8d9",
+              "error-container": "#ffdad6",
+              surface: "#f5fafa",
+              "primary-foreground": "oklch(0.984 0.014 180.72)",
+              "glass-border": "rgba(255, 255, 255, 0.6)",
+              "surface-container-lowest": "#ffffff",
+              background: "oklch(1 0 0)",
+              "on-tertiary-fixed-variant": "#763306",
+              card: "oklch(1 0 0)",
+              "on-tertiary": "#ffffff",
+              "on-secondary-fixed-variant": "#434749",
+              "on-primary-fixed-variant": "#004f50",
+              "secondary-container": "#dde0e2",
+              "tertiary-fixed": "#ffdbcb",
+              "inverse-on-surface": "#ecf2f1",
+              "on-secondary": "#ffffff",
+              "primary-container": "#2eb1b2",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              xl: "4rem",
+              xs: "0.5rem",
+              margin: "2rem",
+              md: "1.5rem",
+              lg: "2.5rem",
+              sm: "1rem",
+              gutter: "1.5rem",
+              base: "0.25rem",
+            },
+            fontFamily: {
+              "label-caps": ["Inter", "sans-serif"],
+              h3: ["Manrope", "sans-serif"],
+              h2: ["Manrope", "sans-serif"],
+              h1: ["Manrope", "sans-serif"],
+              "body-lg": ["Inter", "sans-serif"],
+              display: ["Manrope", "sans-serif"],
+              "body-md": ["Inter", "sans-serif"],
+            },
+            fontSize: {
+              "label-caps": [
+                "12px",
+                {
+                  lineHeight: "1.0",
+                  letterSpacing: "0.05em",
+                  fontWeight: "600",
+                },
+              ],
+              h3: ["20px", { lineHeight: "1.4", fontWeight: "500" }],
+              h2: ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+              h1: [
+                "32px",
+                {
+                  lineHeight: "1.2",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+              "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+              display: [
+                "48px",
+                {
+                  lineHeight: "1.1",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  </head>
+  <body
+    class="bg-surface text-on-surface font-body-md min-h-screen flex flex-col"
+  >
+    <!-- TopNavBar -->
+    <nav
+      class="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 shadow-[0_8px_32px_rgba(0,0,0,0.05)] font-['Manrope'] antialiased"
+    >
+      <div
+        class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between rounded-none"
+        id="nav-pill"
+      >
+        <div class="flex items-center gap-2">
+          <div class="flex items-center">
+            <img
+              alt="BailKey Logo"
+              class="h-8 w-auto"
+              id="logo-full"
+              src="https://lh3.googleusercontent.com/aida/ADBb0ug2SCjJ4Y4uvU2VXyrktzzAJBtVQBGhaiP3RLMNiTW0xhghBThJ7DXJVdTs68rYUzvQNXBMhuKK3gYmjjI4KGRf0mdUSocM9uGVwuCjf-g1_YdVQiMpV5tcHYPQgBpMxQuIMHn_i2fozn92bW3XbYGKyBYfhxgQ9uEWKTOhQEVX6EZfL23AoscJTyAzVrxK6nbzuQuH7sLKaTmcKzryjX6FOyxJ5IcOcfcFGT7oE2xF2jL3_jB4qLGBT12LKfBZFfKaAXI5Mmfj"
+            />
+            <img
+              alt="BailKey Icon"
+              class="h-8 w-auto hidden opacity-0"
+              id="logo-icon"
+              src="https://lh3.googleusercontent.com/aida/ADBb0ujcY3Ryu3PW2zs_SZLrSDPj20glEWciVBMQ8RWkR8zF4SgkqJ0i_0nGGRGAk7HHfkOlyPxIvRd3M8dgruauhFch87VjCvOKkV_U4SzLn1aMol5ed3jiaoecOsqCNdVaxb8Ru8QOmrC5q-f5pioWaIxnspU1szs34xPctLCWiFIZMdodrpXFs4PK-unv_Bm5rYbGZ3GnIKaF84fLdrMXrohesGFaG0hSqOQ0ek7TklicpahSyCkqqJ7kC8DvhVcKKUgHZfEQTUM7xg"
+            />
+          </div>
+        </div>
+        <div class="hidden md:flex items-center gap-8">
+          <a
+            class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300"
+            href="#"
+            >Plateforme</a
+          >
+          <a
+            class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300"
+            href="#"
+            >Solutions</a
+          >
+          <a
+            class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300"
+            href="#"
+            >Tarifs</a
+          >
+          <a
+            class="text-teal-600 dark:text-teal-400 font-semibold border-b-2 border-teal-600 pb-1 hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300"
+            href="#"
+            >Ressources</a
+          >
+          <a
+            class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300"
+            href="#"
+            >Contact</a
+          >
+        </div>
+        <div class="flex items-center gap-4">
+          <button
+            class="text-slate-600 dark:text-slate-400 font-medium hover:text-teal-500 dark:hover:text-teal-300 transition-all duration-300"
+          >
+            Connexion
+          </button>
+          <button
+            class="bg-primary text-primary-foreground px-6 py-2 rounded-none font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+          >
+            Commencer
+          </button>
+        </div>
+      </div>
+    </nav>
+    <!-- Main Content Canvas -->
+    <main
+      class="flex-grow pt-[120px] pb-xl px-gutter md:px-xl max-w-7xl mx-auto w-full"
+    >
+      <!-- Article Header -->
+      <header class="mb-xl max-w-4xl">
+        <div class="flex items-center space-x-4 mb-6">
+          <span
+            class="font-label-caps text-label-caps text-primary bg-primary-container/20 px-3 py-1 uppercase tracking-wider"
+            >Guide</span
+          >
+          <span class="text-sm text-on-surface-variant flex items-center">
+            <span
+              class="material-symbols-outlined text-[18px] mr-1"
+              data-weight="regular"
+              >calendar_today</span
+            >
+            24 Octobre 2024
+          </span>
+          <span class="text-sm text-on-surface-variant flex items-center">
+            <span
+              class="material-symbols-outlined text-[18px] mr-1"
+              data-weight="regular"
+              >schedule</span
+            >
+            8 min de lecture
+          </span>
+        </div>
+        <h1 class="font-display text-display text-on-surface mb-8">
+          Optimiser la rentabilité de votre parc immobilier avec Odoo 19
+        </h1>
+        <div class="flex items-center space-x-4">
+          <img
+            alt="Author Avatar"
+            class="w-12 h-12 object-cover bg-surface-container"
+            data-alt="A professional headshot of a corporate real estate expert. The lighting is bright and modern, creating a clean, trustworthy aesthetic. The background is a soft, muted grey. The overall mood is confident and authoritative."
+            src="https://lh3.googleusercontent.com/aida/ADBb0ugubDjGfPuVmMSOS54lqHg9TM4euefgkUp_rL9rJd1OnwRLb7h5VpWSLcTYY7yrhe0PrSurti1Hyv8eZpMoWGa7lxyBLK9Vq6q2Ir2FX2nUC5U_WB2_TKuytePl44yiVWMmqowNnKsiteoV_hAVhShg3eJn8j35F6CxqhaHyRhC32YMHCjD9hDI8PmCk9QPbTNFV1cvixqf18r0bbAhQas4UcT4rP670Soz0WCPYt5njtdaWSQmWsHsGg1bNDtri5KccIphYStOEw"
+          />
+          <div>
+            <div class="font-h3 text-h3 text-on-surface">Jean-Marc Laurent</div>
+            <div class="text-sm text-on-surface-variant">
+              Directeur des Opérations, BailKey
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- Hero Image -->
+      <div
+        class="w-full h-[500px] mb-xl relative bg-surface-container overflow-hidden shadow-lg"
+        style="box-shadow: 0 32px 64px -16px rgba(46, 177, 178, 0.1)"
+      >
+        <img
+          alt="Architectural Real Estate Cover"
+          class="w-full h-full object-cover"
+          data-alt="A cinematic, wide-angle shot of a modern, high-end commercial building facade bathed in soft, early morning light. The architecture is characterized by clean lines, expansive glass panels reflecting the sky, and precise geometric shapes. The color palette is composed of cool greys, slate blues, and a subtle hint of teal in the reflections, establishing a premium, corporate modern aesthetic."
+          src="https://lh3.googleusercontent.com/aida/ADBb0ug2SCjJ4Y4uvU2VXyrktzzAJBtVQBGhaiP3RLMNiTW0xhghBThJ7DXJVdTs68rYUzvQNXBMhuKK3gYmjjI4KGRf0mdUSocM9uGVwuCjf-g1_YdVQiMpV5tcHYPQgBpMxQuIMHn_i2fozn92bW3XbYGKyBYfhxgQ9uEWKTOhQEVX6EZfL23AoscJTyAzVrxK6nbzuQuH7sLKaTmcKzryjX6FOyxJ5IcOcfcFGT7oE2xF2jL3_jB4qLGBT12LKfBZFfKaAXI5Mmfj"
+        />
+      </div>
+      <!-- Article Body & Sidebar Layout -->
+      <div class="flex flex-col lg:flex-row gap-xl">
+        <!-- Main Content -->
+        <article class="lg:w-2/3 max-w-3xl prose prose-slate max-w-none">
+          <p
+            class="font-body-lg text-body-lg text-on-surface-variant mb-6 leading-relaxed"
+          >
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur.
+          </p>
+          <h2 class="font-h2 text-h2 text-on-surface mt-10 mb-4">
+            La centralisation des données
+          </h2>
+          <p class="font-body-md text-body-md text-on-surface-variant mb-6">
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+            officia deserunt mollit anim id est laborum. Nemo enim ipsam
+            voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+            consequuntur magni dolores eos qui ratione voluptatem sequi
+            nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit
+            amet.
+          </p>
+          <blockquote
+            class="my-8 pl-6 border-l-4 border-primary bg-surface-container-low p-6 font-h3 text-h3 text-on-surface italic shadow-sm relative overflow-hidden"
+          >
+            "La véritable rentabilité ne naît pas seulement de l'acquisition de
+            nouveaux actifs, mais de la maîtrise absolue des flux opérationnels
+            existants."
+          </blockquote>
+          <p class="font-body-md text-body-md text-on-surface-variant mb-6">
+            Consectetur, adipisci velit, sed quia non numquam eius modi tempora
+            incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut
+            enim ad minima veniam, quis nostrum exercitationem ullam corporis
+            suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
+          </p>
+          <h2 class="font-h2 text-h2 text-on-surface mt-10 mb-4">
+            Automatisation des flux financiers
+          </h2>
+          <p class="font-body-md text-body-md text-on-surface-variant mb-6">
+            Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse
+            quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat
+            quo voluptas nulla pariatur? At vero eos et accusamus et iusto odio
+            dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
+            atque corrupti quos dolores et quas molestias excepturi sint
+            occaecati cupiditate non provident.
+          </p>
+          <div
+            class="bg-surface-container p-8 my-8 border border-outline-variant shadow-sm"
+          >
+            <h3 class="font-h3 text-h3 text-on-surface mb-3 flex items-center">
+              <span class="material-symbols-outlined text-primary mr-2"
+                >lightbulb</span
+              >
+              Point Clé
+            </h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">
+              L'intégration d'Odoo 19 permet une réduction moyenne de 22% des
+              coûts de traitement administratif lors de la première année
+              d'implémentation.
+            </p>
+          </div>
+        </article>
+        <!-- Sidebar -->
+        <aside class="lg:w-1/3">
+          <div class="sticky top-[120px]">
+            <h3
+              class="font-h3 text-h3 text-on-surface mb-6 border-b border-outline-variant pb-2"
+            >
+              Articles recommandés
+            </h3>
+            <div class="space-y-6">
+              <!-- Related Article 1 -->
+              <a
+                class="group block bg-surface-container-low border border-transparent hover:border-primary/30 transition-colors shadow-sm"
+                href="#"
+              >
+                <div class="h-32 bg-surface-variant relative overflow-hidden">
+                  <img
+                    alt="Office building"
+                    class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
+                    data-alt="A low-angle perspective of a glass-facade office building reaching towards a clear blue sky. The geometric patterns of the windows create a structured, corporate modern look. The lighting is bright and clear, reflecting a professional and organized environment."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJlmxqjKW14_EsrvLXwFwmsUGTTk5oLlu1h7Hfx0W8Jz7s_0lVM7NrvIY9v5BoBodQ-oLbOfjaiCZZeEMHjksADVOFIfs7CsgTqGihflZQ5d2L7DDEYAn_EXl2MGXzKlTCGq8YY4Dan9asmesLCP_asR7BGxS71_LmO7aZcZnL8NBPd4YZK1OR4KMqeCZwd8iZ6QIcHCMAf6V4IT1Li_qfoRcTHQ6aZRJMvgSe6XEDzSqWp3b8pPYVCYb_eg2DqONZJhJVbMSwhD4"
+                  />
+                </div>
+                <div class="p-4">
+                  <span
+                    class="font-label-caps text-label-caps text-primary mb-2 block uppercase"
+                    >Analyse</span
+                  >
+                  <h4
+                    class="font-body-lg text-body-lg text-on-surface font-semibold group-hover:text-primary transition-colors leading-snug"
+                  >
+                    Tendances du marché tertiaire Q3 2024
+                  </h4>
+                </div>
+              </a>
+              <!-- Related Article 2 -->
+              <a
+                class="group block bg-surface-container-low border border-transparent hover:border-primary/30 transition-colors shadow-sm"
+                href="#"
+              >
+                <div class="h-32 bg-surface-variant relative overflow-hidden">
+                  <img
+                    alt="Architecture abstract"
+                    class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
+                    data-alt="An abstract detail shot of modern interior architecture, featuring clean lines, light wood panels, and stark white walls. The lighting is diffused and soft, creating a calm, systematic mood. The aesthetic is highly precise and clean."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdd1Osu4IYlegcii3RDUlORyE_DgzI29dNIf2EpqEd8IqiWLMG_ZX5bxDToF-LHtPcQu-2AD70TWmmZ6N7DWCtg0vWFJUNrKw9-kPEtIOGcq3bfse0Zi1FsCyUxSM0Sz-khr2chZBl96C5lqarp121mQTtAm9MuYxQFkk5b8RkGH-NEMylU0bf2gn2kiHIXC_itypwtVtEFurEJUNZQgf9iR01WaimjMc6S3T6RKjuy5QHa6FDXoOWBf9gqnIB1e_m5wWGL6kcVyc"
+                  />
+                </div>
+                <div class="p-4">
+                  <span
+                    class="font-label-caps text-label-caps text-primary mb-2 block uppercase"
+                    >Cas Client</span
+                  >
+                  <h4
+                    class="font-body-lg text-body-lg text-on-surface font-semibold group-hover:text-primary transition-colors leading-snug"
+                  >
+                    Comment AlphaCap a digitalisé 400 lots
+                  </h4>
+                </div>
+              </a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+    <!-- Footer -->
+    <footer
+      class="bg-surface-container-lowest border-t border-outline-variant/30 pt-16 pb-8 rounded-none"
+      id="footer"
+    >
+      <div class="container mx-auto px-12 max-w-7xl">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16"
+        >
+          <div class="lg:col-span-2">
+            <img
+              alt="BailKey Logo"
+              class="h-8 w-auto mb-6"
+              src="https://lh3.googleusercontent.com/aida/ADBb0ug2SCjJ4Y4uvU2VXyrktzzAJBtVQBGhaiP3RLMNiTW0xhghBThJ7DXJVdTs68rYUzvQNXBMhuKK3gYmjjI4KGRf0mdUSocM9uGVwuCjf-g1_YdVQiMpV5tcHYPQgBpMxQuIMHn_i2fozn92bW3XbYGKyBYfhxgQ9uEWKTOhQEVX6EZfL23AoscJTyAzVrxK6nbzuQuH7sLKaTmcKzryjX6FOyxJ5IcOcfcFGT7oE2xF2jL3_jB4qLGBT12LKfBZFfKaAXI5Mmfj"
+            />
+            <p class="text-sm text-on-surface-variant mb-6 max-w-sm">
+              La plateforme logicielle de référence pour les gestionnaires de
+              patrimoine immobilier. Centralisez, analysez et optimisez vos
+              actifs en toute sécurité.
+            </p>
+            <div class="flex gap-4">
+              <a
+                class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors rounded-none"
+                href="#"
+              >
+                <span class="material-symbols-outlined text-[20px]"
+                  >language</span
+                >
+              </a>
+              <a
+                class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors rounded-none"
+                href="#"
+              >
+                <span class="material-symbols-outlined text-[20px]">mail</span>
+              </a>
+              <a
+                class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors rounded-none"
+                href="#"
+              >
+                <span class="material-symbols-outlined text-[20px]">phone</span>
+              </a>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-h3 text-base font-semibold text-on-surface mb-6">
+              Produit
+            </h4>
+            <ul class="flex flex-col gap-3 text-sm text-on-surface-variant">
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Solutions</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Fonctionnalités</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Tarifs</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Témoignages</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Sécurité</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-h3 text-base font-semibold text-on-surface mb-6">
+              Ressources
+            </h4>
+            <ul class="flex flex-col gap-3 text-sm text-on-surface-variant">
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Centre d'aide</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Études de cas</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Blog</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Webinaires</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-h3 text-base font-semibold text-on-surface mb-6">
+              Société
+            </h4>
+            <ul class="flex flex-col gap-3 text-sm text-on-surface-variant">
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >À propos</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Carrières</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Contact</a
+                >
+              </li>
+              <li>
+                <a class="hover:text-primary transition-colors" href="#"
+                  >Partenaires</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          class="border-t border-outline-variant/30 pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
+        >
+          <p class="text-xs text-on-surface-variant">
+            © 2024 BailKey Asset Management. Tous droits réservés.
+          </p>
+          <div class="flex gap-6 text-xs text-on-surface-variant">
+            <a class="hover:text-primary transition-colors" href="#"
+              >Mentions Légales</a
+            >
+            <a class="hover:text-primary transition-colors" href="#"
+              >Politique de Confidentialité</a
+            >
+            <a class="hover:text-primary transition-colors" href="#">CGU</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

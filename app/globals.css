@@ -1,26 +1,289 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==========================================================================
+   1. TAILWIND V4 THEME CONFIGURATION
+   ========================================================================== */
+@theme {
+  /* --- BailKey Design System (Tokens from template) --- */
+  --color-primary: #00696a;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #2eb1b2;
+  --color-on-primary-container: #003e3f;
+  --color-primary-fixed: #7ff5f5;
+  --color-primary-fixed-dim: #60d8d9;
+
+  --color-secondary: oklch(0.967 0.001 286.375);
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #dde0e2;
+  --color-on-secondary-container: #5f6365;
+
+  --color-tertiary: #94491d;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #e58957;
+  --color-tertiary-fixed: #ffdbcb;
+  --color-tertiary-fixed-dim: #ffb691;
+
+  --color-background: #ffffff;
+  --color-on-background: #171d1d;
+
+  --color-surface: #f5fafa;
+  --color-on-surface: #171d1d;
+  --color-surface-variant: #dee4e3;
+  --color-on-surface-variant: #3d4949;
+  --color-surface-dim: #d6dbda;
+  --color-surface-bright: #f5fafa;
+
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #eff5f4;
+  --color-surface-container: #eaefee;
+  --color-surface-container-high: #e4e9e8;
+  --color-surface-container-highest: #dee4e3;
+
+  --color-outline: #6d7a79;
+  --color-outline-variant: #bcc9c9;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  /* --- Spacing Tokens --- */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2.5rem;
+  --spacing-xl: 4rem;
+  --spacing-base: 0.25rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-margin: 2rem;
+
+  /* --- Typography --- */
+  --font-display: "Manrope", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-h1: "Manrope", sans-serif;
+  --font-h2: "Manrope", sans-serif;
+  --font-h3: "Manrope", sans-serif;
+  --font-body-lg: "Inter", sans-serif;
+  --font-body-md: "Inter", sans-serif;
+  --font-label-caps: "Inter", sans-serif;
+
+  --text-display: 48px;
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 700;
+
+  --text-h1: 32px;
+  --text-h1--line-height: 1.2;
+  --text-h1--letter-spacing: -0.01em;
+  --text-h1--font-weight: 600;
+
+  --text-h2: 24px;
+  --text-h2--line-height: 1.3;
+  --text-h2--font-weight: 600;
+
+  --text-h3: 20px;
+  --text-h3--line-height: 1.4;
+  --text-h3--font-weight: 500;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 1.6;
+  --text-body-lg--font-weight: 400;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 1.5;
+  --text-body-md--font-weight: 400;
+
+  --text-label-caps: 12px;
+  --text-label-caps--line-height: 1.0;
+  --text-label-caps--letter-spacing: 0.05em;
+  --text-label-caps--font-weight: 600;
+
+  /* --- Effects --- */
+  --shadow-glass: 0 32px 64px -16px rgba(0, 105, 106, 0.05);
+  --radius-lg: 0px;
+  --radius-xl: 0px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+/* ==========================================================================
+   2. BASE STYLES
+   ========================================================================== */
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: light;
+  }
+
+  body {
+    @apply bg-background text-on-surface font-body antialiased;
+    scroll-behavior: smooth;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display tracking-tight;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ==========================================================================
+   3. COMPONENTS
+   ========================================================================== */
+@layer components {
+  /* Effet Glassmorphism (Navbar, Dashboard) */
+  .glass-panel {
+    @apply bg-surface/80 backdrop-blur-xl border border-outline-variant/30 shadow-glass;
+  }
+
+  /* Typographie spécifique */
+  .text-display {
+    @apply text-5xl md:text-7xl font-extrabold leading-[1.1];
+  }
+
+  .font-label-caps {
+    @apply text-[10px] uppercase tracking-[0.2em] font-bold;
+  }
+
+  /* FIX CRITIQUE: Forcer la police pour Material Symbols */
+  .material-symbols-outlined {
+    font-family: "Material Symbols Outlined" !important;
+    font-variation-settings:
+      "FILL" 0,
+      "wght" 400,
+      "GRAD" 0,
+      "opsz" 24;
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* --- États initiaux GSAP (Prévient le FOUC) --- */
+  .hero-word {
+    @apply inline-block opacity-0 translate-y-[30px];
+  }
+
+  .hero-subtitle {
+    @apply opacity-0 translate-y-[20px];
+  }
+
+  .feature-section {
+    @apply opacity-0 invisible;
+  }
+
+  .chart-bar {
+    transform-origin: bottom;
+    transform: scaleY(0);
+  }
+
+  .gsap-button {
+    @apply origin-center transition-transform duration-300;
+  }
+}
+
+/* ==========================================================================
+   4. UTILITIES (Animations SVG & Scroll)
+   ========================================================================== */
+@layer utilities {
+  /* Masquer les barres de défilement tout en gardant le scroll actif */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Optimisation de performance pour les animations complexes de la navbar */
+  #nav-pill {
+    will-change: width, padding, background-color, box-shadow;
+  }
+
+  /* ------------------------------------------------------------------------
+     ANIMATIONS DU HERO BACKGROUND (Style Maquette Claire)
+     ------------------------------------------------------------------------ */
+  @keyframes travelAnim {
+    0% {
+      stroke-dasharray: 0, 3000;
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      stroke-dasharray: 600, 3000;
+      stroke-dashoffset: -2000;
+      opacity: 0;
+    }
+  }
+
+  @keyframes pulseDot {
+    0% {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+    50% {
+      transform: scale(1.5);
+      opacity: 0.2;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes spinSlow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes floatAnim {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  .data-particle-1 {
+    stroke-linecap: round;
+    animation: travelAnim 12s ease-in-out infinite;
+  }
+
+  .data-particle-2 {
+    stroke-linecap: round;
+    animation: travelAnim 15s ease-in-out infinite;
+    animation-delay: 3s;
+  }
+
+  .pulse-dot {
+    animation: pulseDot 4s infinite ease-in-out;
+    transform-origin: center;
+  }
+
+  .spin-slow {
+    animation: spinSlow 30s linear infinite;
+    transform-origin: center;
+  }
+
+  .floating-element {
+    animation: floatAnim 10s ease-in-out infinite;
+  }
 }
