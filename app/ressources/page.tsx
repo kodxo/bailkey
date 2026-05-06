@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -71,7 +72,7 @@ export default function ResourcesPage() {
     <>
       <Navbar />
 
-      <main className="flex-grow pt-32 pb-xl px-6 max-w-7xl mx-auto w-full min-h-screen">
+      <main className="grow pt-32 pb-xl px-6 max-w-7xl mx-auto w-full min-h-screen">
         {/* Hero Section */}
         <section className="mb-16 text-center md:text-left">
           <h1 className="font-display text-display text-on-surface mb-4">
@@ -128,15 +129,15 @@ export default function ResourcesPage() {
                 <p className="font-body-md text-body-md text-on-surface-variant flex-grow mb-6">
                   {resource.description}
                 </p>
-                <a
+                <Link
                   className="font-h3 text-sm text-primary hover:text-primary-container inline-flex items-center gap-2 font-semibold uppercase tracking-wider transition-colors"
-                  href="#"
+                  href="/post_detail"
                 >
                   Lire la suite
                   <span className="material-symbols-outlined text-sm">
                     arrow_forward
                   </span>
-                </a>
+                </Link>
               </div>
             </article>
           ))}
@@ -158,7 +159,7 @@ export default function ResourcesPage() {
             onSubmit={(e) => e.preventDefault()}
           >
             <input
-              className="flex-grow bg-surface-container-lowest border border-outline rounded-none px-4 py-3 font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-on-surface-variant/50"
+              className="grow bg-surface-container-lowest border border-outline rounded-none px-4 py-3 font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-on-surface-variant/50"
               placeholder="Votre adresse email professionnelle"
               type="email"
               required
@@ -167,7 +168,7 @@ export default function ResourcesPage() {
               className="bg-primary text-on-primary font-h3 text-sm uppercase tracking-wider px-6 py-3 rounded-none hover:bg-primary/90 transition-colors whitespace-nowrap"
               type="submit"
             >
-              S'inscrire
+              S&apos;inscrire
             </button>
           </form>
         </section>

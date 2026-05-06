@@ -38,6 +38,7 @@ export function Footer() {
               src="/logo.png"
               width={120}
               height={32}
+              style={{ width: "auto", height: "auto" }}
             />
             <p className="text-body-sm text-on-surface-variant mb-6">
               La plateforme logicielle de référence pour les gestionnaires de

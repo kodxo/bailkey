@@ -20,6 +20,7 @@ export default function RootLayout({
     <html
       lang="fr"
       className={`light scroll-smooth ${inter.variable} ${manrope.variable}`}
+      suppressHydrationWarning
     >
       <head>
         {/* Importation fiable des Material Symbols pour Next.js */}

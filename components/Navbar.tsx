@@ -20,21 +20,29 @@ export function Navbar() {
     () => {
       const navTimeline = gsap.timeline({
         scrollTrigger: {
-          trigger: "body",
+          trigger: typeof document !== "undefined" ? document.body : "body",
           start: "top top",
           end: "top -100",
           scrub: 1,
         },
       });
 
-      navTimeline.to(
+      navTimeline.fromTo(
         "#nav-pill",
+        {
+          width: "95%",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          backgroundColor: "rgba(245, 250, 250, 0.9)", // Valeur exacte de bg-surface/90
+          boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)", // shadow-sm
+        },
         {
           width: "70%",
           paddingTop: "0.75rem",
           paddingBottom: "0.75rem",
-
           backgroundColor: "rgba(251, 248, 252, 0.95)",
+          boxShadow:
+            "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
           ease: "power2.inOut",
         },
         0,
@@ -58,7 +66,7 @@ export function Navbar() {
       id="nav-wrapper"
     >
       <div
-        className="bg-surface/90 backdrop-blur-md w-[95%] max-w-7xl mx-auto px-8 py-4 mt-6 border border-outline-variant/30 shadow-sm flex items-center justify-between gap-8 transform-gpu transition-all duration-500 ease-in-out"
+        className="bg-surface/90 backdrop-blur-md w-[95%] max-w-7xl mx-auto px-8 py-4 mt-6 border border-outline-variant/30 shadow-sm flex items-center justify-between gap-8 transform-gpu"
         id="nav-pill"
       >
         <div className="text-xl font-bold tracking-tighter text-on-surface">
@@ -70,6 +78,8 @@ export function Navbar() {
               src="/logo.png"
               width={120}
               height={32}
+              priority
+              style={{ width: "auto", height: "auto" }}
             />
           </Link>
         </div>

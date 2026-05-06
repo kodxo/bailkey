@@ -444,6 +444,8 @@ export default function Home() {
                   className="w-full h-full object-cover shadow-xl feature-img"
                   src="/modern_architecture_building.png"
                   fill
+                  priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
                 <div className="absolute bottom-8 left-8 right-8 bg-surface/90 backdrop-blur-md p-6 border border-outline-variant/30 flex justify-between items-center shadow-lg feature-float-card">
@@ -539,6 +541,7 @@ export default function Home() {
                   className="w-full h-full object-cover shadow-xl feature-img"
                   src="/professional_office_workspace.png"
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
                 <div className="absolute bottom-8 left-8 right-8 bg-surface/90 backdrop-blur-md p-6 border border-outline-variant/30 flex justify-between items-center shadow-lg feature-float-card">
@@ -629,6 +632,7 @@ export default function Home() {
                   className="w-full h-full object-cover shadow-xl feature-img"
                   src="/financial_analytics_graph_on_glass.png"
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
                 <div className="absolute bottom-8 left-8 right-8 bg-surface/90 backdrop-blur-md p-6 border border-outline-variant/30 flex justify-between items-center shadow-lg feature-float-card">
@@ -724,8 +728,9 @@ export default function Home() {
                   className="w-full h-full object-cover shadow-xl feature-img"
                   src="/person_using_a_smartphone_app_for_real_estate.png"
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
+                <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent"></div>
                 <div className="absolute bottom-8 left-8 right-8 bg-surface/90 backdrop-blur-md p-6 border border-outline-variant/30 flex justify-between items-center shadow-lg feature-float-card">
                   <div>
                     <div className="text-xs font-label-caps text-on-surface-variant mb-1">
