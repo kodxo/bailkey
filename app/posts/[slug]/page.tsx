@@ -137,7 +137,7 @@ function RelatedPostCard({ post }: { post: PostSummaryDTO }) {
   return (
     <Link
       className="group block bg-surface-container-low border border-transparent hover:border-primary/30 transition-colors shadow-sm"
-      href={`/post_detail/${post.slug}`}
+      href={`/posts/${post.slug}`}
     >
       {post.coverImage && (
         <div className="h-32 bg-surface-variant relative overflow-hidden">

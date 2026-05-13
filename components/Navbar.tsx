@@ -56,7 +56,7 @@ export function Navbar() {
     { name: "Plateforme", href: "/" },
     { name: "Solutions", href: "/solutions" },
     { name: "Tarifs", href: "/pricing" }, // ou /tarifs selon le nom de votre dossier
-    { name: "Ressources", href: "/ressources" },
+    { name: "Ressources", href: "/posts" },
   ];
 
   return (

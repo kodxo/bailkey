@@ -119,7 +119,7 @@ export function ResourcesGrid({ posts }: { posts: PostSummaryDTO[] }) {
 
                 <Link
                   className="font-h3 text-sm text-primary hover:text-primary-container inline-flex items-center gap-2 font-semibold uppercase tracking-wider transition-colors"
-                  href={`/post_detail/${post.slug}`}
+                  href={`/posts/${post.slug}`}
                 >
                   Lire
                   <span className="material-symbols-outlined text-sm">
