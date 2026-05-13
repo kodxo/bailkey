@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 const ContactMap = dynamic(() => import("@/components/ContactMap"), {
   ssr: false,
   loading: () => (
-    <div className="flex-grow bg-surface-container-highest border border-outline-variant rounded-none relative overflow-hidden min-h-[300px] flex items-center justify-center">
+    <div className="grow bg-surface-container-highest border border-outline-variant rounded-none relative overflow-hidden min-h-[300px] flex items-center justify-center">
       <p className="text-on-surface-variant font-medium">
         Chargement de la carte...
       </p>
@@ -22,11 +22,11 @@ export default function ContactPage() {
     <div className="flex flex-col min-h-screen">
       <Navbar />
 
-      <main className="flex-grow pt-32 pb-xl px-gutter max-w-[1440px] mx-auto w-full">
+      <main className="grow pt-32 pb-xl px-gutter max-w-[1440px] mx-auto w-full">
         {/* Header Section  */}
         <header className="mb-xl max-w-3xl">
           <h1 className="font-display text-display text-on-surface mb-xs uppercase tracking-tight">
-            Contactez l'Expertise BailKey
+            Contactez l&apos;Expertise BailKey
           </h1>
           <p className="font-body-lg text-body-lg text-on-surface-variant">
             Nos experts sont à votre disposition pour optimiser votre gestion
@@ -105,8 +105,8 @@ export default function ContactPage() {
                   id="message"
                   name="message"
                   placeholder="Décrivez votre besoin..."
-                  rows="5"
-                ></textarea>
+                  rows={5}
+                />
               </div>
               <div className="pt-sm">
                 <button
@@ -122,7 +122,7 @@ export default function ContactPage() {
           <section className="lg:col-span-5 flex flex-col gap-gutter">
             {/* Info Card  */}
             <div className="bg-surface-container border border-outline-variant p-md rounded-none relative">
-              <div className="absolute -left-[1px] top-md bottom-md w-[2px] bg-primary-container"></div>
+              <div className="absolute -left-px top-md bottom-md w-[2px] bg-primary-container"></div>
               <h3 className="font-h3 text-h3 text-on-surface mb-sm">
                 Coordonnées
               </h3>
@@ -186,7 +186,7 @@ export default function ContactPage() {
                   </span>
                   <div>
                     <span className="block font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">
-                      Heures d'Ouverture
+                      Heures d&apos;Ouverture
                     </span>
                     <span className="block font-body-md text-body-md text-on-surface">
                       Lun - Ven : 09h00 - 18h30
@@ -199,7 +199,7 @@ export default function ContactPage() {
             </div>
             {/* Interactive Map */}
             <div
-              className="flex-grow border border-outline-variant rounded-none relative overflow-hidden min-h-[300px] z-10 shadow-inner"
+              className="grow border border-outline-variant rounded-none relative overflow-hidden min-h-[300px] z-10 shadow-inner"
               data-location="Paris"
             >
               <ContactMap center={parisCoords} />
