@@ -1,153 +1,217 @@
 import { prisma } from "@/lib/db";
-import { PostCategory, PostStatus } from "@/lib/generated/prisma/enums";
 
 async function main() {
-  console.log("Démarrage du seeding pour Bailkey...");
+  console.log("🚀 Démarrage du seeding pour Bailkey...");
 
+  // Nettoyage de la base de données
+  console.log("🧹 Nettoyage des données existantes...");
   await prisma.post.deleteMany();
   await prisma.tag.deleteMany();
   await prisma.user.deleteMany();
 
   // ---------------------------------------------------------------------------
-  // 1. Auteur : Expert Immobilier (Focus Marché Local)
+  // 1. CRÉATION DES AUTEURS (USERS)
   // ---------------------------------------------------------------------------
-  const laurent = await prisma.user.create({
-    data: {
+  console.log("👤 Création des auteurs...");
+
+  const authors = [
+    {
       name: "Laurent N.",
       role: "Expert en Stratégie Foncière",
-      avatarUrl:
-        "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200&h=200",
-      posts: {
-        create: [
-          {
-            title: "Digitaliser la gestion locative entre Douala et Yaoundé",
-            slug: "digitaliser-gestion-locative-douala-yaounde",
-            category: PostCategory.GUIDE,
-            status: PostStatus.PUBLISHED,
-            publishedAt: new Date(),
-            readingTime: 6,
-            coverImage:
-              "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
-            coverImageAlt: "Vue aérienne d'un quartier d'affaires moderne",
-            excerpt:
-              "La fragmentation des données immobilières ralentit la rentabilité. Découvrez comment centraliser vos actifs sur l'axe Douala-Yaoundé.",
-            metaTitle:
-              "Digitalisation Gestion Locative Douala Yaoundé | Bailkey",
-            metaDescription:
-              "Guide complet pour digitaliser et optimiser la gestion de vos actifs immobiliers au Cameroun avec des outils SaaS modernes.",
-            content: `
-La gestion immobilière moderne exige une précision chirurgicale. La véritable rentabilité ne naît pas seulement de l'acquisition de nouveaux actifs, mais de la maîtrise absolue des flux opérationnels existants.
+      avatarUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200&h=200",
+    },
+    {
+      name: "Sophie M.",
+      role: "Juriste Immobilier & Régulation",
+      avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200&h=200",
+    },
+    {
+      name: "Pôle Ingénierie",
+      role: "Équipe Technique Bailkey",
+      avatarUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=200&h=200",
+    },
+    {
+      name: "Marc A.",
+      role: "Directeur de l'Innovation",
+      avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200&h=200",
+    }
+  ];
+
+  const createdAuthors = [];
+  for (const author of authors) {
+    const user = await prisma.user.create({
+      data: author,
+    });
+    createdAuthors.push(user);
+    console.log(`   ✅ Auteur créé : ${user.name} (${user.role})`);
+  }
+
+  // ---------------------------------------------------------------------------
+  // 2. CRÉATION DES TAGS
+  // ---------------------------------------------------------------------------
+  console.log("\n🏷️ Création des tags...");
+
+  const tagData = [
+    { name: "Digitalisation", slug: "digitalisation" },
+    { name: "Gestion Locative", slug: "gestion-locative" },
+    { name: "Fiscalité", slug: "fiscalite" },
+    { name: "Tech", slug: "tech" },
+    { name: "SaaS", slug: "saas" },
+    { name: "Rentabilité", slug: "rentabilite" },
+    { name: "Immobilier Commercial", slug: "immobilier-commercial" },
+    { name: "Automatisation", slug: "automatisation" },
+    { name: "Législation", slug: "legislation" },
+    { name: "Afrique Centrale", slug: "afrique-centrale" }
+  ];
+
+  const createdTags = [];
+  for (const tag of tagData) {
+    const t = await prisma.tag.create({ data: tag });
+    createdTags.push(t);
+  }
+  console.log(`   ✅ ${createdTags.length} tags créés.`);
+
+  // ---------------------------------------------------------------------------
+  // 3. CRÉATION DES POSTS (Partie 1)
+  // ---------------------------------------------------------------------------
+  console.log("\n📝 Création des articles (Batch 1)...");
+
+  // Post 1 : Guide
+  const post1 = await prisma.post.create({
+    data: {
+      title: "Digitaliser la gestion locative entre Douala et Yaoundé",
+      slug: "digitaliser-gestion-locative-douala-yaounde",
+      category: "GUIDE",
+      status: "PUBLISHED",
+      publishedAt: new Date(new Date().setDate(new Date().getDate() - 10)),
+      readingTime: 6,
+      coverImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
+      coverImageAlt: "Vue aérienne d'un quartier d'affaires moderne",
+      excerpt: "La fragmentation des données immobilières ralentit la rentabilité. Découvrez comment centraliser vos actifs sur l'axe Douala-Yaoundé.",
+      metaTitle: "Digitalisation Gestion Locative Douala Yaoundé | Bailkey",
+      metaDescription: "Guide complet pour digitaliser et optimiser la gestion de vos actifs immobiliers au Cameroun avec des outils SaaS modernes.",
+      content: `La gestion immobilière moderne exige une précision chirurgicale. La véritable rentabilité ne naît pas seulement de l'acquisition de nouveaux actifs, mais de la maîtrise absolue des flux opérationnels existants.
 
 ## La centralisation des données : Un enjeu majeur
 
 Aujourd'hui, de nombreux gestionnaires opérant sur plusieurs villes s'appuient encore sur des fichiers Excel dispersés. Cette fragmentation entraîne des retards de paiement, des erreurs de calcul et une perte de temps considérable lors des redditions de comptes. 
 
-En centralisant vos données (baux, paiements, interventions techniques) sur une plateforme cloud unique, vous gagnez en visibilité immédiate, peu importe où vous vous trouvez.
-            `,
-            tags: {
-              connectOrCreate: [
-                {
-                  where: { slug: "digitalisation" },
-                  create: { name: "Digitalisation", slug: "digitalisation" },
-                },
-                {
-                  where: { slug: "gestion-locative" },
-                  create: {
-                    name: "Gestion Locative",
-                    slug: "gestion-locative",
-                  },
-                },
-              ],
-            },
-          },
-          {
-            title: "Brouillon : Les nouvelles régulations fiscales 2026",
-            slug: "nouvelles-regulations-fiscales-2026",
-            category: PostCategory.ACTUALITE,
-            status: PostStatus.DRAFT,
-            // Pas de publishedAt ni de readingTime car c'est un brouillon
-            excerpt:
-              "Aperçu des impacts fiscaux sur les revenus fonciers pour l'année à venir.",
-            content:
-              "Ce texte est en cours de rédaction. Il abordera les optimisations possibles...",
-            tags: {
-              connectOrCreate: [
-                {
-                  where: { slug: "fiscalite" },
-                  create: { name: "Fiscalité", slug: "fiscalite" },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  });
+> Le passage au numérique n'est plus une option, c'est une nécessité de survie économique pour les agences.
 
-  // ---------------------------------------------------------------------------
-  // 2. Auteur : Pôle Tech / ERP
-  // ---------------------------------------------------------------------------
-  const techLead = await prisma.user.create({
+En centralisant vos données (baux, paiements, interventions techniques) sur une plateforme cloud unique, vous gagnez en visibilité immédiate, peu importe où vous vous trouvez.`,
+      authorId: createdAuthors[0].id, // Laurent N.
+      tags: {
+        connect: [{ slug: "digitalisation" }, { slug: "gestion-locative" }, { slug: "afrique-centrale" }]
+      }
+    }
+  });
+  console.log(`   ✅ Article créé : ${post1.title}`);
+
+  // Post 2 : Analyse
+  const post2 = await prisma.post.create({
     data: {
-      name: "Pôle Ingénierie",
-      role: "Équipe Technique Bailkey",
-      avatarUrl:
-        "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=200&h=200",
-      posts: {
-        create: [
-          {
-            title:
-              "Optimisation de l'infrastructure SaaS : Pourquoi nous utilisons Next.js",
-            slug: "optimisation-infrastructure-saas-nextjs",
-            category: PostCategory.ANALYSE,
-            status: PostStatus.PUBLISHED,
-            publishedAt: new Date(new Date().setDate(new Date().getDate() - 5)), // Publié il y a 5 jours
-            readingTime: 8,
-            coverImage:
-              "https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&q=80&w=1200",
-            coverImageAlt: "Architecture serveur et code",
-            excerpt:
-              "Plongée technique dans l'architecture qui permet à Bailkey de traiter des milliers de lots locatifs sans latence.",
-            metaTitle: "Architecture SaaS Next.js pour l'Immobilier",
-            metaDescription:
-              "Découvrez nos choix architecturaux avec Next.js et Prisma pour garantir des performances extrêmes à nos gestionnaires immobiliers.",
-            content: `
-La performance d'une plateforme métier ne doit faire l'objet d'aucun compromis. Pour garantir une expérience fluide à nos utilisateurs, même lors du traitement de milliers de données locatives, le choix de la stack technique est crucial.
+      title: "Optimisation de l'infrastructure SaaS : Pourquoi nous utilisons Next.js",
+      slug: "optimisation-infrastructure-saas-nextjs",
+      category: "ANALYSE",
+      status: "PUBLISHED",
+      publishedAt: new Date(new Date().setDate(new Date().getDate() - 5)),
+      readingTime: 8,
+      coverImage: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&q=80&w=1200",
+      coverImageAlt: "Architecture serveur et code",
+      excerpt: "Plongée technique dans l'architecture qui permet à Bailkey de traiter des milliers de lots locatifs sans latence.",
+      metaTitle: "Architecture SaaS Next.js pour l'Immobilier",
+      metaDescription: "Découvrez nos choix architecturaux avec Next.js et Prisma pour garantir des performances extrêmes à nos gestionnaires immobiliers.",
+      content: `La performance d'une plateforme métier ne doit faire l'objet d'aucun compromis. Pour garantir une expérience fluide à nos utilisateurs, même lors du traitement de milliers de données locatives, le choix de la stack technique est crucial.
 
 ## Server Components et vitesse d'exécution
 
-En utilisant les Server Components de Next.js, nous réduisons drastiquement la charge sur le navigateur de nos clients. L'interface se charge instantanément, car le gros du calcul (récupération des loyers, consolidation financière) est effectué directement côté serveur, sans dépendre d'applications de consolidation tierces obsolètes.
+En utilisant les Server Components de Next.js, nous réduisons drastiquement la charge sur le navigateur de nos clients. L'interface se charge instantanément, car le gros du calcul (récupération des loyers, consolidation financière) est effectué directement côté serveur.
 
 ## Sécurité des bases de données
 
-Couplé à Prisma, notre architecture garantit l'intégrité absolue des données financières de nos clients. Un schéma strict est la première ligne de défense.
-            `,
-            tags: {
-              connectOrCreate: [
-                {
-                  where: { slug: "tech" },
-                  create: { name: "Tech", slug: "tech" },
-                },
-                {
-                  where: { slug: "saas" },
-                  create: { name: "SaaS", slug: "saas" },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
+Couplé à Prisma, notre architecture garantit l'intégrité absolue des données financières de nos clients. Un schéma strict est la première ligne de défense contre les erreurs d'incohérence comptable.`,
+      authorId: createdAuthors[2].id, // Pôle Ingénierie
+      tags: {
+        connect: [{ slug: "tech" }, { slug: "saas" }, { slug: "automatisation" }]
+      }
+    }
   });
+  console.log(`   ✅ Article créé : ${post2.title}`);
 
-  console.log(
-    `Seeding terminé. Auteurs créés : ${laurent.name}, ${techLead.name}`,
-  );
+  // ---------------------------------------------------------------------------
+  // 4. CRÉATION DES POSTS (Partie 2)
+  // ---------------------------------------------------------------------------
+  console.log("\n📝 Création des articles (Batch 2)...");
+
+  // Post 3 : Étude de cas (Cas Client)
+  const post3 = await prisma.post.create({
+    data: {
+      title: "Comment l'agence Haussmann a réduit ses impayés de 30%",
+      slug: "etude-de-cas-agence-haussmann",
+      category: "CAS_CLIENT",
+      status: "PUBLISHED",
+      publishedAt: new Date(new Date().setDate(new Date().getDate() - 2)),
+      readingTime: 5,
+      coverImage: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1200",
+      coverImageAlt: "Façade d'un immeuble de rapport",
+      excerpt: "Analyse détaillée de la stratégie mise en place par une agence leader pour automatiser ses relances et sécuriser ses revenus locatifs.",
+      metaTitle: "Étude de Cas : Réduction des Impayés | Bailkey",
+      metaDescription: "Découvrez comment l'automatisation des relances avec Bailkey permet de réduire significativement les retards de paiement de loyers.",
+      content: `Gérer les retards de paiement est l'une des tâches les plus chronophages pour un gestionnaire locatif. L'agence Haussmann gérait historiquement ses relances manuellement.
+
+## Le problème des relances manuelles
+
+Chaque 5 du mois, l'équipe comptable devait pointer les relevés bancaires, identifier les manquements, rédiger des emails ou courriers, et suivre les réponses. Un processus lourd, sujet aux erreurs, et souvent exécuté avec retard.
+
+> La clé n'est pas d'être sévère, mais d'être systématique et réactif. L'automatisation permet cette rigueur sans l'effort humain.
+
+## La solution : Relances automatisées et portail locataire
+
+En intégrant Bailkey, l'agence a configuré des scénarios de relance : 
+1. J+3 : SMS de rappel amical
+2. J+7 : Email formel avec lien de paiement sécurisé
+3. J+15 : Mise en demeure générée automatiquement au format PDF
+
+Résultat : une baisse de 30% des retards dès le deuxième mois.`,
+      authorId: createdAuthors[1].id, // Sophie M.
+      tags: {
+        connect: [{ slug: "automatisation" }, { slug: "rentabilite" }]
+      },
+      relatedPosts: {
+        connect: [{ id: post1.id }] // Lier l'étude de cas au guide sur la digitalisation
+      }
+    }
+  });
+  console.log(`   ✅ Article créé : ${post3.title}`);
+
+  // Post 4 : Brouillon (Actualité)
+  const post4 = await prisma.post.create({
+    data: {
+      title: "Les nouvelles réglementations de la gestion locative en 2026",
+      slug: "nouvelles-reglementations-gestion-locative-2026",
+      category: "ACTUALITE",
+      status: "DRAFT",
+      // Pas de publishedAt ni readingTime pour un draft
+      excerpt: "Un tour d'horizon complet des changements législatifs à venir, notamment sur les normes énergétiques et l'encadrement des loyers.",
+      metaTitle: "Réglementations Immobilières 2026",
+      content: `Ce texte est en cours de rédaction. Il abordera :
+- Les nouvelles normes DPE
+- L'impact sur la rentabilité nette
+- Comment anticiper avec Bailkey`,
+      authorId: createdAuthors[1].id, // Sophie M.
+      tags: {
+        connect: [{ slug: "legislation" }, { slug: "fiscalite" }]
+      }
+    }
+  });
+  console.log(`   ✅ Article créé : ${post4.title} (Brouillon)`);
+
+  console.log("\n🎉 Seeding terminé avec succès !");
 }
 
 main()
   .catch((e) => {
-    console.error("Erreur durant le seeding:", e);
+    console.error("❌ Erreur durant le seeding:", e);
     process.exit(1);
   })
   .finally(async () => {
