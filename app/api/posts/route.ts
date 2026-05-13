@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getPublishedPosts } from "@/lib/dal/posts";
-import type { PostCategory } from "@/lib/generated/prisma";
+import { PostCategory } from "@/lib/generated/prisma/enums";
 
-const VALID_CATEGORIES = new Set<string>([
+const VALID_CATEGORIES = new Set<PostCategory>([
   "GUIDE",
   "ANALYSE",
   "CAS_CLIENT",
