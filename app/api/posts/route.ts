@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { getPublishedPosts } from "@/lib/dal/posts";
 import { PostCategory } from "@/lib/generated/prisma/enums";
 
-const VALID_CATEGORIES = new Set<PostCategory>([
+const VALID_CATEGORIES = new Set<string>([
   "GUIDE",
   "ANALYSE",
   "CAS_CLIENT",
