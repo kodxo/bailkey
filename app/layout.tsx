@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body className="bg-background text-on-surface font-body-md text-body-md overflow-x-hidden">
         {children}
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
