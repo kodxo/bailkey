@@ -12,6 +12,20 @@ datasource db {
   provider = "postgresql"
 }
 
+// On utilise des Enums pour sécuriser les données (éviter les fautes de frappe)
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum PostCategory {
+  GUIDE
+  ANALYSE
+  CAS_CLIENT
+  ACTUALITE
+}
+
 model User {
   id        String  @id @default(cuid())
   name      String
@@ -22,22 +36,52 @@ model User {
 }
 
 model Post {
-  id            String   @id @default(cuid())
-  slug          String   @unique
-  title         String
-  category      String
-  publishedAt   DateTime @default(now())
-  readingTime   Int
-  coverImage    String
-  coverImageAlt String?
-  content       String   @db.Text
+  id    String @id @default(cuid())
+  slug  String @unique
+  title String
 
+  category PostCategory
+
+  status PostStatus @default(DRAFT)
+
+  publishedAt DateTime?
+  readingTime Int?
+
+  coverImage    String?
+  coverImageAlt String?
+
+  // Un extrait court pour éviter de charger tout le contenu sur les pages de liste
+  excerpt String? @db.Text
+  content String  @db.Text
+
+  // Champs SEO (Crucial pour le marketing)
+  metaTitle       String?
+  metaDescription String? @db.Text
+
+  // Relations Auteur
   authorId String
   author   User   @relation("PostAuthor", fields: [authorId], references: [id])
 
+  // Relations Articles Recommandés
   relatedPosts Post[] @relation("RelatedPosts")
   relatedTo    Post[] @relation("RelatedPosts")
 
+  // Nouvelle relation : Les Tags (Many-to-Many)
+  tags Tag[] @relation("PostTags")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // INDEXATION : Indispensable pour accélérer les requêtes de ton app Next.js
+  @@index([slug])
+  @@index([status, publishedAt]) // Optimise: "Trouver les articles publiés, triés par date"
+  @@index([category])
+}
+
+model Tag {
+  id   String @id @default(cuid())
+  name String @unique
+  slug String @unique
+
+  posts Post[] @relation("PostTags")
 }
