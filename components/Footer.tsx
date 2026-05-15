@@ -1,15 +1,15 @@
 "use client";
 
-import { useRef} from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { usePathname } from "next/navigation";
-import clsx  from "clsx";
+import clsx from "clsx";
 
 export function Footer() {
-  const pathname = usePathname(); 
+  const pathname = usePathname();
   const footerRef = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -174,7 +174,10 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link className="hover:text-primary transition-colors" href="#">
+                <Link
+                  className="hover:text-primary transition-colors"
+                  href="/partners"
+                >
                   Partenaires
                 </Link>
               </li>

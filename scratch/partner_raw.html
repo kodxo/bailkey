@@ -1,0 +1,773 @@
+<!doctype html>
+
+<html class="light" lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Partenaires - BailKey</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              ring: "oklch(0.723 0.014 214.4)",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#c4c7c9",
+              card: "oklch(1 0 0)",
+              "error-container": "#ffdad6",
+              "secondary-foreground": "oklch(0.21 0.006 285.885)",
+              outline: "#6d7a79",
+              "surface-bright": "#f5fafa",
+              "on-primary-fixed-variant": "#004f50",
+              "surface-container": "#eaefee",
+              border: "oklch(0.925 0.005 214.3)",
+              background: "oklch(1 0 0)",
+              "inverse-surface": "#2c3131",
+              "on-tertiary-container": "#602600",
+              "muted-foreground": "oklch(0.56 0.021 213.5)",
+              "on-tertiary": "#ffffff",
+              "accent-foreground": "oklch(0.218 0.008 223.9)",
+              "surface-container-high": "#e4e9e8",
+              secondary: "oklch(0.967 0.001 286.375)",
+              "surface-tint": "#00696a",
+              "glass-border": "rgba(255, 255, 255, 0.6)",
+              "inverse-on-surface": "#ecf2f1",
+              "primary-fixed": "#7ff5f5",
+              "outline-variant": "#bcc9c9",
+              "on-secondary-fixed-variant": "#434749",
+              "surface-variant": "#dee4e3",
+              muted: "oklch(0.963 0.002 197.1)",
+              "on-surface": "#171d1d",
+              "primary-container": "#2eb1b2",
+              "surface-container-lowest": "#ffffff",
+              error: "#ba1a1a",
+              "tertiary-fixed": "#ffdbcb",
+              "tertiary-fixed-dim": "#ffb691",
+              "on-tertiary-fixed": "#341100",
+              foreground: "oklch(0.148 0.004 228.8)",
+              destructive: "oklch(0.577 0.245 27.325)",
+              "on-surface-variant": "#3d4949",
+              tertiary: "#94491d",
+              "on-primary-container": "#003e3f",
+              "on-error": "#ffffff",
+              "surface-container-highest": "#dee4e3",
+              "on-background": "#171d1d",
+              "inverse-primary": "#60d8d9",
+              "on-primary-fixed": "#002020",
+              "on-secondary-fixed": "#181c1e",
+              "secondary-fixed": "#e0e3e5",
+              accent: "oklch(0.963 0.002 197.1)",
+              "surface-dim": "#d6dbda",
+              "primary-fixed-dim": "#60d8d9",
+              primary: "#2eb1b2",
+              "on-secondary-container": "#5f6365",
+              "on-primary": "#ffffff",
+              "surface-container-low": "#eff5f4",
+              "primary-foreground": "oklch(0.984 0.014 180.72)",
+              "on-secondary": "#ffffff",
+              "secondary-container": "#dde0e2",
+              surface: "#f5fafa",
+              "on-tertiary-fixed-variant": "#763306",
+              "tertiary-container": "#e58957",
+            },
+            borderRadius: {
+              DEFAULT: "0rem",
+              lg: "0rem",
+              xl: "0rem",
+              full: "0rem",
+            },
+            spacing: {
+              gutter: "1.5rem",
+              xl: "4rem",
+              md: "1.5rem",
+              xs: "0.5rem",
+              sm: "1rem",
+              base: "0.25rem",
+              margin: "2rem",
+              lg: "2.5rem",
+            },
+            fontFamily: {
+              h2: ["Manrope"],
+              display: ["Manrope"],
+              h3: ["Manrope"],
+              "body-lg": ["Inter"],
+              "label-caps": ["Inter"],
+              "body-md": ["Inter"],
+              h1: ["Manrope"],
+            },
+            fontSize: {
+              h2: [
+                "24px",
+                {
+                  lineHeight: "1.3",
+                  fontWeight: "600",
+                },
+              ],
+              display: [
+                "48px",
+                {
+                  lineHeight: "1.1",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              h3: [
+                "20px",
+                {
+                  lineHeight: "1.4",
+                  fontWeight: "500",
+                },
+              ],
+              "body-lg": [
+                "18px",
+                {
+                  lineHeight: "1.6",
+                  fontWeight: "400",
+                },
+              ],
+              "label-caps": [
+                "12px",
+                {
+                  lineHeight: "1.0",
+                  letterSpacing: "0.05em",
+                  fontWeight: "600",
+                },
+              ],
+              "body-md": [
+                "16px",
+                {
+                  lineHeight: "1.5",
+                  fontWeight: "400",
+                },
+              ],
+              h1: [
+                "32px",
+                {
+                  lineHeight: "1.2",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+      }
+      .diffused-shadow {
+        box-shadow: 0 32px 64px -16px rgba(46, 177, 178, 0.1);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background text-on-background font-body-md min-h-screen flex flex-col overflow-x-hidden"
+  >
+    <!-- TopNavBar -->
+    <nav
+      class="fixed top-0 left-0 right-0 z-50 flex justify-center items-center w-full px-4"
+      id="nav-wrapper"
+    >
+      <div
+        class="bg-surface/90 backdrop-blur-md w-[95%] max-w-7xl mx-auto px-8 py-4 mt-6 border border-outline-variant/30 shadow-sm flex items-center justify-between gap-8 transform-gpu transition-all duration-500 ease-in-out"
+        id="nav-pill"
+      >
+        <div class="text-xl font-bold tracking-tighter text-on-surface">
+          <div class="flex items-center">
+            <img
+              alt="BailKey Logo"
+              class="h-8 w-auto"
+              id="logo-full"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZlok7TCIYa8ItsA7lyjOinYRdw6Ge3kHYnmrFkcCBbqGChr9gsfxP5J7o7dKkRH8yQM2gK-znDQG3HQa0EBwweA3tUXBpkatj__5AzgMv3dSXNQR9R_Kw1Fj3KPxxZD36H9GdqsRAkVAyPGyUl7VFu4KKazts9Ep-i68hQq496Qg0Ceok4Wt1FXHzXKg8Qb1I0GRMSmPqHfiIgzl6zdA8GQOj_rTCR4Uq18dluaekBfORSxbZC10MOWAAHNk7zVrYWifVWrdvWvg"
+            />
+          </div>
+        </div>
+        <div
+          class="hidden md:flex font-h3 text-body-md font-medium tracking-tight justify-center flex-grow gap-12"
+        >
+          <a
+            class="text-on-surface-variant hover:text-primary transition-colors pb-1 font-display"
+            href="#"
+            >Plateforme</a
+          ><a
+            class="text-on-surface-variant hover:text-primary transition-colors pb-1 font-display"
+            href="#"
+            >Solutions</a
+          ><a
+            class="text-on-surface-variant hover:text-primary transition-colors pb-1 font-display"
+            href="#"
+            >Tarifs</a
+          ><a
+            class="text-on-surface-variant hover:text-primary transition-colors pb-1 font-display"
+            href="#"
+            >Ressources</a
+          ><a
+            class="text-on-surface-variant hover:text-primary transition-colors pb-1 font-display"
+            href="#"
+            >Contact</a
+          >
+        </div>
+        <a
+          class="text-on-surface-variant hover:text-primary transition-colors font-h3 text-body-md font-medium tracking-tight font-display px-4 whitespace-nowrap"
+          href="#"
+          >Connexion</a
+        ><a
+          class="bg-primary text-on-primary px-6 py-2 font-h3 text-body-md font-medium tracking-tight whitespace-nowrap gsap-button font-display hover:-translate-y-0.5 hover:shadow-md transition-all hover:scale-[1.02] hover:brightness-110 hover:shadow-lg transition-all duration-300"
+          href="#footer"
+        >
+          Commencer
+        </a>
+      </div>
+    </nav>
+    <main class="flex-grow pt-32">
+      <!-- Hero Section -->
+      <section
+        class="relative w-full overflow-hidden bg-surface-container-lowest"
+      >
+        <div
+          class="max-w-7xl mx-auto px-margin pt-xl pb-xl flex flex-col md:flex-row items-center gap-xl relative z-10"
+        >
+          <div class="md:w-1/2 flex flex-col items-start text-left z-10">
+            <span
+              class="font-label-caps text-label-caps text-primary tracking-wider uppercase mb-base block"
+              >Programme Partenaires</span
+            >
+            <h1 class="font-display text-display text-on-surface mb-md">
+              Étendons ensemble les limites de la gestion immobilière
+            </h1>
+            <p
+              class="font-body-lg text-body-lg text-on-surface-variant mb-lg max-w-xl"
+            >
+              Rejoignez l'écosystème BailKey. Associez votre expertise à notre
+              technologie pour offrir une expérience de gestion locative sans
+              précédent aux professionnels de l'immobilier haut de gamme.
+            </p>
+            <a
+              class="bg-primary text-on-primary font-label-caps text-label-caps uppercase py-sm px-lg rounded-none hover:-translate-y-1 hover:shadow-lg transition-all duration-300 inline-flex items-center gap-xs hover:scale-[1.02] hover:brightness-110 hover:shadow-lg transition-all duration-300"
+              href="#devenir-partenaire"
+            >
+              Devenir partenaire
+              <span class="material-symbols-outlined text-sm"
+                >arrow_forward</span
+              >
+            </a>
+          </div>
+          <div class="md:w-1/2 w-full h-[500px] relative">
+            <img
+              alt="Architectural modern office space"
+              class="w-full h-full object-cover rounded-none"
+              data-alt="A bright, modern corporate office interior featuring sleek glass walls, structural precision, and high-end architectural design. The lighting is soft and natural, emphasizing a clean, light-mode aesthetic with crisp lines and a professional atmosphere. Subtle teal accents highlight the sophisticated, reliable mood of a high-end real estate management ecosystem."
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoIWL6piGNa46v_nNPDLhFQXlpbyMXzXO1zOTZ9nK-1ujKEl_WuZ0XXRKKctKZpbjSrhQqCoxm5E6FX-qLGjuttfJKpcvXa_-BXBK8hhkvVieF4HixBSEX_vr3bWVlunvKuqsIP0VUWwEn53QwkFbUhhf93IhhndBv7-55gfNrW_zhnCeFW4hDRjtFKf8hLocGR6wMZkvyD4E6sP9i2HrlhOrcXA54xtc_WJVWq1CJtGyIWuL7Ew19UNS24jeuEov5Geu2y5JpQXs"
+            />
+            <div
+              class="absolute bottom-md left-md bg-surface/90 backdrop-blur-md p-sm rounded-none border border-outline-variant/30 shadow-lg"
+            >
+              <div class="flex items-center gap-xs">
+                <span class="material-symbols-outlined text-primary"
+                  >handshake</span
+                >
+                <div>
+                  <div
+                    class="font-label-caps text-label-caps text-on-surface uppercase mb-1"
+                  >
+                    Réseau d'excellence
+                  </div>
+                  <div
+                    class="font-body-md text-sm font-semibold text-on-surface-variant"
+                  >
+                    Rejoignez 500+ partenaires
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Decorative background element -->
+        <div
+          class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-primary/5 to-transparent pointer-events-none"
+        ></div>
+      </section>
+      <!-- Partner Types Section -->
+      <section class="py-xl bg-surface px-margin">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-xl">
+            <h2
+              class="font-display text-[40px] leading-tight text-on-surface mb-sm font-semibold"
+            >
+              Un écosystème conçu pour vous
+            </h2>
+            <p
+              class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto"
+            >
+              Que vous soyez expert technique, consultant ou éditeur de
+              logiciels, le programme partenaire BailKey s'adapte à votre modèle
+              d'affaires.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+            <!-- Type 1 -->
+            <div
+              class="bg-surface-container-lowest p-lg border border-outline-variant/30 hover:border-primary/50 transition-colors group hover:-translate-y-1 hover:shadow-xl hover:border-primary transition-all duration-300"
+            >
+              <div
+                class="w-12 h-12 bg-primary/10 flex items-center justify-center mb-md group-hover:bg-primary/20 transition-colors"
+              >
+                <span class="material-symbols-outlined text-primary text-2xl"
+                  >integration_instructions</span
+                >
+              </div>
+              <h3
+                class="font-h3 text-h3 text-on-surface mb-base font-semibold group-hover:text-primary transition-colors"
+              >
+                Intégrateurs
+              </h3>
+              <p
+                class="font-body-md text-body-md text-on-surface-variant mb-md"
+              >
+                Déployez BailKey chez vos clients. Bénéficiez d'un
+                accompagnement technique dédié et de marges avantageuses sur les
+                licences.
+              </p>
+              <ul
+                class="space-y-xs font-body-md text-sm text-on-surface-variant mb-lg flex-grow"
+              >
+                <li class="flex items-start gap-xs">
+                  <span
+                    class="material-symbols-outlined text-primary text-sm mt-1"
+                    >check</span
+                  >
+                  Formation certifiante
+                </li>
+                <li class="flex items-start gap-xs">
+                  <span
+                    class="material-symbols-outlined text-primary text-sm mt-1"
+                    >check</span
+                  >
+                  Support technique prioritaire
+                </li>
+                <li class="flex items-start gap-xs">
+                  <span
+                    class="material-symbols-outlined text-primary text-sm mt-1"
+                    >check</span
+                  >
+                  Marges récurrentes
+                </li>
+              </ul>
+            </div>
+            <!-- Type 2 -->
+            <div
+              class="bg-surface-container-lowest p-lg border border-outline-variant/30 hover:border-primary/50 transition-colors group relative hover:-translate-y-1 hover:shadow-xl hover:border-primary transition-all duration-300"
+            >
+              <!-- Highlight Badge -->
+              <div
+                class="absolute top-0 right-0 bg-primary text-on-primary font-label-caps text-label-caps px-xs py-base translate-x-1/2 -translate-y-1/2 rotate-12 hidden md:block uppercase tracking-wider font-bold"
+              >
+                POPULAIRE
+              </div>
+              <div
+                class="w-12 h-12 bg-primary/10 flex items-center justify-center mb-md group-hover:bg-primary/20 transition-colors"
+              >
+                <span class="material-symbols-outlined text-primary text-2xl"
+                  >real_estate_agent</span
+                >
+              </div>
+              <h3
+                class="font-h3 text-h3 text-on-surface mb-base font-semibold group-hover:text-primary transition-colors"
+              >
+                Experts Immobiliers
+              </h3>
+              <p
+                class="font-body-md text-body-md text-on-surface-variant mb-md"
+              >
+                Recommandez BailKey à votre réseau. Idéal pour les consultants,
+                auditeurs et réseaux d'agences cherchant à moderniser leurs
+                outils.
+              </p>
+              <ul
+                class="space-y-xs font-body-md text-sm text-on-surface-variant mb-lg flex-grow"
+              >
+                <li class="flex items-start gap-xs">
+                  <span
+                    class="material-symbols-outlined text-primary text-sm mt-1"
+                    >check</span
+                  >
+                  Modèle de commissionnement simple
+                </li>
+                <li class="flex items-start gap-xs">
+                  <span
+                    class="material-symbols-outlined text-primary text-sm mt-1"
+                    >check</span
+                  >
+                  Kit de recommandation
+                </li>
+                <li class="flex items-start gap-xs">
+                  <span
+                    class="material-symbols-outlined text-primary text-sm mt-1"
+                    >check</span
+                  >
+                  Portail partenaire dédié
+                </li>
+              </ul>
+            </div>
+            <!-- Type 3 -->
+            <div
+              class="bg-surface-container-lowest p-lg border border-outline-variant/30 hover:border-primary/50 transition-colors group hover:-translate-y-1 hover:shadow-xl hover:border-primary transition-all duration-300"
+            >
+              <div
+                class="w-12 h-12 bg-primary/10 flex items-center justify-center mb-md group-hover:bg-primary/20 transition-colors"
+              >
+                <span class="material-symbols-outlined text-primary text-2xl"
+                  >api</span
+                >
+              </div>
+              <h3
+                class="font-h3 text-h3 text-on-surface mb-base font-semibold group-hover:text-primary transition-colors"
+              >
+                Partenaires Technologiques
+              </h3>
+              <p
+                class="font-body-md text-body-md text-on-surface-variant mb-md"
+              >
+                Connectez votre solution à BailKey. Créez des synergies pour
+                offrir une valeur ajoutée unique à nos clients communs.
+              </p>
+              <ul
+                class="space-y-xs font-body-md text-sm text-on-surface-variant mb-lg flex-grow"
+              >
+                <li class="flex items-start gap-xs">
+                  <span
+                    class="material-symbols-outlined text-primary text-sm mt-1"
+                    >check</span
+                  >
+                  Accès API étendu
+                </li>
+                <li class="flex items-start gap-xs">
+                  <span
+                    class="material-symbols-outlined text-primary text-sm mt-1"
+                    >check</span
+                  >
+                  Environnement de test (Sandbox)
+                </li>
+                <li class="flex items-start gap-xs">
+                  <span
+                    class="material-symbols-outlined text-primary text-sm mt-1"
+                    >check</span
+                  >
+                  Présence dans notre marketplace
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Program Benefits Grid -->
+      <section class="py-xl px-margin bg-surface-container-lowest">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex flex-col md:flex-row gap-xl items-center mb-xl">
+            <div class="md:w-1/3">
+              <h2
+                class="font-display text-[40px] leading-tight text-on-surface mb-sm font-semibold"
+              >
+                Les avantages du programme
+              </h2>
+              <p class="font-body-lg text-body-lg text-on-surface-variant">
+                Nous investissons dans la réussite de nos partenaires en
+                fournissant les outils, ressources et soutiens nécessaires pour
+                générer de la croissance.
+              </p>
+            </div>
+            <div class="md:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-gutter">
+              <!-- Benefit 1 -->
+              <div
+                class="flex gap-sm p-sm border-l-2 border-primary/20 hover:border-primary transition-colors hover:bg-primary/5 transition-colors duration-200 cursor-default"
+              >
+                <span
+                  class="material-symbols-outlined text-primary text-2xl mt-1"
+                  >support_agent</span
+                >
+                <div>
+                  <h4
+                    class="font-h3 text-body-md font-semibold text-on-surface mb-xs"
+                  >
+                    Support dédié
+                  </h4>
+                  <p class="font-body-md text-sm text-on-surface-variant">
+                    Un responsable partenaire attitré pour vous accompagner à
+                    chaque étape de notre collaboration.
+                  </p>
+                </div>
+              </div>
+              <!-- Benefit 2 -->
+              <div
+                class="flex gap-sm p-sm border-l-2 border-primary/20 hover:border-primary transition-colors hover:bg-primary/5 transition-colors duration-200 cursor-default"
+              >
+                <span
+                  class="material-symbols-outlined text-primary text-2xl mt-1"
+                  >payments</span
+                >
+                <div>
+                  <h4
+                    class="font-h3 text-body-md font-semibold text-on-surface mb-xs"
+                  >
+                    Partage de revenus
+                  </h4>
+                  <p class="font-body-md text-sm text-on-surface-variant">
+                    Un modèle de rémunération attractif et transparent,
+                    récompensant votre engagement.
+                  </p>
+                </div>
+              </div>
+              <!-- Benefit 3 -->
+              <div
+                class="flex gap-sm p-sm border-l-2 border-primary/20 hover:border-primary transition-colors hover:bg-primary/5 transition-colors duration-200 cursor-default"
+              >
+                <span
+                  class="material-symbols-outlined text-primary text-2xl mt-1"
+                  >developer_board</span
+                >
+                <div>
+                  <h4
+                    class="font-h3 text-body-md font-semibold text-on-surface mb-xs"
+                  >
+                    Accès technique privilégié
+                  </h4>
+                  <p class="font-body-md text-sm text-on-surface-variant">
+                    Documentation technique complète, accès anticipé aux
+                    nouvelles fonctionnalités et API robustes.
+                  </p>
+                </div>
+              </div>
+              <!-- Benefit 4 -->
+              <div
+                class="flex gap-sm p-sm border-l-2 border-primary/20 hover:border-primary transition-colors hover:bg-primary/5 transition-colors duration-200 cursor-default"
+              >
+                <span
+                  class="material-symbols-outlined text-primary text-2xl mt-1"
+                  >campaign</span
+                >
+                <div>
+                  <h4
+                    class="font-h3 text-body-md font-semibold text-on-surface mb-xs"
+                  >
+                    Ressources marketing
+                  </h4>
+                  <p class="font-body-md text-sm text-on-surface-variant">
+                    Kits de communication, études de cas communes et
+                    participation à nos événements de l'industrie.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- CTA Section -->
+      <section
+        class="py-xl px-margin bg-inverse-surface text-inverse-on-surface relative overflow-hidden"
+        id="devenir-partenaire"
+      >
+        <div
+          class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary to-transparent pointer-events-none"
+        ></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+          <h2
+            class="font-display text-[40px] leading-tight text-inverse-primary mb-md font-semibold"
+          >
+            Prêt à construire l'avenir de la gestion immobilière ?
+          </h2>
+          <p class="font-body-lg text-body-lg text-surface-variant mb-lg">
+            Rejoignez le programme partenaire BailKey aujourd'hui et commencez à
+            offrir une valeur exceptionnelle à vos clients.
+          </p>
+          <div
+            class="flex flex-col sm:flex-row justify-center items-center gap-sm"
+          >
+            <a
+              class="bg-primary text-on-primary font-label-caps text-label-caps uppercase py-sm px-lg rounded-none hover:-translate-y-1 shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto text-center hover:scale-[1.02] hover:brightness-110 hover:shadow-lg transition-all duration-300"
+              href="#"
+            >
+              Devenir partenaire BailKey
+            </a>
+            <a
+              class="bg-transparent border border-outline text-inverse-on-surface font-label-caps text-label-caps uppercase py-sm px-lg rounded-none hover:bg-surface/10 transition-colors duration-300 w-full sm:w-auto text-center hover:bg-primary/10 hover:border-primary transition-all duration-300"
+              href="#"
+            >
+              Contacter l'équipe
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- Footer -->
+    <footer
+      class="bg-surface-container-lowest border-t border-outline-variant/30 pt-16 pb-8"
+      id="footer"
+    >
+      <div class="container mx-auto px-gutter max-w-7xl">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16"
+        >
+          <div class="lg:col-span-2">
+            <img
+              alt="BailKey Logo"
+              class="h-8 w-auto mb-6"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZlok7TCIYa8ItsA7lyjOinYRdw6Ge3kHYnmrFkcCBbqGChr9gsfxP5J7o7dKkRH8yQM2gK-znDQG3HQa0EBwweA3tUXBpkatj__5AzgMv3dSXNQR9R_Kw1Fj3KPxxZD36H9GdqsRAkVAyPGyUl7VFu4KKazts9Ep-i68hQq496Qg0Ceok4Wt1FXHzXKg8Qb1I0GRMSmPqHfiIgzl6zdA8GQOj_rTCR4Uq18dluaekBfORSxbZC10MOWAAHNk7zVrYWifVWrdvWvg"
+            />
+            <p
+              class="font-body-md text-body-md text-on-surface-variant mb-6 max-w-sm"
+            >
+              © 2024 BailKey. Architectural Precision in Property Management.
+            </p>
+            <div class="flex gap-4">
+              <a
+                class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors gsap-button rounded-none"
+                href="#"
+              >
+                <span class="material-symbols-outlined text-[20px]"
+                  >language</span
+                >
+              </a>
+              <a
+                class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors gsap-button rounded-none"
+                href="#"
+              >
+                <span class="material-symbols-outlined text-[20px]">mail</span>
+              </a>
+              <a
+                class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors gsap-button rounded-none"
+                href="#"
+              >
+                <span class="material-symbols-outlined text-[20px]">phone</span>
+              </a>
+            </div>
+          </div>
+          <div>
+            <h4
+              class="font-h3 text-body-md font-semibold text-on-surface mb-6 font-label-caps uppercase text-primary tracking-wider"
+            >
+              Produit
+            </h4>
+            <ul
+              class="flex flex-col gap-3 font-body-md text-body-md text-on-surface-variant"
+            >
+              <li>
+                <a
+                  class="hover:text-primary transition-colors hover:underline hover:text-primary transition-colors duration-200"
+                  href="#"
+                  >Produit</a
+                >
+              </li>
+              <li>
+                <a
+                  class="hover:text-primary transition-colors hover:underline hover:text-primary transition-colors duration-200"
+                  href="#"
+                  >Solutions</a
+                >
+              </li>
+              <li>
+                <a
+                  class="hover:text-primary transition-colors hover:underline hover:text-primary transition-colors duration-200"
+                  href="#"
+                  >Tarifs</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="font-h3 text-body-md font-semibold text-on-surface mb-6 font-label-caps uppercase text-primary tracking-wider"
+            >
+              Ressources
+            </h4>
+            <ul
+              class="flex flex-col gap-3 font-body-md text-body-md text-on-surface-variant"
+            >
+              <li>
+                <a
+                  class="hover:text-primary transition-colors hover:underline hover:text-primary transition-colors duration-200"
+                  href="#"
+                  >Ressources</a
+                >
+              </li>
+              <li>
+                <a
+                  class="hover:text-primary transition-colors hover:underline hover:text-primary transition-colors duration-200"
+                  href="#"
+                  >Blog</a
+                >
+              </li>
+              <li>
+                <a
+                  class="hover:text-primary transition-colors hover:underline hover:text-primary transition-colors duration-200"
+                  href="#"
+                  >Documentation</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="font-h3 text-body-md font-semibold text-on-surface mb-6 font-label-caps uppercase text-primary tracking-wider"
+            >
+              Entreprise
+            </h4>
+            <ul
+              class="flex flex-col gap-3 font-body-md text-body-md text-on-surface-variant"
+            >
+              <li>
+                <a
+                  class="hover:text-primary transition-colors hover:underline hover:text-primary transition-colors duration-200"
+                  href="#"
+                  >Entreprise</a
+                >
+              </li>
+              <li>
+                <a
+                  class="hover:text-primary transition-colors hover:underline hover:text-primary transition-colors duration-200"
+                  href="#"
+                  >À propos</a
+                >
+              </li>
+              <li>
+                <a
+                  class="hover:text-primary transition-colors hover:underline hover:text-primary transition-colors duration-200"
+                  href="#"
+                  >Carrières</a
+                >
+              </li>
+              <li>
+                <a
+                  class="hover:text-primary transition-colors hover:underline hover:text-primary transition-colors duration-200"
+                  href="#"
+                  >Contact</a
+                >
+              </li>
+              <li>
+                <a
+                  class="hover:text-primary transition-colors hover:underline hover:text-primary transition-colors duration-200"
+                  href="#"
+                  >Confidentialité</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
