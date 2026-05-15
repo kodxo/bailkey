@@ -53,9 +53,10 @@ export function Navbar() {
 
   // Configuration centralisée de vos liens
   const navLinks = [
+    { name: "À propos", href: "/about" },
     { name: "Plateforme", href: "/" },
     { name: "Solutions", href: "/solutions" },
-    { name: "Tarifs", href: "/pricing" }, // ou /tarifs selon le nom de votre dossier
+    { name: "Tarifs", href: "/pricing" },
     { name: "Ressources", href: "/posts" },
   ];
 

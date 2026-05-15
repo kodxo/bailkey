@@ -394,12 +394,12 @@ export default function Home() {
                     pour vos actifs.
                   </span>
                 </h2>
-                <p className="font-body-lg text-on-surface-variant mb-10 max-w-lg">
+                <p className="font-body-lg text-on-surface-variant mb-10 ">
                   Modélisez votre patrimoine avec précision : Immeubles, Étages,
                   et Lots. Gérez une variété de biens, du résidentiel au
                   commercial, avec une flexibilité totale.
                 </p>
-                <div className="flex flex-col gap-4 w-full max-w-md gsap-card mb-8">
+                <div className="flex flex-col gap-4 w-full  gsap-card mb-8">
                   <div className="border border-outline-variant/50 p-4 bg-surface cursor-pointer group">
                     <div className="flex justify-between items-start mb-2">
                       <div>
@@ -500,12 +500,12 @@ export default function Home() {
                     du cycle locatif.
                   </span>
                 </h2>
-                <p className="font-body-lg text-on-surface-variant mb-10 max-w-lg">
+                <p className="font-body-lg text-on-surface-variant mb-10 ">
                   Odoo 19 propulse notre moteur de gestion. Création
                   d'échéanciers, génération automatique de quittances, et
                   indexation des loyers sans intervention manuelle.
                 </p>
-                <div className="flex flex-col gap-4 w-full max-w-md gsap-card mb-8">
+                <div className="flex flex-col gap-4 w-full  gsap-card mb-8">
                   <div className="border border-outline-variant/50 p-4 bg-surface cursor-pointer group">
                     <div className="flex justify-between items-center mb-2">
                       <div className="flex items-center gap-3">
@@ -588,12 +588,12 @@ export default function Home() {
                     de vos flux financiers.
                   </span>
                 </h2>
-                <p className="font-body-lg text-on-surface-variant mb-10 max-w-lg">
+                <p className="font-body-lg text-on-surface-variant mb-10 ">
                   Suivez les impayés avec rigueur, gérez votre trésorerie
                   (cashbox) en temps réel, et mettez en place des moratoires
                   structurés en cas de besoin.
                 </p>
-                <div className="flex flex-col gap-4 w-full max-w-md gsap-card mb-8">
+                <div className="flex flex-col gap-4 w-full  gsap-card mb-8">
                   <div className="border border-outline-variant/50 p-4 bg-surface cursor-pointer group">
                     <div className="flex justify-between items-center mb-2">
                       <div className="flex items-center gap-3">
@@ -687,12 +687,12 @@ export default function Home() {
                     moderne et connectée.
                   </span>
                 </h2>
-                <p className="font-body-lg text-on-surface-variant mb-10 max-w-lg">
+                <p className="font-body-lg text-on-surface-variant mb-10 ">
                   Portail locataire dédié et application mobile (Flutter) pour
                   une gestion fluide. Centralisez les demandes d'intervention et
                   suivez les prestataires en direct.
                 </p>
-                <div className="flex flex-col gap-4 w-full max-w-md gsap-card mb-8">
+                <div className="flex flex-col gap-4 w-full  gsap-card mb-8">
                   <div className="border border-outline-variant/50 p-4 bg-surface cursor-pointer group">
                     <div className="flex justify-between items-center mb-2">
                       <div className="flex items-center gap-3">
