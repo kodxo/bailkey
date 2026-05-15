@@ -9,7 +9,7 @@ export default function CareersPage() {
     <>
       <Navbar />
       {/* Main Content */}
-      <main className="flex-grow flex flex-col">
+      <main className="grow flex flex-col">
         {/* Hero Section */}
         <section className="relative w-full min-h-[614px] flex items-center bg-surface-container-highest overflow-hidden">
           <div className="absolute inset-0 z-0">
@@ -20,7 +20,7 @@ export default function CareersPage() {
               className="object-cover opacity-40 mix-blend-multiply filter grayscale"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent"></div>
+            <div className="absolute inset-0 bg-linear-to-r from-background via-background/80 to-transparent"></div>
           </div>
           <div className="relative z-10 max-w-7xl mx-auto px-margin w-full flex flex-col gap-sm md:w-2/3">
             <span className="font-label-caps text-label-caps text-primary tracking-widest uppercase">
@@ -30,12 +30,12 @@ export default function CareersPage() {
               Rejoignez l&apos;excellence en gestion immobilière
             </h1>
             <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mt-4">
-              Chez BailKey, nous construisons l&apos;avenir de la gestion de biens
-              avec une précision architecturale. Découvrez nos opportunités et
-              participez à l&apos;innovation.
+              Chez BailKey, nous construisons l&apos;avenir de la gestion de
+              biens avec une précision architecturale. Découvrez nos
+              opportunités et participez à l&apos;innovation.
             </p>
             <div className="mt-8">
-              <button className="bg-primary text-primary-foreground px-8 py-4 font-body-md text-body-md font-semibold hover:opacity-90 transition-opacity hover:-translate-y-0.5 hover:shadow-lg hover:bg-primary-container transition-all">
+              <button className="bg-primary text-primary-foreground px-8 py-4 font-body-md text-body-md font-semibold hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg hover:bg-primary-container transition-all">
                 Voir les postes ouverts
               </button>
             </div>
@@ -48,8 +48,8 @@ export default function CareersPage() {
               Notre ADN
             </h2>
             <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto">
-              L&apos;exigence et l&apos;innovation au cœur de chaque ligne de code et de
-              chaque interaction client.
+              L&apos;exigence et l&apos;innovation au cœur de chaque ligne de
+              code et de chaque interaction client.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
@@ -138,7 +138,7 @@ export default function CareersPage() {
                   </span>
                 </div>
               </div>
-              <button className="bg-surface border border-outline-variant text-on-surface px-6 py-3 font-body-md text-body-md font-semibold hover:bg-primary hover:text-primary-foreground transition-colors w-full md:w-auto hover:-translate-y-0.5 hover:shadow-md transition-all">
+              <button className="bg-surface border border-outline-variant text-on-surface px-6 py-3 font-body-md text-body-md font-semibold hover:bg-primary hover:text-primary-foreground w-full md:w-auto hover:-translate-y-0.5 hover:shadow-md transition-all">
                 Postuler
               </button>
             </div>
@@ -166,7 +166,7 @@ export default function CareersPage() {
                   </span>
                 </div>
               </div>
-              <button className="bg-surface border border-outline-variant text-on-surface px-6 py-3 font-body-md text-body-md font-semibold hover:bg-primary hover:text-primary-foreground transition-colors w-full md:w-auto hover:-translate-y-0.5 hover:shadow-md transition-all">
+              <button className="bg-surface border border-outline-variant text-on-surface px-6 py-3 font-body-md text-body-md font-semibold hover:bg-primary hover:text-primary-foreground  w-full md:w-auto hover:-translate-y-0.5 hover:shadow-md transition-all">
                 Postuler
               </button>
             </div>
@@ -194,7 +194,7 @@ export default function CareersPage() {
                   </span>
                 </div>
               </div>
-              <button className="bg-surface border border-outline-variant text-on-surface px-6 py-3 font-body-md text-body-md font-semibold hover:bg-primary hover:text-primary-foreground transition-colors w-full md:w-auto hover:-translate-y-0.5 hover:shadow-md transition-all">
+              <button className="bg-surface border border-outline-variant text-on-surface px-6 py-3 font-body-md text-body-md font-semibold hover:bg-primary hover:text-primary-foreground  w-full md:w-auto hover:-translate-y-0.5 hover:shadow-md transition-all">
                 Postuler
               </button>
             </div>
@@ -210,7 +210,7 @@ export default function CareersPage() {
             Envoyez-nous votre profil et nous vous contacterons si une
             opportunité se présente.
           </p>
-          <button className="bg-secondary text-secondary-foreground border border-outline-variant px-8 py-4 font-body-md text-body-md font-semibold hover:bg-surface-variant transition-colors hover:-translate-y-0.5 hover:shadow-md hover:bg-surface-variant transition-all">
+          <button className="bg-secondary text-secondary-foreground border border-outline-variant px-8 py-4 font-body-md text-body-md font-semibold  hover:-translate-y-0.5 hover:shadow-md hover:bg-surface-variant transition-all">
             Envoyer une candidature spontanée
           </button>
         </section>

@@ -1,12 +1,15 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef} from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { usePathname } from "next/navigation";
+import clsx  from "clsx";
 
 export function Footer() {
+  const pathname = usePathname(); 
   const footerRef = useRef<HTMLElement>(null);
 
   useGSAP(
