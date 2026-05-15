@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "BailKey - Logiciel de Gestion Immobilière Innovant",
   description:
     "La solution SaaS institutionnelle pour les gestionnaires immobiliers exigeants.",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

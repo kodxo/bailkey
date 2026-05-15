@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -46,30 +47,30 @@ export function Footer() {
               actifs en toute sécurité.
             </p>
             <div className="flex gap-4">
-              <a
+              <Link
                 className="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors gsap-button"
                 href="#"
               >
                 <span className="material-symbols-outlined text-[20px]">
                   language
                 </span>
-              </a>
-              <a
+              </Link>
+              <Link
                 className="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors gsap-button"
                 href="#"
               >
                 <span className="material-symbols-outlined text-[20px]">
                   mail
                 </span>
-              </a>
-              <a
+              </Link>
+              <Link
                 className="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors gsap-button"
                 href="#"
               >
                 <span className="material-symbols-outlined text-[20px]">
                   phone
                 </span>
-              </a>
+              </Link>
             </div>
           </div>
           <div>
@@ -78,29 +79,35 @@ export function Footer() {
             </h4>
             <ul className="flex flex-col gap-3 text-body-sm text-on-surface-variant">
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <Link
+                  className="hover:text-primary transition-colors"
+                  href="/solutions"
+                >
                   Solutions
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <Link className="hover:text-primary transition-colors" href="#">
                   Fonctionnalités
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <Link
+                  className="hover:text-primary transition-colors"
+                  href="/pricing"
+                >
                   Tarifs
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <Link className="hover:text-primary transition-colors" href="#">
                   Témoignages
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <Link className="hover:text-primary transition-colors" href="#">
                   Sécurité
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -110,24 +117,27 @@ export function Footer() {
             </h4>
             <ul className="flex flex-col gap-3 text-body-sm text-on-surface-variant">
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <Link className="hover:text-primary transition-colors" href="#">
                   Centre d'aide
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <Link className="hover:text-primary transition-colors" href="#">
                   Études de cas
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <Link
+                  className="hover:text-primary transition-colors"
+                  href="/posts"
+                >
                   Blog
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <Link className="hover:text-primary transition-colors" href="#">
                   Webinaires
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -137,24 +147,27 @@ export function Footer() {
             </h4>
             <ul className="flex flex-col gap-3 text-body-sm text-on-surface-variant">
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <Link className="hover:text-primary transition-colors" href="#">
                   À propos
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <Link className="hover:text-primary transition-colors" href="#">
                   Carrières
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <Link
+                  className="hover:text-primary transition-colors"
+                  href="/contact"
+                >
                   Contact
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-primary transition-colors" href="#">
+                <Link className="hover:text-primary transition-colors" href="#">
                   Partenaires
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -164,15 +177,15 @@ export function Footer() {
             © 2024 BailKey Asset Management. Tous droits réservés.
           </p>
           <div className="flex gap-6 text-xs text-on-surface-variant">
-            <a className="hover:text-primary transition-colors" href="#">
+            <Link className="hover:text-primary transition-colors" href="#">
               Mentions Légales
-            </a>
-            <a className="hover:text-primary transition-colors" href="#">
+            </Link>
+            <Link className="hover:text-primary transition-colors" href="#">
               Politique de Confidentialité
-            </a>
-            <a className="hover:text-primary transition-colors" href="#">
+            </Link>
+            <Link className="hover:text-primary transition-colors" href="#">
               CGU
-            </a>
+            </Link>
           </div>
         </div>
       </div>
