@@ -155,7 +155,10 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link className="hover:text-primary transition-colors" href="#">
+                <Link
+                  className="hover:text-primary transition-colors"
+                  href="/careers"
+                >
                   Carrières
                 </Link>
               </li>
