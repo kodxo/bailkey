@@ -1,30 +1,35 @@
 import { createImageUpload } from "novel";
 import { toast } from "sonner";
 
+import { getPresignedUrl } from "@/actions/s3";
+
 const onUpload = async (file: File) => {
-  const promise = fetch("/api/upload", {
-    method: "POST",
-    headers: {
-      "content-type": file?.type || "application/octet-stream",
-      "x-vercel-filename": file?.name || "image.png",
-    },
-    body: file,
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error("Upload failed");
-      }
-      return res.text();
-    })
-    .catch((err) => {
-      console.error(err);
-      toast.error(
-        "Échec du téléchargement. L'API /api/upload n'est pas encore implémentée.",
-      );
-      return "/images/admin/cover-sample.png"; // Fallback placeholder
+  try {
+    // 1. Demander l'URL pré-signée à l'Action Serveur
+    const presignedData = await getPresignedUrl(file.name, file.type);
+    
+    if (!presignedData.success || !presignedData.uploadUrl || !presignedData.publicUrl) {
+      throw new Error(presignedData.error || "Impossible d'obtenir l'URL de téléchargement");
+    }
+
+    // 2. Uploader directement vers Cloudflare R2
+    const uploadResponse = await fetch(presignedData.uploadUrl, {
+      method: "PUT",
+      body: file,
+      headers: { "Content-Type": file.type },
     });
 
-  return promise;
+    if (!uploadResponse.ok) {
+      throw new Error("L'upload vers R2 a échoué");
+    }
+
+    // 3. Retourner l'URL publique pour que l'éditeur l'insère dans le champ "content"
+    return presignedData.publicUrl;
+  } catch (err) {
+    console.error(err);
+    toast.error("Échec du téléchargement vers Cloudflare R2.");
+    return "/images/admin/cover-sample.png"; // Fallback placeholder
+  }
 };
 
 export const uploadFn = createImageUpload({

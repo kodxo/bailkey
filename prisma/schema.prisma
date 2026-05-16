@@ -32,7 +32,8 @@ model User {
   role      String?
   avatarUrl String?
 
-  posts Post[] @relation("PostAuthor")
+  posts  Post[]  @relation("PostAuthor")
+  medias Media[]
 }
 
 model Post {
@@ -83,5 +84,26 @@ model Tag {
   name String @unique
   slug String @unique
 
-  posts Post[] @relation("PostTags")
+  posts  Post[]  @relation("PostTags")
+  medias Media[] @relation("MediaTags")
+}
+
+model Media {
+  id         String  @id @default(cuid())
+  name       String
+  size       String
+  type       String
+  category   String
+  dimensions String?
+  src        String
+  icon       String  @default("image")
+  iconColor  String?
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  tags Tag[] @relation("MediaTags")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

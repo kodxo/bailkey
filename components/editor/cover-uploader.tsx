@@ -4,20 +4,71 @@ import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
 
-export const CoverUploader = () => {
-  const [coverImage, setCoverImage] = useState<string>("/images/admin/cover-sample.png");
+import { getPresignedUrl } from "@/actions/s3";
+
+interface CoverUploaderProps {
+  initialImage?: string;
+  postId?: string;
+}
+
+export const CoverUploader = ({ initialImage, postId }: CoverUploaderProps) => {
+  const [coverImage, setCoverImage] = useState<string>(initialImage || "/images/admin/cover-sample.png");
+  const [isUploading, setIsUploading] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
         toast.error("L'image ne doit pas dépasser 5 Mo.");
         return;
       }
-      const url = URL.createObjectURL(file);
-      setCoverImage(url);
-      toast.success("Image de couverture modifiée avec succès.");
+      
+      // Temporary local preview
+      const localUrl = URL.createObjectURL(file);
+      setCoverImage(localUrl);
+      setIsUploading(true);
+
+      try {
+        // 1. Get Presigned URL
+        const presignedData = await getPresignedUrl(file.name, file.type);
+        if (!presignedData.success || !presignedData.uploadUrl || !presignedData.publicUrl) {
+          throw new Error(presignedData.error || "Erreur URL R2");
+        }
+
+        // 2. Upload to R2
+        const uploadResponse = await fetch(presignedData.uploadUrl, {
+          method: "PUT",
+          body: file,
+          headers: { "Content-Type": file.type },
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error("L'upload vers R2 a échoué");
+        }
+
+        // 3. Set the final public URL
+        setCoverImage(presignedData.publicUrl);
+        toast.success("Image de couverture sauvegardée sur R2.");
+        
+        // 4. Update the database
+        if (postId) {
+          const res = await fetch(`/api/posts/${postId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ coverImage: presignedData.publicUrl }),
+          });
+          const updateResult = await res.json();
+          if (!res.ok || !updateResult.success) {
+             toast.error("Erreur lors de la sauvegarde dans la base de données.");
+          }
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("Échec de l'upload de la couverture.");
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 
@@ -46,15 +97,28 @@ export const CoverUploader = () => {
           src={coverImage}
         />
         <div className="relative z-10 flex flex-col items-center bg-surface/80 p-4 rounded backdrop-blur-md border border-glass-border shadow-sm text-center">
-          <span className="material-symbols-outlined text-3xl mb-2 text-primary">
-            cloud_upload
-          </span>
-          <span className="font-body-md text-sm md:text-base font-medium text-on-surface">
-            Cliquez pour remplacer ou glissez-déposez
-          </span>
-          <span className="font-label-caps text-xs text-on-surface-variant mt-1">
-            PNG, JPG, WEBP (Max 5MB)
-          </span>
+          {isUploading ? (
+            <>
+              <span className="material-symbols-outlined text-3xl mb-2 text-primary animate-spin" data-icon="refresh">
+                refresh
+              </span>
+              <span className="font-body-md text-sm md:text-base font-semibold text-primary animate-pulse">
+                Téléversement sur Cloudflare R2...
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="material-symbols-outlined text-3xl mb-2 text-primary" data-icon="cloud_upload">
+                cloud_upload
+              </span>
+              <span className="font-body-md text-sm md:text-base font-medium text-on-surface">
+                Cliquez pour remplacer ou glissez-déposez
+              </span>
+              <span className="font-label-caps text-xs text-on-surface-variant mt-1">
+                PNG, JPG, WEBP (Max 5MB)
+              </span>
+            </>
+          )}
         </div>
       </div>
     </div>

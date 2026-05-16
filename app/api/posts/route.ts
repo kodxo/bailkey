@@ -1,47 +1,18 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { getPublishedPosts } from "@/lib/dal/posts";
-import { PostCategory } from "@/lib/generated/prisma/enums";
+import { getAdminPosts, createAdminDraftPost } from "@/lib/dal/posts";
 
-const VALID_CATEGORIES = new Set<string>([
-  PostCategory.GUIDE,
-  PostCategory.ANALYSE,
-  PostCategory.CAS_CLIENT,
-  PostCategory.ACTUALITE,
-]);
-
-/**
- * GET /api/posts
- *
- * Paramètres query :
- * - category (optionnel) : GUIDE | ANALYSE | CAS_CLIENT | ACTUALITE
- *
- * Retourne : { posts: PostSummaryDTO[], total: number }
- */
-export async function GET(request: NextRequest): Promise<NextResponse> {
-  const { searchParams } = new URL(request.url);
-  const categoryParam = searchParams.get("category");
-
-  // Validation de la catégorie
-  let category: PostCategory | undefined;
-  if (categoryParam) {
-    const upper = categoryParam.toUpperCase();
-    if (!VALID_CATEGORIES.has(upper)) {
-      return NextResponse.json(
-        {
-          error: `Catégorie invalide: "${categoryParam}". Valeurs acceptées: ${[...VALID_CATEGORIES].join(", ")}`,
-        },
-        { status: 400 },
-      );
-    }
-    category = upper as PostCategory;
+export async function GET() {
+  const result = await getAdminPosts();
+  if (result.success) {
+    return NextResponse.json({ posts: result.posts });
   }
+  return NextResponse.json({ error: "Failed to fetch posts" }, { status: 500 });
+}
 
-  const result = await getPublishedPosts(category);
-
-  return NextResponse.json(result, {
-    headers: {
-      "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",
-    },
-  });
+export async function POST() {
+  const result = await createAdminDraftPost();
+  if (result.success) {
+    return NextResponse.json({ post: result.post });
+  }
+  return NextResponse.json({ error: "Failed to create draft" }, { status: 500 });
 }

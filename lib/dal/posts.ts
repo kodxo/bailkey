@@ -176,3 +176,103 @@ export async function getPostBySlug(
 
   return serializePostDetail(post, relatedPosts);
 }
+
+// ---------------------------------------------------------------------------
+// Admin DAL functions
+// ---------------------------------------------------------------------------
+
+export interface PostSaveData {
+  title?: string;
+  content?: string;
+  excerpt?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  coverImage?: string;
+  status?: PostStatus;
+  category?: PostCategory;
+  publishedAt?: Date | null;
+  tags?: string[];
+}
+
+export async function getAdminPosts() {
+  try {
+    const posts = await prisma.post.findMany({
+      include: { author: true },
+      orderBy: { createdAt: "desc" },
+    });
+    return { success: true, posts };
+  } catch (error) {
+    console.error("Erreur récupération posts:", error);
+    return { success: false, posts: [] };
+  }
+}
+
+export async function getAdminPostById(id: string) {
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id },
+      include: { author: true, tags: true },
+    });
+    return { success: true, post };
+  } catch (error) {
+    console.error("Erreur récupération post id:", error);
+    return { success: false, post: null };
+  }
+}
+
+export async function createAdminDraftPost() {
+  try {
+    let defaultAuthor = await prisma.user.findFirst();
+    if (!defaultAuthor) {
+      defaultAuthor = await prisma.user.create({
+        data: {
+          name: "Sarah Jenkins",
+          role: "Rédactrice",
+          avatarUrl: "/images/admin/avatar1.png",
+        },
+      });
+    }
+
+    const newPost = await prisma.post.create({
+      data: {
+        title: "",
+        slug: `brouillon-${crypto.randomUUID()}`,
+        content: "",
+        excerpt: "",
+        category: PostCategory.ACTUALITE,
+        authorId: defaultAuthor.id,
+      },
+    });
+
+    return { success: true, post: newPost };
+  } catch (error) {
+    console.error("Erreur création brouillon:", error);
+    return { success: false, post: null };
+  }
+}
+
+export async function updateAdminPost(postId: string, data: PostSaveData) {
+  try {
+    const { tags, ...restData } = data;
+    
+    const updatedPost = await prisma.post.update({
+      where: { id: postId },
+      data: {
+        ...restData,
+        ...(tags && {
+          tags: {
+            set: [], // Dissocie les anciens tags
+            connectOrCreate: tags.map((tag: string) => ({
+              where: { name: tag },
+              create: { name: tag, slug: tag.toLowerCase().replace(/[^a-z0-9]+/g, '-') }
+            }))
+          }
+        })
+      },
+    });
+    return { success: true, post: updatedPost };
+  } catch (error) {
+    console.error("Erreur de sauvegarde:", error);
+    return { success: false, error: "Sauvegarde échouée" };
+  }
+}

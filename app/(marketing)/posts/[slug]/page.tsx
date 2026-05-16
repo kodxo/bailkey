@@ -51,82 +51,6 @@ function formatDate(isoDate: string): string {
   }).format(new Date(isoDate));
 }
 
-/**
- * Transforme le contenu brut (texte + markdown light) en paragraphes et titres.
- * Gère les blocs `## titre`, `> citation`, et paragraphes normaux.
- */
-function renderContent(content: string): React.ReactNode[] {
-  const lines = content.split("\n");
-  const elements: React.ReactNode[] = [];
-  let blockquoteBuffer: string[] = [];
-  let key = 0;
-
-  function flushBlockquote(): void {
-    if (blockquoteBuffer.length > 0) {
-      elements.push(
-        <blockquote
-          key={`bq-${key++}`}
-          className="my-8 pl-6 border-l-4 border-primary bg-surface-container-low p-6 font-h3 text-h3 text-on-surface italic shadow-sm relative overflow-hidden"
-        >
-          &quot;{blockquoteBuffer.join(" ").trim()}&quot;
-        </blockquote>,
-      );
-      blockquoteBuffer = [];
-    }
-  }
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) {
-      flushBlockquote();
-      continue;
-    }
-
-    if (trimmed.startsWith("> ")) {
-      blockquoteBuffer.push(trimmed.slice(2));
-      continue;
-    }
-
-    flushBlockquote();
-
-    if (trimmed.startsWith("## ")) {
-      elements.push(
-        <h2
-          key={`h2-${key++}`}
-          className="font-h2 text-h2 text-on-surface mt-10 mb-4"
-        >
-          {trimmed.slice(3)}
-        </h2>,
-      );
-      continue;
-    }
-
-    if (trimmed.startsWith("### ")) {
-      elements.push(
-        <h3
-          key={`h3-${key++}`}
-          className="font-h3 text-h3 text-on-surface mt-8 mb-3"
-        >
-          {trimmed.slice(4)}
-        </h3>,
-      );
-      continue;
-    }
-
-    elements.push(
-      <p
-        key={`p-${key++}`}
-        className="font-body-md text-body-md text-on-surface-variant mb-6 leading-relaxed"
-      >
-        {trimmed}
-      </p>,
-    );
-  }
-
-  flushBlockquote();
-  return elements;
-}
-
 // ---------------------------------------------------------------------------
 // Sub-components
 // ---------------------------------------------------------------------------
@@ -277,7 +201,7 @@ export default async function PostDetailPage({
                 {post.excerpt}
               </p>
             )}
-            {renderContent(post.content)}
+            <div dangerouslySetInnerHTML={{ __html: post.content }} />
           </article>
 
           {/* Sidebar */}

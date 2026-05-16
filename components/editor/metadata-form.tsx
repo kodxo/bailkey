@@ -2,42 +2,85 @@
 
 import React, { useState } from "react";
 import { toast } from "sonner";
+import type { Post, Tag, User } from "@/lib/generated/prisma/client";
 
-export const MetadataForm = () => {
-  const [isPublished, setIsPublished] = useState(false);
-  const [author, setAuthor] = useState("Sarah Jenkins");
-  const [category, setCategory] = useState("Analyse du Marché");
-  const [tags, setTags] = useState<string[]>(["Luxe", "ESG"]);
+type PostCategoryType = "GUIDE" | "ANALYSE" | "CAS_CLIENT" | "ACTUALITE";
+
+interface MetadataFormProps {
+  post: Post & { author: User; tags: Tag[] };
+}
+
+export const MetadataForm = ({ post }: MetadataFormProps) => {
+  const [isPublished, setIsPublished] = useState(post.status === "PUBLISHED");
+  const author = post.author?.name || "Sarah Jenkins";
+  const [category, setCategory] = useState<
+    "GUIDE" | "ANALYSE" | "CAS_CLIENT" | "ACTUALITE"
+  >(post.category || "ACTUALITE");
+  const [tags, setTags] = useState<string[]>(
+    post.tags?.map((t) => t.name) || [],
+  );
   const [tagInput, setTagInput] = useState("");
-  const [metaTitle, setMetaTitle] = useState("Tendances Immobilier de Luxe & Investissement | BailKey");
-  const [metaDesc, setMetaDesc] = useState("Découvrez les nouvelles tendances de l'immobilier de luxe institutionnel. Comment l'ESG et les technologies transforment la valorisation des actifs premium.");
-  const [publishDate, setPublishDate] = useState("2026-05-15");
-  const [publishTime, setPublishTime] = useState("14:30");
+  const [metaTitle, setMetaTitle] = useState(post.metaTitle || "");
+  const [metaDesc, setMetaDesc] = useState(post.metaDescription || "");
+
+  const initialDate = post.publishedAt
+    ? new Date(post.publishedAt).toISOString().split("T")[0]
+    : "";
+  const initialTime = post.publishedAt
+    ? new Date(post.publishedAt).toISOString().split("T")[1].substring(0, 5)
+    : "";
+
+  const [publishDate, setPublishDate] = useState(initialDate);
+  const [publishTime, setPublishTime] = useState(initialTime);
+
+  const handleSave = async (data: Partial<import("@/lib/services/post.service").PostSaveData>) => {
+    try {
+      const response = await fetch(`/api/posts/${post.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      
+      const res = await response.json();
+      
+      if (!response.ok || !res.success) {
+        toast.error("Erreur de sauvegarde automatique");
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error("Erreur réseau lors de la sauvegarde");
+    }
+  };
 
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInput.trim()) {
       e.preventDefault();
-      if (!tags.includes(tagInput.trim())) {
-        setTags([...tags, tagInput.trim()]);
-        toast.success(`Mot-clé "${tagInput.trim()}" ajouté.`);
+      const newTag = tagInput.trim();
+      if (!tags.includes(newTag)) {
+        const newTags = [...tags, newTag];
+        setTags(newTags);
+        handleSave({ tags: newTags });
+        toast.success(`Mot-clé "${newTag}" ajouté.`);
       }
       setTagInput("");
     }
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
-    setTags(tags.filter((t) => t !== tagToRemove));
+    const newTags = tags.filter((t) => t !== tagToRemove);
+    setTags(newTags);
+    handleSave({ tags: newTags });
     toast.info(`Mot-clé supprimé.`);
   };
 
   return (
-    <div className="w-full xl:w-[360px] flex-shrink-0 flex flex-col gap-6">
+    <div className="w-full xl:w-[360px] shrink-0 flex flex-col gap-6">
       {/* Status Card */}
       <div className="bg-surface-container-lowest p-6 rounded shadow-sm border border-outline-variant/50">
         <h3 className="font-label-caps text-xs text-on-surface-variant mb-4 flex items-center gap-2 uppercase tracking-wider font-semibold">
-          <span className="material-symbols-outlined text-sm">
-            visibility
-          </span>
+          <span className="material-symbols-outlined text-sm">visibility</span>
           Visibilité &amp; Statut
         </h3>
         <div className="flex items-center justify-between mb-4">
@@ -63,8 +106,16 @@ export const MetadataForm = () => {
               type="checkbox"
               checked={isPublished}
               onChange={(e) => {
-                setIsPublished(e.target.checked);
-                toast.success(e.target.checked ? "Article passé en statut Publié." : "Article repassé en Brouillon.");
+                const checked = e.target.checked;
+                setIsPublished(checked);
+                handleSave({
+                  status: checked ? "PUBLISHED" : "DRAFT",
+                });
+                toast.success(
+                  checked
+                    ? "Article passé en statut Publié."
+                    : "Article repassé en Brouillon.",
+                );
               }}
               className="sr-only peer"
             />
@@ -78,45 +129,46 @@ export const MetadataForm = () => {
       <div className="bg-surface-container-lowest p-6 rounded shadow-sm border border-outline-variant/50 flex flex-col gap-4">
         <h3 className="font-label-caps text-xs text-on-surface-variant mb-2 flex items-center gap-2 uppercase tracking-wider font-semibold">
           <span className="material-symbols-outlined text-sm">label</span>
-          Métadonnées
+          Classification
         </h3>
+
+        {/* Category */}
         <div>
-          <label className="block font-label-caps text-xs text-on-surface-variant mb-1 font-semibold uppercase tracking-wider">
-            Auteur
-          </label>
-          <div className="flex items-center gap-3 p-3 bg-surface-container-low border border-outline-variant rounded">
-            <div className="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-xs">
-              {author.split(" ").map((n) => n[0]).join("")}
-            </div>
-            <input
-              type="text"
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-              className="font-body-md text-sm text-on-surface flex-1 font-medium bg-transparent border-none p-0 focus:ring-0 outline-none"
-            />
-            <span className="material-symbols-outlined text-sm text-on-surface-variant">
-              edit
-            </span>
-          </div>
-        </div>
-        <div>
-          <label className="block font-label-caps text-xs text-on-surface-variant mb-1 font-semibold uppercase tracking-wider">
+          <label className="block text-xs font-label-caps text-on-surface-variant mb-1 uppercase tracking-wider">
             Catégorie
           </label>
           <select
             value={category}
             onChange={(e) => {
-              setCategory(e.target.value);
+              setCategory(e.target.value as PostCategoryType);
+              handleSave({ category: e.target.value as PostCategoryType });
               toast.success(`Catégorie modifiée en "${e.target.value}".`);
             }}
-            className="w-full p-3 bg-surface-container-lowest border border-outline-variant rounded font-body-md text-sm text-on-surface focus:ring-1 focus:ring-primary outline-none cursor-pointer"
+            className="w-full bg-surface-container border border-outline-variant rounded px-3 py-2 text-sm font-body-md text-on-surface focus:outline-hidden focus:ring-1 focus:ring-primary transition-shadow cursor-pointer"
           >
-            <option value="Analyse du Marché">Analyse du Marché</option>
-            <option value="Tendances Architecturales">Tendances Architecturales</option>
-            <option value="Investissement">Investissement</option>
-            <option value="ESG &amp; Durabilité">ESG &amp; Durabilité</option>
+            <option value="GUIDE">Guide</option>
+            <option value="ANALYSE">Analyse</option>
+            <option value="CAS_CLIENT">Cas Client</option>
+            <option value="ACTUALITE">Actualité</option>
           </select>
         </div>
+
+        {/* Author */}
+        <div>
+          <label className="block text-xs font-label-caps text-on-surface-variant mb-1 uppercase tracking-wider">
+            Auteur (Lecture seule)
+          </label>
+          <div className="flex items-center gap-2 p-2 bg-surface-container border border-outline-variant rounded">
+            <span className="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-label-caps text-[10px] font-bold">
+              {author.charAt(0)}
+            </span>
+            <span className="font-body-md text-sm text-on-surface flex-1 font-medium bg-transparent border-none p-0">
+              {author}
+            </span>
+          </div>
+        </div>
+
+        {/* Tags */}
         <div>
           <label className="block font-label-caps text-xs text-on-surface-variant mb-1 font-semibold uppercase tracking-wider">
             Mots-clés (Entrée pour valider)
@@ -155,35 +207,33 @@ export const MetadataForm = () => {
       {/* SEO Card */}
       <div className="bg-surface-container-lowest p-6 rounded shadow-sm border border-outline-variant/50 flex flex-col gap-4">
         <h3 className="font-label-caps text-xs text-on-surface-variant mb-2 flex items-center gap-2 uppercase tracking-wider font-semibold">
-          <span className="material-symbols-outlined text-sm">search</span>
-          Paramètres SEO
+          <span className="material-symbols-outlined text-sm">public</span>
+          SEO &amp; Référencement
         </h3>
         <div>
-          <label className="block font-label-caps text-xs text-on-surface-variant mb-1 flex justify-between font-semibold uppercase tracking-wider">
-            Meta Title
-            <span className={metaTitle.length > 60 ? "text-destructive font-bold" : "text-outline"}>
-              {metaTitle.length}/60
-            </span>
+          <label className="block font-label-caps text-xs text-on-surface-variant mb-1 font-semibold uppercase tracking-wider">
+            Méta Titre
           </label>
           <input
             type="text"
             value={metaTitle}
             onChange={(e) => setMetaTitle(e.target.value)}
-            className="w-full p-3 bg-surface-container-lowest border border-outline-variant rounded font-body-md text-sm text-on-surface focus:ring-1 focus:ring-primary outline-none focus:outline-hidden"
+            onBlur={() => handleSave({ metaTitle })}
+            className="w-full p-3 bg-surface-container-lowest border border-outline-variant rounded font-body-md text-sm text-on-surface focus:ring-1 focus:ring-primary outline-none focus:outline-hidden placeholder:text-on-surface-variant/50"
+            placeholder="Titre optimisé SEO..."
           />
         </div>
         <div>
-          <label className="block font-label-caps text-xs text-on-surface-variant mb-1 flex justify-between font-semibold uppercase tracking-wider">
-            Meta Description
-            <span className={metaDesc.length > 160 ? "text-destructive font-bold" : "text-outline"}>
-              {metaDesc.length}/160
-            </span>
+          <label className="block font-label-caps text-xs text-on-surface-variant mb-1 font-semibold uppercase tracking-wider">
+            Méta Description
           </label>
           <textarea
             value={metaDesc}
             onChange={(e) => setMetaDesc(e.target.value)}
+            onBlur={() => handleSave({ metaDescription: metaDesc })}
             rows={3}
-            className="w-full p-3 bg-surface-container-lowest border border-outline-variant rounded font-body-md text-sm text-on-surface focus:ring-1 focus:ring-primary outline-none resize-none focus:outline-hidden"
+            className="w-full p-3 bg-surface-container-lowest border border-outline-variant rounded font-body-md text-sm text-on-surface focus:ring-1 focus:ring-primary outline-none resize-none focus:outline-hidden placeholder:text-on-surface-variant/50"
+            placeholder="Courte description pour Google (150-160 caractères max)..."
           ></textarea>
         </div>
       </div>
@@ -191,37 +241,49 @@ export const MetadataForm = () => {
       {/* Schedule Card */}
       <div className="bg-surface-container-lowest p-6 rounded shadow-sm border border-outline-variant/50 flex flex-col gap-4">
         <h3 className="font-label-caps text-xs text-on-surface-variant mb-2 flex items-center gap-2 uppercase tracking-wider font-semibold">
-          <span className="material-symbols-outlined text-sm">
-            calendar_month
-          </span>
-          Calendrier de publication
+          <span className="material-symbols-outlined text-sm">event</span>
+          Planification
         </h3>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block font-label-caps text-xs text-on-surface-variant mb-1 font-semibold uppercase tracking-wider">
               Date
             </label>
-            <div className="relative">
-              <input
-                type="date"
-                value={publishDate}
-                onChange={(e) => setPublishDate(e.target.value)}
-                className="w-full p-3 bg-surface-container-lowest border border-outline-variant rounded font-body-md text-sm text-on-surface focus:ring-1 focus:ring-primary outline-none focus:outline-hidden"
-              />
-            </div>
+            <input
+              type="date"
+              value={publishDate}
+              onChange={(e) => {
+                setPublishDate(e.target.value);
+                if (e.target.value) {
+                  handleSave({
+                    publishedAt: new Date(
+                      `${e.target.value}T${publishTime || "00:00"}:00Z`,
+                    ),
+                  });
+                }
+              }}
+              className="w-full p-2 bg-surface-container-lowest border border-outline-variant rounded font-body-md text-sm text-on-surface focus:ring-1 focus:ring-primary outline-none cursor-pointer focus:outline-hidden"
+            />
           </div>
           <div>
             <label className="block font-label-caps text-xs text-on-surface-variant mb-1 font-semibold uppercase tracking-wider">
               Heure
             </label>
-            <div className="relative">
-              <input
-                type="time"
-                value={publishTime}
-                onChange={(e) => setPublishTime(e.target.value)}
-                className="w-full p-3 bg-surface-container-lowest border border-outline-variant rounded font-body-md text-sm text-on-surface focus:ring-1 focus:ring-primary outline-none focus:outline-hidden"
-              />
-            </div>
+            <input
+              type="time"
+              value={publishTime}
+              onChange={(e) => {
+                setPublishTime(e.target.value);
+                if (publishDate) {
+                  handleSave({
+                    publishedAt: new Date(
+                      `${publishDate}T${e.target.value || "00:00"}:00Z`,
+                    ),
+                  });
+                }
+              }}
+              className="w-full p-2 bg-surface-container-lowest border border-outline-variant rounded font-body-md text-sm text-on-surface focus:ring-1 focus:ring-primary outline-none cursor-pointer focus:outline-hidden"
+            />
           </div>
         </div>
       </div>
