@@ -7,7 +7,7 @@ async function main() {
   console.log("🧹 Nettoyage des données existantes...");
   await prisma.post.deleteMany();
   await prisma.tag.deleteMany();
-  await prisma.user.deleteMany();
+  await prisma.auteur.deleteMany();
 
   // ---------------------------------------------------------------------------
   // 1. CRÉATION DES AUTEURS (USERS)
@@ -39,7 +39,7 @@ async function main() {
 
   const createdAuthors = [];
   for (const author of authors) {
-    const user = await prisma.user.create({
+    const user = await prisma.auteur.create({
       data: author,
     });
     createdAuthors.push(user);

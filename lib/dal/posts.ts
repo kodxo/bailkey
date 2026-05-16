@@ -222,9 +222,9 @@ export async function getAdminPostById(id: string) {
 
 export async function createAdminDraftPost() {
   try {
-    let defaultAuthor = await prisma.user.findFirst();
+    let defaultAuthor = await prisma.auteur.findFirst();
     if (!defaultAuthor) {
-      defaultAuthor = await prisma.user.create({
+      defaultAuthor = await prisma.auteur.create({
         data: {
           name: "Sarah Jenkins",
           role: "Rédactrice",

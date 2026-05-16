@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import { toast } from "sonner";
-import type { Post, Tag, User } from "@/lib/generated/prisma/client";
+import type { Post, Tag, Auteur } from "@/lib/generated/prisma/client";
 
 type PostCategoryType = "GUIDE" | "ANALYSE" | "CAS_CLIENT" | "ACTUALITE";
 
 interface MetadataFormProps {
-  post: Post & { author: User; tags: Tag[] };
+  post: Post & { author: Auteur; tags: Tag[] };
 }
 
 export const MetadataForm = ({ post }: MetadataFormProps) => {
