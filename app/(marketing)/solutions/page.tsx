@@ -44,7 +44,7 @@ export default function SolutionsPage() {
               <Image
                 alt="Façade de bâtiment en verre moderne"
                 className="w-full h-full object-cover grayscale-20 contrast-[1.1]"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF0ouT2rMGlbbWFQDjetX0rAyvrbM_-7cfZW8yL7x9FTQmXglB8GPmHUL-SRvYJcMIdHgAPmTpnRuxM-X7zh1Bn0zctpXyn9ifm5LmnQsbaJ8nkA8HX244If7vgyxXNvFR0s9WQ_9Wcyq171aHkzkoMroLI4DGV6XQlZ7IApiNyQ2Ddj95EKbVb79OwKQcnd-vtUHpgwe3jTkhgNYq40yeVM2eRVJspBwn9qAA4xkqEXH36SRSozWiTibQDH_ENej-3IxsfE6_uU4"
+                src="/images/solutions/hero.png"
                 fill
                 priority
               />
@@ -158,7 +158,7 @@ export default function SolutionsPage() {
                 <Image
                   alt="Tableau de bord financier"
                   className="w-full h-full object-cover opacity-80 mix-blend-luminosity hover:scale-105 transition-transform duration-700"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8kPcKu1oiKoIQ06mQB3l_1lIxWQlNRSORyF-v2OgQj3QqRPWtu-gW1PYjESLygeBNYMAePgOzCbc-Y4IiItDEaEUy5LZ17BV0J1hpM9HtjA2b4ci6k8dxS1OI21h4obxcgLpLdT-a0C1zAoBMy1H0ao3sjy0dOJ7GNhaWdVvvqevHMLQ6tOKXPRBqCqKQUz4yDI7pg1jmZkSXbcNL_suElNMxBLq_2G6C5-gE7HnX6h2G_gF7pIgrr44FbEWV6ukSJbj-q6fy2yc"
+                  src="/images/solutions/dashboard.png"
                   fill
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-surface-container-highest to-transparent"></div>
