@@ -1,0 +1,394 @@
+<!doctype html>
+
+<html class="light" lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Erreur 404 - BailKey</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Inter:wght@400;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+    </style>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-container": "#e58957",
+              "surface-container-highest": "#dee4e3",
+              "surface-container-high": "#e4e9e8",
+              "secondary-fixed-dim": "#c4c7c9",
+              "on-tertiary": "#ffffff",
+              "inverse-primary": "#60d8d9",
+              "surface-container-lowest": "#ffffff",
+              "secondary-fixed": "#e0e3e5",
+              "on-surface": "#171d1d",
+              "on-primary-container": "#003e3f",
+              foreground: "oklch(0.148 0.004 228.8)",
+              accent: "oklch(0.963 0.002 197.1)",
+              "surface-container-low": "#eff5f4",
+              "glass-border": "rgba(255, 255, 255, 0.6)",
+              "accent-foreground": "oklch(0.218 0.008 223.9)",
+              tertiary: "#94491d",
+              "primary-fixed-dim": "#60d8d9",
+              "on-secondary-container": "#5f6365",
+              "primary-foreground": "oklch(0.984 0.014 180.72)",
+              "on-tertiary-fixed": "#341100",
+              "on-tertiary-container": "#602600",
+              card: "oklch(1 0 0)",
+              "secondary-container": "#dde0e2",
+              "surface-variant": "#dee4e3",
+              "on-primary-fixed": "#002020",
+              "on-primary": "#ffffff",
+              primary: "oklch(0.511 0.096 186.391)",
+              "surface-dim": "#d6dbda",
+              secondary: "oklch(0.967 0.001 286.375)",
+              background: "oklch(1 0 0)",
+              "surface-container": "#eaefee",
+              "on-secondary-fixed": "#181c1e",
+              muted: "oklch(0.963 0.002 197.1)",
+              border: "oklch(0.925 0.005 214.3)",
+              "primary-container": "#2eb1b2",
+              "outline-variant": "#bcc9c9",
+              "muted-foreground": "oklch(0.56 0.021 213.5)",
+              "secondary-foreground": "oklch(0.21 0.006 285.885)",
+              "surface-tint": "#00696a",
+              "on-secondary": "#ffffff",
+              error: "#ba1a1a",
+              "tertiary-fixed": "#ffdbcb",
+              "on-error": "#ffffff",
+              surface: "#f5fafa",
+              ring: "oklch(0.723 0.014 214.4)",
+              "on-secondary-fixed-variant": "#434749",
+              "primary-fixed": "#7ff5f5",
+              "on-surface-variant": "#3d4949",
+              "inverse-surface": "#2c3131",
+              "surface-bright": "#f5fafa",
+              "on-error-container": "#93000a",
+              "on-tertiary-fixed-variant": "#763306",
+              "inverse-on-surface": "#ecf2f1",
+              destructive: "oklch(0.577 0.245 27.325)",
+              outline: "#6d7a79",
+              "tertiary-fixed-dim": "#ffb691",
+              "on-background": "#171d1d",
+              "on-primary-fixed-variant": "#004f50",
+              "error-container": "#ffdad6",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              base: "0.25rem",
+              margin: "2rem",
+              lg: "2.5rem",
+              gutter: "1.5rem",
+              md: "1.5rem",
+              xl: "4rem",
+              sm: "1rem",
+              xs: "0.5rem",
+            },
+            fontFamily: {
+              h1: ["Manrope"],
+              "body-md": ["Inter"],
+              h2: ["Manrope"],
+              display: ["Manrope"],
+              "body-lg": ["Inter"],
+              "label-caps": ["Inter"],
+              h3: ["Manrope"],
+            },
+            fontSize: {
+              h1: [
+                "32px",
+                {
+                  lineHeight: "1.2",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+              "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+              h2: ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+              display: [
+                "48px",
+                {
+                  lineHeight: "1.1",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+              "label-caps": [
+                "12px",
+                {
+                  lineHeight: "1.0",
+                  letterSpacing: "0.05em",
+                  fontWeight: "600",
+                },
+              ],
+              h3: ["20px", { lineHeight: "1.4", fontWeight: "500" }],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body
+    class="bg-surface text-on-surface font-body-md min-h-screen flex flex-col"
+  >
+    <!-- TopNavBar (Suppressed for 404, but requested by user prompt - hiding based on Semantic Shell Mandate for dead ends, but user specifically asked for it in prompt. "Elle doit utiliser le TopNavBar et le Footer institutionnels." I will include it but keep it clean.) -->
+    <!-- Applying Shared Component JSON -->
+    <nav
+      class="bg-background/80 dark:bg-inverse-surface/80 backdrop-blur-xl w-full sticky top-0 z-50 rounded-none border-b border-outline-variant dark:border-outline/30 shadow-sm dark:shadow-none"
+    >
+      <div
+        class="flex justify-between items-center w-full px-margin py-xs max-w-7xl mx-auto"
+      >
+        <a class="flex items-center gap-2" href="/">
+          <img
+            alt="BailKey Logo"
+            class="h-8 w-auto"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBF2Ka6DwmC4FP_yPmoiqx0JZMJC_dc0BYuAhvmENkMWoDMOdj1xSpKN090l0Jwxs7A7T8N0Ooot_xRqzg2GOneKqeBH88L5SuVxw9Jyr71Pp8g5dfK1abt7Zyofhn1JqUszEPPZtYEpY_OEvyyPe8veMlhu5CTEZbfLYzowOKDYo51S2C5mHtDJP5oVcCHfq5JszbNsovgslqDzMhi5o6mf7scgnE8WzRtUDrsSX-F1dJ1KacsOLOnXHb4KXuGRGKV1HnwBIvce1E"
+          />
+        </a>
+        <div class="hidden md:flex items-center gap-6">
+          <a
+            class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors font-body-md text-body-md"
+            href="#"
+            >Plateforme</a
+          >
+          <a
+            class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors font-body-md text-body-md"
+            href="#"
+            >Solutions</a
+          >
+          <a
+            class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors font-body-md text-body-md"
+            href="#"
+            >Tarifs</a
+          >
+          <a
+            class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors font-body-md text-body-md"
+            href="#"
+            >Ressources</a
+          >
+          <a
+            class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors font-body-md text-body-md"
+            href="#"
+            >Contact</a
+          >
+        </div>
+        <div class="flex items-center gap-4">
+          <a
+            class="hidden md:block font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200"
+            href="#"
+            >Connexion</a
+          >
+          <a
+            class="bg-primary text-primary-foreground px-6 py-2 rounded-full font-body-md text-body-md hover:opacity-80 transition-all duration-200 hover:shadow-md"
+            href="#"
+            >Commencer</a
+          >
+        </div>
+      </div>
+    </nav>
+    <!-- Main Content Canvas -->
+    <main
+      class="flex-grow flex items-center justify-center px-margin py-xl relative overflow-hidden"
+    >
+      <!-- Ambient Background Decoration -->
+      <div
+        class="absolute inset-0 z-0 pointer-events-none flex items-center justify-center opacity-30"
+      >
+        <div
+          class="w-[800px] h-[800px] rounded-full bg-gradient-to-tr from-primary-container/20 to-transparent blur-3xl mix-blend-multiply"
+        ></div>
+      </div>
+      <div
+        class="relative z-10 max-w-3xl w-full mx-auto text-center flex flex-col items-center"
+      >
+        <!-- 404 Display -->
+        <div class="mb-8 relative">
+          <h1
+            class="font-display text-[120px] leading-none text-on-surface font-extrabold tracking-tighter opacity-10"
+          >
+            404
+          </h1>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span
+              class="material-symbols-outlined text-[64px] text-primary"
+              data-weight="fill"
+              style="font-variation-settings: &quot;FILL&quot; 1"
+              >architecture</span
+            >
+          </div>
+        </div>
+        <!-- Message -->
+        <h2 class="font-h1 text-h1 text-on-surface mb-4">Page non trouvée</h2>
+        <p
+          class="font-body-lg text-body-lg text-on-surface-variant max-w-xl mx-auto mb-10"
+        >
+          L'adresse que vous recherchez semble avoir été modifiée ou déplacée.
+          Nous vous invitons à retourner à la structure principale ou à explorer
+          nos solutions.
+        </p>
+        <!-- Actions (Glassmorphism Bento Container) -->
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-gutter w-full max-w-2xl"
+        >
+          <a
+            class="group bg-surface-container-lowest/80 backdrop-blur-xl border border-glass-border p-6 rounded-none flex flex-col items-center justify-center text-center hover:bg-surface-container transition-colors duration-300 shadow-[0_32px_64px_-16px_rgba(46,177,178,0.1)]"
+            href="/"
+          >
+            <span
+              class="material-symbols-outlined text-primary mb-3 text-[32px]"
+              >home</span
+            >
+            <h3
+              class="font-h3 text-h3 text-on-surface mb-2 group-hover:text-primary transition-colors"
+            >
+              Retour à l'accueil
+            </h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">
+              Revenez à la page principale de BailKey.
+            </p>
+          </a>
+          <a
+            class="group bg-surface-container-lowest/80 backdrop-blur-xl border border-glass-border p-6 rounded-none flex flex-col items-center justify-center text-center hover:bg-surface-container transition-colors duration-300 shadow-[0_32px_64px_-16px_rgba(46,177,178,0.1)]"
+            href="#"
+          >
+            <span
+              class="material-symbols-outlined text-primary mb-3 text-[32px]"
+              >explore</span
+            >
+            <h3
+              class="font-h3 text-h3 text-on-surface mb-2 group-hover:text-primary transition-colors"
+            >
+              Nos Solutions
+            </h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">
+              Découvrez nos outils de gestion immobilière.
+            </p>
+          </a>
+        </div>
+      </div>
+    </main>
+    <!-- Footer -->
+    <!-- Applying Shared Component JSON -->
+    <footer
+      class="bg-surface-container-lowest dark:bg-inverse-surface w-full rounded-none border-t border-outline-variant dark:border-outline/20"
+    >
+      <div
+        class="grid grid-cols-2 md:grid-cols-4 gap-gutter px-margin py-xl max-w-7xl mx-auto"
+      >
+        <div class="col-span-2 md:col-span-1 flex flex-col gap-4">
+          <span
+            class="font-display text-h2 font-bold text-primary dark:text-inverse-primary"
+            >BailKey</span
+          >
+          <p
+            class="font-label-caps text-label-caps text-on-surface-variant mt-auto"
+          >
+            © 2024 BailKey. Architectural Precision in Property Management.
+          </p>
+        </div>
+        <div class="flex flex-col gap-3">
+          <h4
+            class="font-label-caps text-label-caps text-on-surface-variant mb-2"
+          >
+            PRODUIT
+          </h4>
+          <a
+            class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors"
+            href="#"
+            >Produit</a
+          >
+          <a
+            class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors"
+            href="#"
+            >Solutions</a
+          >
+          <a
+            class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors"
+            href="#"
+            >Tarifs</a
+          >
+        </div>
+        <div class="flex flex-col gap-3">
+          <h4
+            class="font-label-caps text-label-caps text-on-surface-variant mb-2"
+          >
+            RESSOURCES
+          </h4>
+          <a
+            class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors"
+            href="#"
+            >Ressources</a
+          >
+          <a
+            class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors"
+            href="#"
+            >Blog</a
+          >
+          <a
+            class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors"
+            href="#"
+            >Documentation</a
+          >
+        </div>
+        <div class="flex flex-col gap-3">
+          <h4
+            class="font-label-caps text-label-caps text-on-surface-variant mb-2"
+          >
+            ENTREPRISE
+          </h4>
+          <a
+            class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors"
+            href="#"
+            >Entreprise</a
+          >
+          <a
+            class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors"
+            href="#"
+            >À propos</a
+          >
+          <a
+            class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors"
+            href="#"
+            >Carrières</a
+          >
+          <a
+            class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors"
+            href="#"
+            >Contact</a
+          >
+          <a
+            class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-inverse-primary transition-colors"
+            href="#"
+            >Confidentialité</a
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,130 @@
+ /* Custom Keyframe Animations for CSS-only loading state */
+ @keyframes drawLine1 {
+     0% {
+         height: 0;
+     }
+
+     20% {
+         height: 48px;
+     }
+
+     100% {
+         height: 48px;
+     }
+ }
+
+ @keyframes drawLine2 {
+     0% {
+         height: 0;
+     }
+
+     20% {
+         height: 0;
+     }
+
+     40% {
+         height: 72px;
+     }
+
+     100% {
+         height: 72px;
+     }
+ }
+
+ @keyframes drawLine3 {
+     0% {
+         height: 0;
+     }
+
+     40% {
+         height: 0;
+     }
+
+     60% {
+         height: 32px;
+     }
+
+     100% {
+         height: 32px;
+     }
+ }
+
+ @keyframes drawLine4 {
+     0% {
+         height: 0;
+     }
+
+     60% {
+         height: 0;
+     }
+
+     80% {
+         height: 56px;
+     }
+
+     100% {
+         height: 56px;
+     }
+ }
+
+ @keyframes drawLine5 {
+     0% {
+         height: 0;
+     }
+
+     80% {
+         height: 0;
+     }
+
+     100% {
+         height: 40px;
+     }
+ }
+
+ .building-line-1 {
+     animation: drawLine1 2.5s infinite ease-in-out;
+ }
+
+ .building-line-2 {
+     animation: drawLine2 2.5s infinite ease-in-out;
+ }
+
+ .building-line-3 {
+     animation: drawLine3 2.5s infinite ease-in-out;
+ }
+
+ .building-line-4 {
+     animation: drawLine4 2.5s infinite ease-in-out;
+ }
+
+ .building-line-5 {
+     animation: drawLine5 2.5s infinite ease-in-out;
+ }
+
+ @keyframes pulse-soft {
+
+     0%,
+     100% {
+         opacity: 1;
+         transform: scale(1);
+     }
+
+     50% {
+         opacity: 0.8;
+         transform: scale(0.98);
+     }
+ }
+
+ @keyframes translateX {
+     0% {
+         transform: translateX(-100%);
+     }
+
+     100% {
+         transform: translateX(300%);
+     }
+ }
+
+ .animate-pulse-soft {
+     animation: pulse-soft 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+ }
