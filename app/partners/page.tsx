@@ -9,7 +9,7 @@ export default function PartnerPage() {
     <>
       <Navbar />
       {/* Main Content */}
-      <main className="flex-grow pt-32">
+      <main className="grow pt-32">
         {/* Hero Section */}
         <section className="relative w-full overflow-hidden bg-surface-container-lowest">
           <div className="max-w-7xl mx-auto px-margin pt-xl pb-xl flex flex-col md:flex-row items-center gap-xl relative z-10">
@@ -27,7 +27,7 @@ export default function PartnerPage() {
                 gamme.
               </p>
               <a
-                className="bg-primary text-on-primary font-label-caps text-label-caps uppercase py-sm px-lg rounded-none hover:-translate-y-1 hover:shadow-lg transition-all duration-300 inline-flex items-center gap-xs hover:scale-[1.02] hover:brightness-110 hover:shadow-lg transition-all duration-300"
+                className="bg-primary text-on-primary font-label-caps text-label-caps uppercase py-sm px-lg rounded-none hover:-translate-y-1 hover:shadow-lg transition-all duration-300 inline-flex items-center gap-xs hover:scale-[1.02] hover:brightness-110"
                 href="#devenir-partenaire"
               >
                 Devenir partenaire
@@ -81,7 +81,7 @@ export default function PartnerPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
               {/* Type 1 */}
-              <div className="bg-surface-container-lowest p-lg border border-outline-variant/30 hover:border-primary/50 transition-colors group hover:-translate-y-1 hover:shadow-xl hover:border-primary transition-all duration-300">
+              <div className="bg-surface-container-lowest p-lg border border-outline-variant/30 hover:border-primary/50 transition-colors group hover:-translate-y-1 hover:shadow-xl  duration-300">
                 <div className="w-12 h-12 bg-primary/10 flex items-center justify-center mb-md group-hover:bg-primary/20 transition-colors">
                   <span className="material-symbols-outlined text-primary text-2xl">
                     integration_instructions
@@ -95,7 +95,7 @@ export default function PartnerPage() {
                   accompagnement technique dédié et de marges avantageuses sur
                   les licences.
                 </p>
-                <ul className="space-y-xs font-body-md text-sm text-on-surface-variant mb-lg flex-grow">
+                <ul className="space-y-xs font-body-md text-sm text-on-surface-variant mb-lg grow">
                   <li className="flex items-start gap-xs">
                     <span className="material-symbols-outlined text-primary text-sm mt-1">
                       check
@@ -117,7 +117,7 @@ export default function PartnerPage() {
                 </ul>
               </div>
               {/* Type 2 */}
-              <div className="bg-surface-container-lowest p-lg border border-outline-variant/30 hover:border-primary/50 transition-colors group relative hover:-translate-y-1 hover:shadow-xl hover:border-primary transition-all duration-300">
+              <div className="bg-surface-container-lowest p-lg border border-outline-variant/30 hover:border-primary/50 transition-colors group relative hover:-translate-y-1 hover:shadow-xl  duration-300">
                 {/* Highlight Badge */}
                 <div className="absolute top-0 right-0 bg-primary text-on-primary font-label-caps text-label-caps px-xs py-base translate-x-1/2 -translate-y-1/2 rotate-12 hidden md:block uppercase tracking-wider font-bold">
                   POPULAIRE
@@ -157,7 +157,7 @@ export default function PartnerPage() {
                 </ul>
               </div>
               {/* Type 3 */}
-              <div className="bg-surface-container-lowest p-lg border border-outline-variant/30 hover:border-primary/50 transition-colors group hover:-translate-y-1 hover:shadow-xl hover:border-primary transition-all duration-300">
+              <div className="bg-surface-container-lowest p-lg border border-outline-variant/30 hover:border-primary/50 transition-colors group hover:-translate-y-1 hover:shadow-xl  duration-300">
                 <div className="w-12 h-12 bg-primary/10 flex items-center justify-center mb-md group-hover:bg-primary/20 transition-colors">
                   <span className="material-symbols-outlined text-primary text-2xl">
                     api
@@ -211,7 +211,7 @@ export default function PartnerPage() {
               </div>
               <div className="md:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-gutter">
                 {/* Benefit 1 */}
-                <div className="flex gap-sm p-sm border-l-2 border-primary/20 hover:border-primary transition-colors hover:bg-primary/5 transition-colors duration-200 cursor-default">
+                <div className="flex gap-sm p-sm border-l-2 border-primary/20 hover:border-primary transition-colors hover:bg-primary/5 duration-200 cursor-default">
                   <span className="material-symbols-outlined text-primary text-2xl mt-1">
                     support_agent
                   </span>
@@ -226,7 +226,7 @@ export default function PartnerPage() {
                   </div>
                 </div>
                 {/* Benefit 2 */}
-                <div className="flex gap-sm p-sm border-l-2 border-primary/20 hover:border-primary transition-colors hover:bg-primary/5 transition-colors duration-200 cursor-default">
+                <div className="flex gap-sm p-sm border-l-2 border-primary/20 hover:border-primary transition-colors hover:bg-primary/5 duration-200 cursor-default">
                   <span className="material-symbols-outlined text-primary text-2xl mt-1">
                     payments
                   </span>
@@ -241,7 +241,7 @@ export default function PartnerPage() {
                   </div>
                 </div>
                 {/* Benefit 3 */}
-                <div className="flex gap-sm p-sm border-l-2 border-primary/20 hover:border-primary transition-colors hover:bg-primary/5 transition-colors duration-200 cursor-default">
+                <div className="flex gap-sm p-sm border-l-2 border-primary/20 hover:border-primary transition-colors hover:bg-primary/5 duration-200 cursor-default">
                   <span className="material-symbols-outlined text-primary text-2xl mt-1">
                     developer_board
                   </span>
@@ -256,7 +256,7 @@ export default function PartnerPage() {
                   </div>
                 </div>
                 {/* Benefit 4 */}
-                <div className="flex gap-sm p-sm border-l-2 border-primary/20 hover:border-primary transition-colors hover:bg-primary/5 transition-colors duration-200 cursor-default">
+                <div className="flex gap-sm p-sm border-l-2 border-primary/20 hover:border-primary transition-colors hover:bg-primary/5 duration-200 cursor-default">
                   <span className="material-symbols-outlined text-primary text-2xl mt-1">
                     campaign
                   </span>
@@ -280,7 +280,7 @@ export default function PartnerPage() {
           className="py-xl px-margin bg-inverse-surface text-inverse-on-surface relative overflow-hidden"
           id="devenir-partenaire"
         >
-          <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary to-transparent pointer-events-none"></div>
+          <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-primary to-transparent pointer-events-none"></div>
           <div className="max-w-4xl mx-auto text-center relative z-10">
             <h2 className="font-display text-[40px] leading-tight text-inverse-primary mb-md font-semibold">
               Prêt à construire l&apos;avenir de la gestion immobilière ?
@@ -291,13 +291,13 @@ export default function PartnerPage() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-sm">
               <a
-                className="bg-primary text-on-primary font-label-caps text-label-caps uppercase py-sm px-lg rounded-none hover:-translate-y-1 shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto text-center hover:scale-[1.02] hover:brightness-110 hover:shadow-lg transition-all duration-300"
+                className="bg-primary text-on-primary font-label-caps text-label-caps uppercase py-sm px-lg rounded-none hover:-translate-y-1 shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto text-center hover:scale-[1.02] hover:brightness-110"
                 href="#"
               >
                 Devenir partenaire BailKey
               </a>
               <a
-                className="bg-transparent border border-outline text-inverse-on-surface font-label-caps text-label-caps uppercase py-sm px-lg rounded-none hover:bg-surface/10 transition-colors duration-300 w-full sm:w-auto text-center hover:bg-primary/10 hover:border-primary transition-all duration-300"
+                className="bg-transparent border border-outline text-inverse-on-surface font-label-caps text-label-caps uppercase py-sm px-lg rounded-none hover:bg-surface/10 transition-colors duration-300 w-full sm:w-auto text-center hover:border-primary"
                 href="#"
               >
                 Contacter l&apos;équipe
