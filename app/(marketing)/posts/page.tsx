@@ -16,6 +16,8 @@ export const metadata: Metadata = {
 // Page (Server Component)
 // ---------------------------------------------------------------------------
 
+export const dynamic = "force-dynamic";
+
 export default async function ResourcesPage() {
   const { posts } = await getPublishedPosts();
 

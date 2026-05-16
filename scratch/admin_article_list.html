@@ -1,0 +1,1077 @@
+<!doctype html>
+<html class="light" lang="fr" style="">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Admin Ressources - Liste des articles</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Manrope:wght@500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed": "#181c1e",
+              "surface-container-low": "#eff5f4",
+              "secondary-foreground": "oklch(0.21 0.006 285.885)",
+              "on-secondary": "#ffffff",
+              tertiary: "#94491d",
+              surface: "#f5fafa",
+              "on-primary-container": "#003e3f",
+              "outline-variant": "#bcc9c9",
+              "surface-container-highest": "#dee4e3",
+              "primary-foreground": "oklch(0.984 0.014 180.72)",
+              "accent-foreground": "oklch(0.218 0.008 223.9)",
+              destructive: "oklch(0.577 0.245 27.325)",
+              card: "oklch(1 0 0)",
+              "on-primary": "#ffffff",
+              "muted-foreground": "oklch(0.56 0.021 213.5)",
+              "on-tertiary-container": "#602600",
+              "inverse-on-surface": "#ecf2f1",
+              "surface-bright": "#f5fafa",
+              "primary-fixed-dim": "#60d8d9",
+              "on-surface": "#171d1d",
+              "primary-fixed": "#7ff5f5",
+              "error-container": "#ffdad6",
+              "surface-dim": "#d6dbda",
+              error: "#ba1a1a",
+              muted: "oklch(0.963 0.002 197.1)",
+              accent: "oklch(0.963 0.002 197.1)",
+              "surface-tint": "#00696a",
+              "surface-container-high": "#e4e9e8",
+              "primary-container": "#2eb1b2",
+              "surface-container-lowest": "#ffffff",
+              foreground: "oklch(0.148 0.004 228.8)",
+              "on-background": "#171d1d",
+              border: "oklch(0.925 0.005 214.3)",
+              "inverse-primary": "#60d8d9",
+              "on-tertiary-fixed-variant": "#763306",
+              background: "oklch(1 0 0)",
+              "surface-variant": "#dee4e3",
+              "surface-container": "#eaefee",
+              "glass-border": "rgba(255, 255, 255, 0.6)",
+              primary: "oklch(0.511 0.096 186.391)",
+              "on-tertiary": "#ffffff",
+              "on-error": "#ffffff",
+              ring: "oklch(0.723 0.014 214.4)",
+              "tertiary-fixed": "#ffdbcb",
+              "on-primary-fixed": "#002020",
+              "on-tertiary-fixed": "#341100",
+              "secondary-container": "#dde0e2",
+              "on-secondary-fixed-variant": "#434749",
+              "on-primary-fixed-variant": "#004f50",
+              "secondary-fixed": "#e0e3e5",
+              "tertiary-container": "#e58957",
+              "on-error-container": "#93000a",
+              secondary: "oklch(0.967 0.001 286.375)",
+              "secondary-fixed-dim": "#c4c7c9",
+              "on-secondary-container": "#5f6365",
+              "tertiary-fixed-dim": "#ffb691",
+              outline: "#6d7a79",
+              "on-surface-variant": "#3d4949",
+              "inverse-surface": "#2c3131",
+            },
+            borderRadius: {
+              DEFAULT: "0px",
+              lg: "0px",
+              xl: "0px",
+              full: "0px",
+            },
+            spacing: {
+              sm: "1rem",
+              md: "1.5rem",
+              base: "0.25rem",
+              lg: "2.5rem",
+              xs: "0.5rem",
+              xl: "4rem",
+              margin: "2rem",
+              gutter: "1.5rem",
+            },
+            fontFamily: {
+              h2: ["Manrope"],
+              "body-md": ["Inter"],
+              "label-caps": ["Inter"],
+              "body-lg": ["Inter"],
+              h3: ["Manrope"],
+              display: ["Manrope"],
+              h1: ["Manrope"],
+            },
+            fontSize: {
+              h2: ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+              "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+              "label-caps": [
+                "12px",
+                {
+                  lineHeight: "1.0",
+                  letterSpacing: "0.05em",
+                  fontWeight: "600",
+                },
+              ],
+              "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+              h3: ["20px", { lineHeight: "1.4", fontWeight: "500" }],
+              display: [
+                "48px",
+                {
+                  lineHeight: "1.1",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              h1: [
+                "32px",
+                {
+                  lineHeight: "1.2",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * {
+        border-radius: 0 !important;
+      }
+
+      #mobile-menu-toggle:checked ~ #mobile-bottom-sheet {
+        transform: translateY(0);
+      }
+      #mobile-menu-toggle:checked ~ #mobile-bottom-sheet-backdrop {
+        display: block;
+      }
+
+      /* Hover Flyouts for Nav Rail */
+      .nav-item-group:hover .nav-flyout {
+        display: flex;
+        opacity: 1;
+        visibility: visible;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background text-on-background font-body-md flex min-h-screen transition-all duration-300 ease-in-out"
+  >
+    <!-- Side Nav Rail (Medium/Desktop) -->
+    <nav
+      class="hidden md:flex flex-col py-md bg-surface border-r border-outline-variant shadow-none h-screen left-0 w-[88px] fixed top-0 z-50 transition-all duration-300 ease-in-out items-center"
+    >
+      <div class="mb-lg flex flex-col items-center">
+        <img
+          alt="BailKey Logo"
+          class="w-10 h-auto object-contain"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPerp_Z6DIZ6DSHytSEA4l7U1Wgs09OcIC_V4ubXmpuI2gkMi8k3XDfIWjxPRstw3k1421McqMAPwmePV_1H12K3UtSoHLyy5cGv2fAfUixwPpeks6AMyU-2JnSasEVA-DAB5DT9M5dOxbOj2ZOcp9TvJAdFb7KDeVB2fyfWD9dOG2eaxBVCkbaJ3kIHZlj-jrxTpXxrVwaMXBuWHAudFFy-crkuEi-ufDZ6Nn0A2MH4Es1zxGxrQqJd2fhGSr0mtcZrrlF6BgRZ0"
+        />
+      </div>
+      <div class="flex-1 flex flex-col gap-sm w-full">
+        <!-- Item 1: Content -->
+        <div class="nav-item-group relative flex justify-center w-full group">
+          <div
+            class="flex flex-col items-center justify-center p-sm w-[64px] h-[64px] hover:bg-surface-container-high transition-colors cursor-pointer bg-primary-container/10 text-primary"
+          >
+            <span
+              class="material-symbols-outlined text-[24px]"
+              data-icon="folder"
+              style="font-variation-settings: &quot;FILL&quot; 1"
+              >folder</span
+            >
+            <span class="text-[10px] font-label-caps mt-1">Contenu</span>
+          </div>
+          <!-- Flyout Menu -->
+          <div
+            class="nav-flyout hidden opacity-0 invisible absolute left-[88px] top-0 bg-surface border border-outline-variant shadow-md flex-col w-48 z-50 transition-all duration-200"
+          >
+            <div
+              class="px-sm py-xs border-b border-outline-variant bg-surface-container-low"
+            >
+              <span
+                class="text-[11px] font-label-caps uppercase font-bold tracking-widest text-on-surface-variant"
+                >Gestion Contenu</span
+              >
+            </div>
+            <a
+              class="flex items-center gap-sm px-sm py-2 hover:bg-surface-container-high text-primary border-l-4 border-primary transition-colors"
+              href="#"
+            >
+              <span
+                class="material-symbols-outlined text-[20px]"
+                data-icon="article"
+                >article</span
+              >
+              <span class="text-body-md">Articles</span>
+            </a>
+            <a
+              class="flex items-center gap-sm px-sm py-2 hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface border-l-4 border-transparent transition-colors"
+              href="#"
+            >
+              <span
+                class="material-symbols-outlined text-[20px]"
+                data-icon="category"
+                >category</span
+              >
+              <span class="text-body-md">Catégories</span>
+            </a>
+            <a
+              class="flex items-center gap-sm px-sm py-2 hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface border-l-4 border-transparent transition-colors"
+              href="#"
+            >
+              <span
+                class="material-symbols-outlined text-[20px]"
+                data-icon="sell"
+                >sell</span
+              >
+              <span class="text-body-md">Mots-clés</span>
+            </a>
+          </div>
+        </div>
+        <!-- Item 2: Property -->
+        <div class="nav-item-group relative flex justify-center w-full group">
+          <div
+            class="flex flex-col items-center justify-center p-sm w-[64px] h-[64px] hover:bg-surface-container-high text-on-surface-variant transition-colors cursor-pointer"
+          >
+            <span
+              class="material-symbols-outlined text-[24px]"
+              data-icon="domain"
+              >domain</span
+            >
+            <span class="text-[10px] font-label-caps mt-1">Biens</span>
+          </div>
+          <!-- Flyout Menu -->
+          <div
+            class="nav-flyout hidden opacity-0 invisible absolute left-[88px] top-0 bg-surface border border-outline-variant shadow-md flex-col w-48 z-50 transition-all duration-200"
+          >
+            <div
+              class="px-sm py-xs border-b border-outline-variant bg-surface-container-low"
+            >
+              <span
+                class="text-[11px] font-label-caps uppercase font-bold tracking-widest text-on-surface-variant"
+                >Patrimoine</span
+              >
+            </div>
+            <a
+              class="flex items-center gap-sm px-sm py-2 hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface border-l-4 border-transparent transition-colors"
+              href="#"
+            >
+              <span
+                class="material-symbols-outlined text-[20px]"
+                data-icon="apartment"
+                >apartment</span
+              >
+              <span class="text-body-md">Propriétés</span>
+            </a>
+            <a
+              class="flex items-center gap-sm px-sm py-2 hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface border-l-4 border-transparent transition-colors"
+              href="#"
+            >
+              <span
+                class="material-symbols-outlined text-[20px]"
+                data-icon="real_estate_agent"
+                >real_estate_agent</span
+              >
+              <span class="text-body-md">Locataires</span>
+            </a>
+          </div>
+        </div>
+        <!-- Item 3: Settings -->
+        <div class="nav-item-group relative flex justify-center w-full group">
+          <div
+            class="flex flex-col items-center justify-center p-sm w-[64px] h-[64px] hover:bg-surface-container-high text-on-surface-variant transition-colors cursor-pointer"
+          >
+            <span
+              class="material-symbols-outlined text-[24px]"
+              data-icon="settings"
+              >settings</span
+            >
+            <span class="text-[10px] font-label-caps mt-1">Config</span>
+          </div>
+          <!-- Flyout Menu -->
+          <div
+            class="nav-flyout hidden opacity-0 invisible absolute left-[88px] top-0 bg-surface border border-outline-variant shadow-md flex-col w-48 z-50 transition-all duration-200"
+          >
+            <div
+              class="px-sm py-xs border-b border-outline-variant bg-surface-container-low"
+            >
+              <span
+                class="text-[11px] font-label-caps uppercase font-bold tracking-widest text-on-surface-variant"
+                >Paramètres</span
+              >
+            </div>
+            <a
+              class="flex items-center gap-sm px-sm py-2 hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface border-l-4 border-transparent transition-colors"
+              href="#"
+            >
+              <span
+                class="material-symbols-outlined text-[20px]"
+                data-icon="group"
+                >group</span
+              >
+              <span class="text-body-md">Utilisateurs</span>
+            </a>
+            <a
+              class="flex items-center gap-sm px-sm py-2 hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface border-l-4 border-transparent transition-colors"
+              href="#"
+            >
+              <span
+                class="material-symbols-outlined text-[20px]"
+                data-icon="security"
+                >security</span
+              >
+              <span class="text-body-md">Sécurité</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mt-auto flex flex-col gap-sm items-center w-full pt-md border-t border-outline-variant"
+      >
+        <a
+          class="flex flex-col items-center justify-center p-sm w-[64px] h-[64px] text-on-surface-variant hover:bg-surface-container-high transition-colors"
+          href="#"
+          title="Support"
+        >
+          <span class="material-symbols-outlined text-[24px]" data-icon="help"
+            >help</span
+          >
+        </a>
+        <a
+          class="flex flex-col items-center justify-center p-sm w-[64px] h-[64px] text-on-surface-variant hover:bg-surface-container-high transition-colors"
+          href="#"
+          title="Déconnexion"
+        >
+          <span class="material-symbols-outlined text-[24px]" data-icon="logout"
+            >logout</span
+          >
+        </a>
+        <img
+          alt="Administrator profile photo"
+          class="w-10 h-10 object-cover mt-sm border border-outline-variant"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvnZ615Rd4K7IF1U5FwZKKEsjIZV6Wnt16IV0Z47bk7LIb1OAwONdet8MqxWd5X51n6DQMKKm1xgxWItaKLT2r7nKXj9-xqLlKqdPihe4oRHJqHkfCsgGRBbF5z4Yz1pV0OeUOALC5NPSAZxoPlrpuImdzPpAxeO_tNQrFVm-pmeNMpA0YmSTcdPFkXKGD1Xzkj_Q1Sm2IPoA55gxsb89eUiotSrGle5QeuetQYxq0oesAtEDVt3a_k7IcQFALtgMBjx1AnNvx124"
+        />
+      </div>
+    </nav>
+    <!-- Main Content Area -->
+    <main
+      class="flex-1 flex flex-col md:ml-[88px] w-full bg-surface-bright transition-all duration-300 ease-in-out pb-[80px] md:pb-0 relative"
+    >
+      <!-- TopNavBar (Mobile) -->
+      <header
+        class="flex justify-between items-center w-full px-md h-16 sticky top-0 z-40 bg-surface border-b border-outline-variant text-primary md:hidden transition-all duration-300 ease-in-out"
+      >
+        <div class="flex items-center gap-sm">
+          <img
+            alt="BailKey Logo"
+            class="h-6 w-auto object-contain"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPerp_Z6DIZ6DSHytSEA4l7U1Wgs09OcIC_V4ubXmpuI2gkMi8k3XDfIWjxPRstw3k1421McqMAPwmePV_1H12K3UtSoHLyy5cGv2fAfUixwPpeks6AMyU-2JnSasEVA-DAB5DT9M5dOxbOj2ZOcp9TvJAdFb7KDeVB2fyfWD9dOG2eaxBVCkbaJ3kIHZlj-jrxTpXxrVwaMXBuWHAudFFy-crkuEi-ufDZ6Nn0A2MH4Es1zxGxrQqJd2fhGSr0mtcZrrlF6BgRZ0"
+          />
+        </div>
+        <div class="flex items-center gap-sm">
+          <button
+            class="text-primary hover:bg-primary-container/10 transition-colors p-xs"
+          >
+            <span class="material-symbols-outlined" data-icon="search"
+              >search</span
+            >
+          </button>
+          <img
+            alt="Administrator profile photo"
+            class="w-8 h-8 object-cover ml-xs"
+            data-alt="A professional headshot of a corporate manager in a bright modern office setting. The lighting is crisp and even, highlighting a trustworthy expression. The style is clean, corporate modern, fitting a high-end management platform."
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvnZ615Rd4K7IF1U5FwZKKEsjIZV6Wnt16IV0Z47bk7LIb1OAwONdet8MqxWd5X51n6DQMKKm1xgxWItaKLT2r7nKXj9-xqLlKqdPihe4oRHJqHkfCsgGRBbF5z4Yz1pV0OeUOALC5NPSAZxoPlrpuImdzPpAxeO_tNQrFVm-pmeNMpA0YmSTcdPFkXKGD1Xzkj_Q1Sm2IPoA55gxsb89eUiotSrGle5QeuetQYxq0oesAtEDVt3a_k7IcQFALtgMBjx1AnNvx124"
+          />
+        </div>
+      </header>
+      <!-- Floating Action Button for Medium/Desktop -->
+      <button
+        class="hidden md:flex fixed bottom-md right-md z-50 py-sm px-md bg-primary text-primary-foreground font-label-caps text-label-caps hover:bg-primary/90 transition-all items-center justify-center gap-xs uppercase tracking-wider shadow-md"
+      >
+        <span
+          class="material-symbols-outlined"
+          data-icon="add"
+          style="font-variation-settings: &quot;FILL&quot; 1"
+          >add</span
+        >
+        Nouvel Article
+      </button>
+      <!-- Page Content Canvas -->
+      <div
+        class="p-md w-full max-w-[1200px] mx-auto flex flex-col gap-lg transition-all duration-300 ease-in-out"
+      >
+        <!-- Header & Summary Stats -->
+        <section
+          class="flex flex-col lg:flex-row lg:items-end justify-between gap-md border-b border-outline-variant pb-md"
+        >
+          <div>
+            <h1 class="text-h1 font-h1 text-on-background mb-xs">
+              Gestion des Articles
+            </h1>
+            <p class="text-body-lg font-body-lg text-on-surface-variant">
+              Vue d'ensemble et contrôle sur toutes les ressources publiées et
+              en brouillon.
+            </p>
+          </div>
+          <div class="flex gap-sm overflow-x-auto pb-2 md:pb-0">
+            <div
+              class="bg-surface-container-low border border-outline-variant/30 px-md py-sm flex flex-col items-center min-w-[120px] flex-shrink-0 shadow-sm"
+            >
+              <span class="text-h1 font-h1 text-primary leading-none">142</span>
+              <span
+                class="text-[10px] font-label-caps text-on-surface-variant uppercase mt-xs tracking-widest text-center"
+                >Total</span
+              >
+            </div>
+            <div
+              class="bg-surface-container-low border border-outline-variant/30 px-md py-sm flex flex-col items-center min-w-[120px] flex-shrink-0 shadow-sm"
+            >
+              <span class="text-h1 font-h1 text-tertiary leading-none">28</span>
+              <span
+                class="text-[10px] font-label-caps text-on-surface-variant uppercase mt-xs tracking-widest text-center"
+                >Brouillons</span
+              >
+            </div>
+            <div
+              class="bg-surface-container-low border border-outline-variant/30 px-md py-sm flex flex-col items-center min-w-[120px] flex-shrink-0 shadow-sm"
+            >
+              <span class="text-h1 font-h1 text-primary-container leading-none"
+                >114</span
+              >
+              <span
+                class="text-[10px] font-label-caps text-on-surface-variant uppercase mt-xs tracking-widest text-center"
+                >Publiés</span
+              >
+            </div>
+          </div>
+        </section>
+        <!-- Filters Bar -->
+        <section
+          class="bg-surface-container-lowest border border-outline-variant flex flex-col md:flex-row md:flex-wrap items-stretch md:items-center gap-0 z-30 transition-all duration-300 ease-in-out shadow-sm"
+        >
+          <div
+            class="flex-1 min-w-[200px] flex items-center border-b md:border-b-0 md:border-r border-outline-variant bg-transparent px-sm py-sm"
+          >
+            <span
+              class="material-symbols-outlined text-outline mr-xs"
+              data-icon="search"
+              >search</span
+            >
+            <input
+              class="w-full bg-transparent border-none focus:ring-0 text-body-md font-body-md text-on-surface placeholder:text-outline p-0"
+              placeholder="Rechercher..."
+              type="text"
+            />
+          </div>
+          <div
+            class="flex items-center border-b md:border-b-0 md:border-r border-outline-variant px-sm py-sm bg-surface-container-lowest justify-between md:justify-start"
+          >
+            <span
+              class="text-label-caps font-label-caps text-on-surface-variant uppercase mr-xs"
+              >Catégorie:</span
+            >
+            <select
+              class="border-none bg-transparent text-body-md font-body-md text-on-surface py-0 pl-0 pr-lg focus:ring-0 focus:border-none cursor-pointer text-right md:text-left"
+            >
+              <option>Toutes</option>
+              <option>Guide</option>
+              <option>Analyse</option>
+              <option>Cas Client</option>
+              <option>Actualité</option>
+            </select>
+          </div>
+          <div
+            class="flex items-center px-sm py-sm bg-surface-container-lowest gap-xs overflow-x-auto"
+          >
+            <span
+              class="text-label-caps font-label-caps text-on-surface-variant uppercase mr-xs flex-shrink-0"
+              >Statut:</span
+            >
+            <div
+              class="flex border border-outline-variant overflow-hidden flex-shrink-0"
+            >
+              <button
+                class="px-sm py-[4px] bg-primary text-on-primary text-label-caps font-label-caps border-r border-outline-variant transition-colors uppercase"
+              >
+                Tous
+              </button>
+              <button
+                class="px-sm py-[4px] bg-transparent text-on-surface text-label-caps font-label-caps border-r border-outline-variant hover:bg-surface-variant transition-colors uppercase"
+              >
+                Publié
+              </button>
+              <button
+                class="px-sm py-[4px] bg-transparent text-on-surface text-label-caps font-label-caps border-r border-outline-variant hover:bg-surface-variant transition-colors uppercase"
+              >
+                Brouillon
+              </button>
+              <button
+                class="px-sm py-[4px] bg-transparent text-on-surface text-label-caps font-label-caps hover:bg-surface-variant transition-colors uppercase"
+              >
+                Archivé
+              </button>
+            </div>
+          </div>
+        </section>
+        <!-- Data Table -->
+        <section
+          class="bg-surface-container-lowest border border-outline-variant overflow-x-auto transition-all duration-300 ease-in-out"
+        >
+          <table
+            class="w-full text-left border-collapse min-w-[800px] border-spacing-0"
+          >
+            <thead>
+              <tr
+                class="bg-surface-container-low border-b border-outline-variant"
+              >
+                <th
+                  class="p-sm text-label-caps font-label-caps text-on-surface-variant uppercase tracking-wider"
+                >
+                  TITRE
+                </th>
+                <th
+                  class="p-sm text-label-caps font-label-caps text-on-surface-variant uppercase tracking-wider"
+                >
+                  AUTEUR
+                </th>
+                <th
+                  class="p-sm text-label-caps font-label-caps text-on-surface-variant uppercase tracking-wider"
+                >
+                  CATÉGORIE
+                </th>
+                <th
+                  class="p-sm text-label-caps font-label-caps text-on-surface-variant uppercase tracking-wider"
+                >
+                  STATUT
+                </th>
+                <th
+                  class="p-sm text-label-caps font-label-caps text-on-surface-variant uppercase tracking-wider"
+                >
+                  DATE
+                </th>
+                <th
+                  class="p-sm text-label-caps font-label-caps text-on-surface-variant uppercase tracking-wider text-right"
+                >
+                  ACTIONS
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              class="divide-y divide-outline-variant even:[&amp;_tr]:bg-surface-container-lowest/50"
+            >
+              <!-- Row 1 -->
+              <tr
+                class="hover:bg-surface-container-low transition-colors group"
+              >
+                <td class="p-sm">
+                  <a
+                    class="text-body-md font-body-md text-on-surface font-semibold hover:text-primary transition-colors"
+                    href="#"
+                    >Maximizing Urban Asset Yields in Q4</a
+                  >
+                </td>
+                <td class="p-sm">
+                  <div class="flex items-center gap-xs">
+                    <img
+                      alt="Sarah Jenkins"
+                      class="w-8 h-8 object-cover"
+                      data-alt="A professional headshot of a female financial analyst in a modern office setting, smiling confidently. Bright natural lighting. Corporate modern aesthetic."
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9h8molKRNpQku3mc8XBcpUfLG2neLQCkIZgeR78rEj5B_Eo2NZBVS2jji7ofEjzH9XkMfNI3m64Xu13IAjxw_KfBax6LMmEFNBkhL2RnFzA02lx7m4LOfNkEL8UPtRBkl_ndidEdI9eWWvQJvDJjhf-bnKLRHar3slPZKJjHx81-95iVTGFyvHr7L0nZpW4v_rjDwCG5eCRGVPlazta7nJGcqckQkl30wtJd4z6XrX6UOPFVte0pK7mnTVpWpQsDURLMjqk-aYKg"
+                    />
+                    <span class="text-body-md font-body-md text-on-surface"
+                      >S. Jenkins</span
+                    >
+                  </div>
+                </td>
+                <td class="p-sm">
+                  <span
+                    class="inline-block px-xs py-[2px] bg-secondary-container text-on-secondary-container text-label-caps font-label-caps border border-outline-variant uppercase"
+                    >Analyse</span
+                  >
+                </td>
+                <td class="p-sm">
+                  <span
+                    class="inline-flex items-center gap-[6px] px-2 py-1 bg-primary text-on-primary text-[10px] font-label-caps uppercase tracking-wider"
+                  >
+                    <span class="w-[4px] h-[4px] bg-white rounded-full"></span>
+                    Publié
+                  </span>
+                </td>
+                <td
+                  class="p-sm text-body-md font-body-md text-on-surface-variant"
+                >
+                  24 Oct 2023
+                </td>
+                <td class="p-sm text-right">
+                  <div
+                    class="flex justify-end gap-xs opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <button
+                      class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors"
+                      title="Aperçu"
+                    >
+                      <span
+                        class="material-symbols-outlined text-[20px]"
+                        data-icon="visibility"
+                        >visibility</span
+                      >
+                    </button>
+                    <button
+                      class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors"
+                      title="Modifier"
+                    >
+                      <span
+                        class="material-symbols-outlined text-[20px]"
+                        data-icon="edit"
+                        >edit</span
+                      >
+                    </button>
+                    <button
+                      class="p-xs text-on-surface-variant hover:text-destructive hover:bg-error-container/50 transition-colors"
+                      title="Archiver"
+                    >
+                      <span
+                        class="material-symbols-outlined text-[20px]"
+                        data-icon="archive"
+                        >archive</span
+                      >
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 2 -->
+              <tr
+                class="hover:bg-surface-container-low transition-colors group"
+              >
+                <td class="p-sm">
+                  <a
+                    class="text-body-md font-body-md text-on-surface font-semibold hover:text-primary transition-colors"
+                    href="#"
+                    >Guide to Sustainable Property Transitions</a
+                  >
+                </td>
+                <td class="p-sm">
+                  <div class="flex items-center gap-xs">
+                    <img
+                      alt="David Chen"
+                      class="w-8 h-8 object-cover"
+                      data-alt="A professional headshot of a male property manager with short hair, wearing a suit without a tie. Neutral grey background with soft studio lighting. Corporate aesthetic."
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZJUyHeGp0tlIx_8OSbInaCeoMuOdOLtuxsL9R9jkUK2d27r4WNM65Dt-CaLOZiUcrA3UUwqJUEzlQIkLRA1WJZBuu8xhTRCwZp5po6W0_G67FyYxIDybaHIIe2n60qfLy4bvWnEP375zvQBf1bv7XWGf0ZdOQLed_5xm0WMfa6jdgTysaUdwc8s2PuRUvzbLnO0RFSqW6KFgg4cAK_dAebctJrDDNJG6AzEMDLZmvJ235GgBrzJRKivQHSwkCzGNxfIGGVV8-ITs"
+                    />
+                    <span class="text-body-md font-body-md text-on-surface"
+                      >D. Chen</span
+                    >
+                  </div>
+                </td>
+                <td class="p-sm">
+                  <span
+                    class="inline-block px-xs py-[2px] bg-secondary-container text-on-secondary-container text-label-caps font-label-caps border border-outline-variant uppercase"
+                    >Guide</span
+                  >
+                </td>
+                <td class="p-sm">
+                  <span
+                    class="inline-flex items-center gap-[6px] px-2 py-1 bg-surface-variant text-on-surface-variant text-[10px] font-label-caps uppercase tracking-wider border border-outline/30"
+                  >
+                    <span
+                      class="w-[4px] h-[4px] bg-outline-variant rounded-full"
+                    ></span>
+                    Brouillon
+                  </span>
+                </td>
+                <td
+                  class="p-sm text-body-md font-body-md text-on-surface-variant"
+                >
+                  22 Oct 2023
+                </td>
+                <td class="p-sm text-right">
+                  <div
+                    class="flex justify-end gap-xs opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <button
+                      class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors"
+                      title="Aperçu"
+                    >
+                      <span
+                        class="material-symbols-outlined text-[20px]"
+                        data-icon="visibility"
+                        >visibility</span
+                      >
+                    </button>
+                    <button
+                      class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors"
+                      title="Modifier"
+                    >
+                      <span
+                        class="material-symbols-outlined text-[20px]"
+                        data-icon="edit"
+                        >edit</span
+                      >
+                    </button>
+                    <button
+                      class="p-xs text-on-surface-variant hover:text-destructive hover:bg-error-container/50 transition-colors"
+                      title="Archiver"
+                    >
+                      <span
+                        class="material-symbols-outlined text-[20px]"
+                        data-icon="archive"
+                        >archive</span
+                      >
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 3 -->
+              <tr
+                class="hover:bg-surface-container-low transition-colors group"
+              >
+                <td class="p-sm">
+                  <a
+                    class="text-body-md font-body-md text-on-surface font-semibold hover:text-primary transition-colors"
+                    href="#"
+                    >Client Case: Retrofitting the Zenith Tower</a
+                  >
+                </td>
+                <td class="p-sm">
+                  <div class="flex items-center gap-xs">
+                    <img
+                      alt="M. Ross"
+                      class="w-8 h-8 object-cover"
+                      data-alt="A professional headshot of a corporate manager in a bright modern office setting. The lighting is crisp and even, highlighting a trustworthy expression. The style is clean, corporate modern."
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZRmWLZCuZViymwQtTDNKyOJN6TUFkLhBiph5bK7f7-SPDIz2b2wZdm-V8IVnXlkhdnyHWHwrPCfRw1bNI-g0XBAAWDvH1l-vtEd4y6J6r7yWlkAWeiZXMGGbTmrphXGc72RBTUvaIEOW0rzFxQR21bAXRvnAKtNvsmVxA2AfmL6OikIyq58PkG7Kv4blU3kKlhTRwoKsf_9rJzJe7_anwQkd-xOcYNry7aa_CuNwmWVrnbNPiPOWPQEzsyH9ZT8K-5mDqZ9tg7vM"
+                    />
+                    <span class="text-body-md font-body-md text-on-surface"
+                      >M. Ross</span
+                    >
+                  </div>
+                </td>
+                <td class="p-sm">
+                  <span
+                    class="inline-block px-xs py-[2px] bg-secondary-container text-on-secondary-container text-label-caps font-label-caps border border-outline-variant uppercase"
+                    >Cas Client</span
+                  >
+                </td>
+                <td class="p-sm">
+                  <span
+                    class="inline-flex items-center gap-[6px] px-2 py-1 bg-primary text-on-primary text-[10px] font-label-caps uppercase tracking-wider"
+                  >
+                    <span class="w-[4px] h-[4px] bg-white rounded-full"></span>
+                    Publié
+                  </span>
+                </td>
+                <td
+                  class="p-sm text-body-md font-body-md text-on-surface-variant"
+                >
+                  18 Oct 2023
+                </td>
+                <td class="p-sm text-right">
+                  <div
+                    class="flex justify-end gap-xs opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <button
+                      class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors"
+                      title="Aperçu"
+                    >
+                      <span
+                        class="material-symbols-outlined text-[20px]"
+                        data-icon="visibility"
+                        >visibility</span
+                      >
+                    </button>
+                    <button
+                      class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors"
+                      title="Modifier"
+                    >
+                      <span
+                        class="material-symbols-outlined text-[20px]"
+                        data-icon="edit"
+                        >edit</span
+                      >
+                    </button>
+                    <button
+                      class="p-xs text-on-surface-variant hover:text-destructive hover:bg-error-container/50 transition-colors"
+                      title="Archiver"
+                    >
+                      <span
+                        class="material-symbols-outlined text-[20px]"
+                        data-icon="archive"
+                        >archive</span
+                      >
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 4 -->
+              <tr
+                class="hover:bg-surface-container-low transition-colors group"
+              >
+                <td class="p-sm">
+                  <a
+                    class="text-body-md font-body-md text-on-surface font-semibold hover:text-primary transition-colors"
+                    href="#"
+                    >Q3 Market Shifts in Commercial Real Estate</a
+                  >
+                </td>
+                <td class="p-sm">
+                  <div class="flex items-center gap-xs">
+                    <div
+                      class="w-8 h-8 bg-tertiary-fixed text-on-tertiary-fixed-variant flex items-center justify-center text-label-caps font-label-caps"
+                    >
+                      AK
+                    </div>
+                    <span class="text-body-md font-body-md text-on-surface"
+                      >A. Kumar</span
+                    >
+                  </div>
+                </td>
+                <td class="p-sm">
+                  <span
+                    class="inline-block px-xs py-[2px] bg-secondary-container text-on-secondary-container text-label-caps font-label-caps border border-outline-variant uppercase"
+                    >Actualité</span
+                  >
+                </td>
+                <td class="p-sm">
+                  <span
+                    class="inline-flex items-center gap-[6px] px-2 py-1 bg-error-container text-on-error-container text-[10px] font-label-caps uppercase tracking-wider"
+                  >
+                    <span class="w-[4px] h-[4px] bg-error rounded-full"></span>
+                    Archivé
+                  </span>
+                </td>
+                <td
+                  class="p-sm text-body-md font-body-md text-on-surface-variant"
+                >
+                  30 Sep 2023
+                </td>
+                <td class="p-sm text-right">
+                  <div
+                    class="flex justify-end gap-xs opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <button
+                      class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors"
+                      title="Aperçu"
+                    >
+                      <span
+                        class="material-symbols-outlined text-[20px]"
+                        data-icon="visibility"
+                        >visibility</span
+                      >
+                    </button>
+                    <button
+                      class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors"
+                      title="Modifier"
+                    >
+                      <span
+                        class="material-symbols-outlined text-[20px]"
+                        data-icon="edit"
+                        >edit</span
+                      >
+                    </button>
+                    <button
+                      class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors"
+                      title="Restaurer"
+                    >
+                      <span
+                        class="material-symbols-outlined text-[20px]"
+                        data-icon="restore"
+                        >restore</span
+                      >
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- Pagination -->
+          <div
+            class="flex items-center justify-between p-sm border-t border-outline-variant bg-surface-container-low"
+          >
+            <span
+              class="text-label-caps font-label-caps text-on-surface-variant uppercase"
+              >Affichage de 1-4 sur 142</span
+            >
+            <div class="flex gap-xs">
+              <button
+                class="p-xs border border-outline-variant bg-surface-container-lowest hover:bg-surface-variant text-on-surface transition-colors disabled:opacity-50"
+                disabled=""
+              >
+                <span
+                  class="material-symbols-outlined text-[20px]"
+                  data-icon="chevron_left"
+                  >chevron_left</span
+                >
+              </button>
+              <button
+                class="p-xs border border-outline-variant bg-surface-container-lowest hover:bg-surface-variant text-on-surface transition-colors"
+              >
+                <span
+                  class="material-symbols-outlined text-[20px]"
+                  data-icon="chevron_right"
+                  >chevron_right</span
+                >
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <input class="hidden" id="mobile-menu-toggle" type="checkbox" />
+    <!-- Bottom Nav Bar for Mobile -->
+    <nav
+      class="fixed bottom-0 left-0 w-full bg-surface border-t border-outline-variant z-[60] md:hidden flex justify-around items-center h-16 transition-all duration-300 ease-in-out"
+    >
+      <a
+        class="flex flex-col items-center justify-center w-full h-full text-primary hover:bg-surface-container-low transition-colors"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="article"
+          >article</span
+        >
+        <span class="text-[10px] font-label-caps mt-1">Articles</span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="apartment"
+          >apartment</span
+        >
+        <span class="text-[10px] font-label-caps mt-1">Propriétés</span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="group">group</span>
+        <span class="text-[10px] font-label-caps mt-1">Utilisateurs</span>
+      </a>
+      <label
+        class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors cursor-pointer"
+        for="mobile-menu-toggle"
+      >
+        <span class="material-symbols-outlined" data-icon="menu">menu</span>
+        <span class="text-[10px] font-label-caps mt-1">Plus</span>
+      </label>
+    </nav>
+    <!-- Mobile Bottom Sheet Backdrop -->
+    <label
+      class="fixed inset-0 bg-on-background/50 z-[55] hidden md:hidden"
+      for="mobile-menu-toggle"
+      id="mobile-bottom-sheet-backdrop"
+    ></label>
+    <!-- Mobile Bottom Sheet Menu -->
+    <div
+      class="fixed bottom-16 left-0 w-full bg-surface border-t border-outline-variant z-[55] transform translate-y-full transition-transform duration-300 ease-in-out md:hidden flex flex-col max-h-[70vh] overflow-y-auto pb-4"
+      id="mobile-bottom-sheet"
+    >
+      <div class="w-12 h-1 bg-outline-variant rounded-full mx-auto my-3"></div>
+      <div class="px-sm py-xs">
+        <h3
+          class="text-label-caps font-label-caps text-on-surface-variant uppercase tracking-wider mb-xs"
+        >
+          Gestion Contenu
+        </h3>
+        <div class="flex flex-col gap-1">
+          <a
+            class="flex items-center gap-sm p-xs text-on-surface hover:bg-surface-container-low transition-colors"
+            href="#"
+          >
+            <span
+              class="material-symbols-outlined text-[20px]"
+              data-icon="article"
+              >article</span
+            >
+            <span class="text-body-md font-body-md">Articles</span>
+          </a>
+          <a
+            class="flex items-center gap-sm p-xs text-on-surface hover:bg-surface-container-low transition-colors"
+            href="#"
+          >
+            <span
+              class="material-symbols-outlined text-[20px]"
+              data-icon="category"
+              >category</span
+            >
+            <span class="text-body-md font-body-md">Catégories</span>
+          </a>
+          <a
+            class="flex items-center gap-sm p-xs text-on-surface hover:bg-surface-container-low transition-colors"
+            href="#"
+          >
+            <span class="material-symbols-outlined text-[20px]" data-icon="sell"
+              >sell</span
+            >
+            <span class="text-body-md font-body-md">Mots-clés</span>
+          </a>
+        </div>
+      </div>
+      <div class="px-sm py-xs border-t border-outline-variant mt-xs">
+        <h3
+          class="text-label-caps font-label-caps text-on-surface-variant uppercase tracking-wider mb-xs mt-xs"
+        >
+          Gestion Patrimoine
+        </h3>
+        <div class="flex flex-col gap-1">
+          <a
+            class="flex items-center gap-sm p-xs text-on-surface hover:bg-surface-container-low transition-colors"
+            href="#"
+          >
+            <span
+              class="material-symbols-outlined text-[20px]"
+              data-icon="apartment"
+              >apartment</span
+            >
+            <span class="text-body-md font-body-md">Propriétés</span>
+          </a>
+          <a
+            class="flex items-center gap-sm p-xs text-on-surface hover:bg-surface-container-low transition-colors"
+            href="#"
+          >
+            <span
+              class="material-symbols-outlined text-[20px]"
+              data-icon="real_estate_agent"
+              >real_estate_agent</span
+            >
+            <span class="text-body-md font-body-md">Locataires</span>
+          </a>
+        </div>
+      </div>
+      <div class="px-sm py-xs border-t border-outline-variant mt-xs">
+        <h3
+          class="text-label-caps font-label-caps text-on-surface-variant uppercase tracking-wider mb-xs mt-xs"
+        >
+          Paramètres
+        </h3>
+        <div class="flex flex-col gap-1">
+          <a
+            class="flex items-center gap-sm p-xs text-on-surface hover:bg-surface-container-low transition-colors"
+            href="#"
+          >
+            <span
+              class="material-symbols-outlined text-[20px]"
+              data-icon="settings"
+              >settings</span
+            >
+            <span class="text-body-md font-body-md">Configuration</span>
+          </a>
+          <a
+            class="flex items-center gap-sm p-xs text-on-surface hover:bg-surface-container-low transition-colors"
+            href="#"
+          >
+            <span
+              class="material-symbols-outlined text-[20px]"
+              data-icon="security"
+              >security</span
+            >
+            <span class="text-body-md font-body-md">Sécurité</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

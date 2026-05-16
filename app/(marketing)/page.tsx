@@ -686,8 +686,8 @@ export default function Home() {
                 </h2>
                 <p className="font-body-lg text-on-surface-variant mb-10 ">
                   Portail locataire dédié et application mobile (Flutter) pour
-                  une gestion fluide. Centralisez les demandes d&apos;intervention et
-                  suivez les prestataires en direct.
+                  une gestion fluide. Centralisez les demandes
+                  d&apos;intervention et suivez les prestataires en direct.
                 </p>
                 <div className="flex flex-col gap-4 w-full  gsap-card mb-8">
                   <div className="border border-outline-variant/50 p-4 bg-surface cursor-pointer group">
