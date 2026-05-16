@@ -1,0 +1,85 @@
+// On utilise des Enums pour sécuriser les données (éviter les fautes de frappe)
+enum PostStatus {
+    DRAFT
+    PUBLISHED
+    ARCHIVED
+}
+
+enum PostCategory {
+    GUIDE
+    ANALYSE
+    CAS_CLIENT
+    ACTUALITE
+}
+
+model Post {
+    id    String @id @default(cuid())
+    slug  String @unique
+    title String
+
+    category PostCategory
+
+    status PostStatus @default(DRAFT)
+
+    publishedAt DateTime?
+    readingTime Int?
+
+    coverImage    String?
+    coverImageAlt String?
+
+    // Un extrait court pour éviter de charger tout le contenu sur les pages de liste
+    excerpt String? @db.Text
+    content String  @db.Text
+
+    // Champs SEO (Crucial pour le marketing)
+    metaTitle       String?
+    metaDescription String? @db.Text
+
+    // Relations Auteur
+    authorId String
+    author   User   @relation("PostAuthor", fields: [authorId], references: [id])
+
+    // Relations Articles Recommandés
+    relatedPosts Post[] @relation("RelatedPosts")
+    relatedTo    Post[] @relation("RelatedPosts")
+
+    // Nouvelle relation : Les Tags (Many-to-Many)
+    tags Tag[] @relation("PostTags")
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // INDEXATION : Indispensable pour accélérer les requêtes de ton app Next.js
+    @@index([slug])
+    @@index([status, publishedAt]) // Optimise: "Trouver les articles publiés, triés par date"
+    @@index([category])
+}
+
+model Tag {
+    id   String @id @default(cuid())
+    name String @unique
+    slug String @unique
+
+    posts  Post[]  @relation("PostTags")
+    medias Media[] @relation("MediaTags")
+}
+
+model Media {
+    id         String  @id @default(cuid())
+    name       String
+    size       String
+    type       String
+    category   String
+    dimensions String?
+    src        String
+    icon       String  @default("image")
+    iconColor  String?
+
+    authorId String
+    author   User   @relation(fields: [authorId], references: [id])
+
+    tags Tag[] @relation("MediaTags")
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}

@@ -2,12 +2,13 @@
 
 import React, { useState } from "react";
 import { toast } from "sonner";
-import type { Post, Tag, Auteur } from "@/lib/generated/prisma/client";
+import type { Post, Tag, User } from "@/lib/generated/prisma/client";
+import { PostSaveData } from "@/lib/dal/posts";
 
 type PostCategoryType = "GUIDE" | "ANALYSE" | "CAS_CLIENT" | "ACTUALITE";
 
 interface MetadataFormProps {
-  post: Post & { author: Auteur; tags: Tag[] };
+  post: Post & { author: User; tags: Tag[] };
 }
 
 export const MetadataForm = ({ post }: MetadataFormProps) => {
@@ -33,7 +34,7 @@ export const MetadataForm = ({ post }: MetadataFormProps) => {
   const [publishDate, setPublishDate] = useState(initialDate);
   const [publishTime, setPublishTime] = useState(initialTime);
 
-  const handleSave = async (data: Partial<import("@/lib/services/post.service").PostSaveData>) => {
+  const handleSave = async (data: Partial<PostSaveData>) => {
     try {
       const response = await fetch(`/api/posts/${post.id}`, {
         method: "PATCH",
@@ -42,9 +43,9 @@ export const MetadataForm = ({ post }: MetadataFormProps) => {
         },
         body: JSON.stringify(data),
       });
-      
+
       const res = await response.json();
-      
+
       if (!response.ok || !res.success) {
         toast.error("Erreur de sauvegarde automatique");
       }

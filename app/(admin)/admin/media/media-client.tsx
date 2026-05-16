@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import type { Media, Auteur, Tag } from "@/lib/generated/prisma/client";
+import type { Media, User, Tag } from "@/lib/generated/prisma/client";
 
-type MediaWithRelations = Media & { author: Auteur; tags: Tag[] };
+type MediaWithRelations = Media & { author: User; tags: Tag[] };
 
 interface MediaClientProps {
   initialMedia: MediaWithRelations[];
