@@ -4,7 +4,21 @@ import Link from "next/link";
 
 export default function AdminArticlesPage() {
   return (
-    <>
+    <div className="p-md w-full max-w-[1200px] mx-auto flex flex-col gap-lg relative">
+      {/* Floating Action Button */}
+      <Link
+        href="/admin/editor"
+        className="hidden md:flex fixed bottom-md right-md z-50 py-sm px-md bg-primary text-on-primary font-label-caps text-label-caps hover:bg-primary/90 transition-all items-center justify-center gap-xs uppercase tracking-wider shadow-md cursor-pointer"
+      >
+        <span
+          className="material-symbols-outlined"
+          style={{ fontVariationSettings: '"FILL" 1' }}
+        >
+          add
+        </span>
+        Nouvel Article
+      </Link>
+
       {/* Header & Summary Stats */}
       <section className="flex flex-col lg:flex-row lg:items-end justify-between gap-md border-b border-outline-variant pb-md">
         <div>
@@ -403,6 +417,6 @@ export default function AdminArticlesPage() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

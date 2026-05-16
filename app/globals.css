@@ -64,6 +64,9 @@
   --color-error: #ba1a1a;
   --color-on-secondary-fixed: #181c1e;
   --color-secondary-foreground: oklch(0.21 0.006 285.885);
+  --color-popover: #ffffff;
+  --color-popover-foreground: #171d1d;
+  --color-input: #bcc9c9;
 
   /* --- Spacing --- */
   --spacing-base: 0.25rem;
@@ -308,3 +311,5 @@
     animation: floatAnim 10s ease-in-out infinite;
   }
 }
+
+

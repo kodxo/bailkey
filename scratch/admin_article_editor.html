@@ -1,0 +1,731 @@
+<!doctype html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Asset Editor - BailKey Admin</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-tint": "#00696a",
+              "on-tertiary-fixed": "#341100",
+              "surface-container-highest": "#dee4e3",
+              "on-error-container": "#93000a",
+              "tertiary-fixed-dim": "#ffb691",
+              "surface-dim": "#d6dbda",
+              "surface-container-lowest": "#ffffff",
+              "inverse-primary": "#60d8d9",
+              "on-surface-variant": "#3d4949",
+              "accent-foreground": "oklch(0.218 0.008 223.9)",
+              border: "oklch(0.925 0.005 214.3)",
+              "on-secondary-container": "#5f6365",
+              "secondary-fixed-dim": "#c4c7c9",
+              "outline-variant": "#bcc9c9",
+              background: "oklch(1 0 0)",
+              "surface-container": "#eaefee",
+              "on-background": "#171d1d",
+              "secondary-fixed": "#e0e3e5",
+              "on-tertiary": "#ffffff",
+              "on-secondary-fixed-variant": "#434749",
+              "glass-border": "rgba(255, 255, 255, 0.6)",
+              "primary-fixed": "#7ff5f5",
+              "surface-container-high": "#e4e9e8",
+              "inverse-surface": "#2c3131",
+              "on-primary": "#ffffff",
+              "error-container": "#ffdad6",
+              primary: "oklch(0.511 0.096 186.391)",
+              "surface-variant": "#dee4e3",
+              destructive: "oklch(0.577 0.245 27.325)",
+              card: "oklch(1 0 0)",
+              tertiary: "#94491d",
+              secondary: "oklch(0.967 0.001 286.375)",
+              error: "#ba1a1a",
+              "inverse-on-surface": "#ecf2f1",
+              foreground: "oklch(0.148 0.004 228.8)",
+              muted: "oklch(0.963 0.002 197.1)",
+              "secondary-container": "#dde0e2",
+              "on-secondary": "#ffffff",
+              "surface-container-low": "#eff5f4",
+              ring: "oklch(0.723 0.014 214.4)",
+              "primary-container": "#2eb1b2",
+              "on-tertiary-container": "#602600",
+              "on-error": "#ffffff",
+              "primary-fixed-dim": "#60d8d9",
+              outline: "#6d7a79",
+              "on-primary-fixed-variant": "#004f50",
+              surface: "#f5fafa",
+              "secondary-foreground": "oklch(0.21 0.006 285.885)",
+              "tertiary-fixed": "#ffdbcb",
+              accent: "oklch(0.963 0.002 197.1)",
+              "on-secondary-fixed": "#181c1e",
+              "on-surface": "#171d1d",
+              "on-primary-container": "#003e3f",
+              "tertiary-container": "#e58957",
+              "surface-bright": "#f5fafa",
+              "primary-foreground": "oklch(0.984 0.014 180.72)",
+              "on-tertiary-fixed-variant": "#763306",
+              "on-primary-fixed": "#002020",
+              "muted-foreground": "oklch(0.56 0.021 213.5)",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              md: "1.5rem",
+              xs: "0.5rem",
+              sm: "1rem",
+              margin: "2rem",
+              lg: "2.5rem",
+              gutter: "1.5rem",
+              base: "0.25rem",
+              xl: "4rem",
+            },
+            fontFamily: {
+              "label-caps": ["Inter"],
+              h3: ["Manrope"],
+              h2: ["Manrope"],
+              "body-md": ["Inter"],
+              display: ["Manrope"],
+              "body-lg": ["Inter"],
+              h1: ["Manrope"],
+            },
+            fontSize: {
+              "label-caps": [
+                "12px",
+                {
+                  lineHeight: "1.0",
+                  letterSpacing: "0.05em",
+                  fontWeight: "600",
+                },
+              ],
+              h3: ["20px", { lineHeight: "1.4", fontWeight: "500" }],
+              h2: ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+              "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+              display: [
+                "48px",
+                {
+                  lineHeight: "1.1",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+              h1: [
+                "32px",
+                {
+                  lineHeight: "1.2",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .nav-item-group:hover .nav-flyout {
+        display: flex;
+        opacity: 1;
+        visibility: visible;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background text-on-background font-body-md text-body-md h-screen flex overflow-hidden"
+  >
+    <!-- SideNavBar (Expanded) -->
+    <nav
+      class="hidden md:flex flex-col py-md bg-surface border-r border-outline-variant shadow-none h-screen left-0 w-[88px] fixed top-0 z-50 transition-all duration-300 ease-in-out items-center"
+    >
+      <div class="mb-lg flex flex-col items-center">
+        <img
+          alt="BailKey Logo"
+          class="w-10 h-auto object-contain"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPerp_Z6DIZ6DSHytSEA4l7U1Wgs09OcIC_V4ubXmpuI2gkMi8k3XDfIWjxPRstw3k1421McqMAPwmePV_1H12K3UtSoHLyy5cGv2fAfUixwPpeks6AMyU-2JnSasEVA-DAB5DT9M5dOxbOj2ZOcp9TvJAdFb7KDeVB2fyfWD9dOG2eaxBVCkbaJ3kIHZlj-jrxTpXxrVwaMXBuWHAudFFy-crkuEi-ufDZ6Nn0A2MH4Es1zxGxrQqJd2fhGSr0mtcZrrlF6BgRZ0"
+        />
+      </div>
+      <div class="flex-1 flex flex-col gap-sm w-full">
+        <div class="nav-item-group relative flex justify-center w-full group">
+          <div
+            class="flex flex-col items-center justify-center p-sm w-[64px] h-[64px] hover:bg-surface-container-high transition-colors cursor-pointer bg-primary-container/10 text-primary"
+          >
+            <span
+              class="material-symbols-outlined text-[24px]"
+              data-icon="folder"
+              style="font-variation-settings: &quot;FILL&quot; 1"
+              >folder</span
+            ><span class="text-[10px] font-label-caps mt-1">Contenu</span>
+          </div>
+          <div
+            class="nav-flyout hidden opacity-0 invisible absolute left-[88px] top-0 bg-surface border border-outline-variant shadow-md flex-col w-48 z-50 transition-all duration-200"
+          >
+            <div
+              class="px-sm py-xs border-b border-outline-variant bg-surface-container-low"
+            >
+              <span
+                class="text-[11px] font-label-caps uppercase font-bold tracking-widest text-on-surface-variant"
+                >Gestion Contenu</span
+              >
+            </div>
+            <a
+              class="flex items-center gap-sm px-sm py-2 hover:bg-surface-container-high text-primary border-l-4 border-primary transition-colors"
+              href="#"
+              ><span
+                class="material-symbols-outlined text-[20px]"
+                data-icon="article"
+                >article</span
+              ><span class="text-body-md">Articles</span></a
+            ><a
+              class="flex items-center gap-sm px-sm py-2 hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface border-l-4 border-transparent transition-colors"
+              href="#"
+              ><span
+                class="material-symbols-outlined text-[20px]"
+                data-icon="category"
+                >category</span
+              ><span class="text-body-md">Cat3gories</span></a
+            ><a
+              class="flex items-center gap-sm px-sm py-2 hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface border-l-4 border-transparent transition-colors"
+              href="#"
+              ><span
+                class="material-symbols-outlined text-[20px]"
+                data-icon="sell"
+                >sell</span
+              ><span class="text-body-md">Mots-cl3s</span></a
+            >
+          </div>
+        </div>
+        <div class="nav-item-group relative flex justify-center w-full group">
+          <div
+            class="flex flex-col items-center justify-center p-sm w-[64px] h-[64px] hover:bg-surface-container-high text-on-surface-variant transition-colors cursor-pointer"
+          >
+            <span
+              class="material-symbols-outlined text-[24px]"
+              data-icon="domain"
+              >domain</span
+            ><span class="text-[10px] font-label-caps mt-1">Biens</span>
+          </div>
+          <div
+            class="nav-flyout hidden opacity-0 invisible absolute left-[88px] top-0 bg-surface border border-outline-variant shadow-md flex-col w-48 z-50 transition-all duration-200"
+          >
+            <div
+              class="px-sm py-xs border-b border-outline-variant bg-surface-container-low"
+            >
+              <span
+                class="text-[11px] font-label-caps uppercase font-bold tracking-widest text-on-surface-variant"
+                >Patrimoine</span
+              >
+            </div>
+            <a
+              class="flex items-center gap-sm px-sm py-2 hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface border-l-4 border-transparent transition-colors"
+              href="#"
+              ><span
+                class="material-symbols-outlined text-[20px]"
+                data-icon="apartment"
+                >apartment</span
+              ><span class="text-body-md">Propri3t3s</span></a
+            ><a
+              class="flex items-center gap-sm px-sm py-2 hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface border-l-4 border-transparent transition-colors"
+              href="#"
+              ><span
+                class="material-symbols-outlined text-[20px]"
+                data-icon="real_estate_agent"
+                >real_estate_agent</span
+              ><span class="text-body-md">Locataires</span></a
+            >
+          </div>
+        </div>
+        <div class="nav-item-group relative flex justify-center w-full group">
+          <div
+            class="flex flex-col items-center justify-center p-sm w-[64px] h-[64px] hover:bg-surface-container-high text-on-surface-variant transition-colors cursor-pointer"
+          >
+            <span
+              class="material-symbols-outlined text-[24px]"
+              data-icon="settings"
+              >settings</span
+            ><span class="text-[10px] font-label-caps mt-1">Config</span>
+          </div>
+          <div
+            class="nav-flyout hidden opacity-0 invisible absolute left-[88px] top-0 bg-surface border border-outline-variant shadow-md flex-col w-48 z-50 transition-all duration-200"
+          >
+            <div
+              class="px-sm py-xs border-b border-outline-variant bg-surface-container-low"
+            >
+              <span
+                class="text-[11px] font-label-caps uppercase font-bold tracking-widest text-on-surface-variant"
+                >Paramètres</span
+              >
+            </div>
+            <a
+              class="flex items-center gap-sm px-sm py-2 hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface border-l-4 border-transparent transition-colors"
+              href="#"
+              ><span
+                class="material-symbols-outlined text-[20px]"
+                data-icon="group"
+                >group</span
+              ><span class="text-body-md">Utilisateurs</span></a
+            ><a
+              class="flex items-center gap-sm px-sm py-2 hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface border-l-4 border-transparent transition-colors"
+              href="#"
+              ><span
+                class="material-symbols-outlined text-[20px]"
+                data-icon="security"
+                >security</span
+              ><span class="text-body-md">S3curit3</span></a
+            >
+          </div>
+        </div>
+      </div>
+      <div
+        class="mt-auto flex flex-col gap-sm items-center w-full pt-md border-t border-outline-variant"
+      >
+        <a
+          class="flex flex-col items-center justify-center p-sm w-[64px] h-[64px] text-on-surface-variant hover:bg-surface-container-high transition-colors"
+          href="#"
+          title="Support"
+          ><span class="material-symbols-outlined text-[24px]" data-icon="help"
+            >help</span
+          ></a
+        ><a
+          class="flex flex-col items-center justify-center p-sm w-[64px] h-[64px] text-on-surface-variant hover:bg-surface-container-high transition-colors"
+          href="#"
+          title="D3connexion"
+          ><span
+            class="material-symbols-outlined text-[24px]"
+            data-icon="logout"
+            >logout</span
+          ></a
+        ><img
+          alt="Administrator profile photo"
+          class="w-10 h-10 object-cover mt-sm border border-outline-variant"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvnZ615Rd4K7IF1U5FwZKKEsjIZV6Wnt16IV0Z47bk7LIb1OAwONdet8MqxWd5X51n6DQMKKm1xgxWItaKLT2r7nKXj9-xqLlKqdPihe4oRHJqHkfCsgGRBbF5z4Yz1pV0OeUOALC5NPSAZxoPlrpuImdzPpAxeO_tNQrFVm-pmeNMpA0YmSTcdPFkXKGD1Xzkj_Q1Sm2IPoA55gxsb89eUiotSrGle5QeuetQYxq0oesAtEDVt3a_k7IcQFALtgMBjx1AnNvx124"
+        />
+      </div>
+    </nav>
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col bg-surface md:ml-[88px]">
+      <!-- TopAppBar -->
+      <header
+        class="bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-xl border-b border-glass-border shadow-sm fixed top-0 right-0 h-16 flex justify-between items-center px-gutter z-40 left-0 md:left-[88px]"
+      >
+        <div
+          class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md"
+        >
+          <a class="hover:text-primary transition-colors" href="#">Content</a>
+          <span class="material-symbols-outlined text-sm">chevron_right</span>
+          <a class="hover:text-primary transition-colors" href="#">Articles</a>
+          <span class="material-symbols-outlined text-sm">chevron_right</span>
+          <span class="text-on-surface font-semibold">Edit Article</span>
+        </div>
+        <div class="flex items-center gap-md">
+          <div class="flex items-center gap-2">
+            <button
+              class="px-4 py-2 text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container rounded-full transition-colors border border-outline-variant"
+            >
+              Preview
+            </button>
+            <button
+              class="px-4 py-2 text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container rounded-full transition-colors border border-outline-variant"
+            >
+              Save Draft
+            </button>
+            <button
+              class="px-4 py-2 bg-primary text-primary-foreground font-label-caps text-label-caps rounded-full hover:bg-primary/90 transition-colors shadow-sm"
+            >
+              Publish
+            </button>
+          </div>
+          <div class="h-6 w-px bg-outline-variant mx-2"></div>
+          <div class="flex items-center gap-3 text-on-surface-variant">
+            <button
+              class="p-2 hover:bg-surface-container rounded-full transition-colors hover:text-primary"
+            >
+              <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <button
+              class="p-2 hover:bg-surface-container rounded-full transition-colors hover:text-primary"
+            >
+              <span class="material-symbols-outlined">history</span>
+            </button>
+            <button
+              class="p-2 hover:bg-surface-container rounded-full transition-colors hover:text-primary"
+            >
+              <span class="material-symbols-outlined">account_circle</span>
+            </button>
+          </div>
+        </div>
+      </header>
+      <!-- Editor Workspace -->
+      <main
+        class="flex-1 overflow-y-auto mt-16 p-gutter flex gap-gutter max-w-[1600px] mx-auto w-full"
+      >
+        <!-- Left Pane: Editor -->
+        <div class="flex-1 flex flex-col gap-6">
+          <!-- Title Input -->
+          <div
+            class="bg-surface-container-lowest p-6 rounded-DEFAULT shadow-sm border border-outline-variant/50"
+          >
+            <input
+              class="w-full bg-transparent border-none p-0 focus:ring-0 font-display text-display text-on-surface placeholder-on-surface-variant/50 outline-none"
+              placeholder="Article Title..."
+              type="text"
+              value="Les Nouvelles Tendances de l'Immobilier de Luxe"
+            />
+          </div>
+          <!-- Cover Image -->
+          <div
+            class="bg-surface-container-lowest p-6 rounded-DEFAULT shadow-sm border border-outline-variant/50 flex flex-col gap-4"
+          >
+            <h3 class="font-h3 text-h3 text-on-surface">Cover Image</h3>
+            <div
+              class="border-2 border-dashed border-outline-variant rounded-DEFAULT h-64 flex flex-col items-center justify-center text-on-surface-variant bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group relative overflow-hidden"
+            >
+              <img
+                class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity"
+                data-alt="A modern, high-end luxury real estate interior showing a spacious living room with floor-to-ceiling windows overlooking a sleek city skyline. The room is bathed in bright, natural light emphasizing a clean, architectural light-mode aesthetic. A palette of crisp whites, soft grays, and natural wood tones creates a sophisticated, premium mood."
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhINLpe52NV6u5mNX1ebADW7_Zc88_aAAGbLc3mLfBg2vmxjgv13mrtQ2USZU-4iViZ48leD8TIU1q_vsfkUSyhQcCiTr6oXVtifqyr041SGo_wgNL_5rw9R4VWSZw_Sl9hIGEoDRXYIPfjCbvPzJdnEFhY5HpJkrjxl3uDd-NDOSZHQ25diKpkKwM2ofF-U1LwYxfio0GaNL8C_LqusI5_EYPxM_Csgr6Q9EBbflSYx73NyU8dBnJ82267D7aOlezYyxkswvT9PI"
+              />
+              <div
+                class="relative z-10 flex flex-col items-center bg-surface/80 p-4 rounded-DEFAULT backdrop-blur-md border border-glass-border shadow-sm"
+              >
+                <span
+                  class="material-symbols-outlined text-3xl mb-2 text-primary"
+                  >cloud_upload</span
+                >
+                <span
+                  class="font-body-md text-body-md font-medium text-on-surface"
+                  >Click to replace or drag and drop</span
+                >
+                <span
+                  class="font-label-caps text-label-caps text-on-surface-variant mt-1"
+                  >PNG, JPG, WEBP (Max 5MB)</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Rich Text Editor -->
+          <div
+            class="bg-surface-container-lowest rounded-DEFAULT shadow-sm border border-outline-variant/50 flex-1 flex flex-col min-h-[500px]"
+          >
+            <!-- Toolbar -->
+            <div
+              class="border-b border-outline-variant/50 p-2 flex items-center gap-1 bg-surface-container-low flex-wrap"
+            >
+              <button
+                class="p-2 hover:bg-surface-container rounded text-on-surface-variant"
+              >
+                <span class="material-symbols-outlined text-[20px]"
+                  >format_bold</span
+                >
+              </button>
+              <button
+                class="p-2 hover:bg-surface-container rounded text-on-surface-variant"
+              >
+                <span class="material-symbols-outlined text-[20px]"
+                  >format_italic</span
+                >
+              </button>
+              <button
+                class="p-2 hover:bg-surface-container rounded text-on-surface-variant"
+              >
+                <span class="material-symbols-outlined text-[20px]"
+                  >format_underlined</span
+                >
+              </button>
+              <div class="w-px h-6 bg-outline-variant mx-1"></div>
+              <button
+                class="p-2 hover:bg-surface-container rounded text-on-surface-variant"
+              >
+                <span class="material-symbols-outlined text-[20px]"
+                  >format_h1</span
+                >
+              </button>
+              <button
+                class="p-2 hover:bg-surface-container rounded text-on-surface-variant"
+              >
+                <span class="material-symbols-outlined text-[20px]"
+                  >format_h2</span
+                >
+              </button>
+              <div class="w-px h-6 bg-outline-variant mx-1"></div>
+              <button
+                class="p-2 hover:bg-surface-container rounded text-on-surface-variant"
+              >
+                <span class="material-symbols-outlined text-[20px]"
+                  >format_list_bulleted</span
+                >
+              </button>
+              <button
+                class="p-2 hover:bg-surface-container rounded text-on-surface-variant"
+              >
+                <span class="material-symbols-outlined text-[20px]"
+                  >format_list_numbered</span
+                >
+              </button>
+              <div class="w-px h-6 bg-outline-variant mx-1"></div>
+              <button
+                class="p-2 hover:bg-surface-container rounded text-on-surface-variant"
+              >
+                <span class="material-symbols-outlined text-[20px]">link</span>
+              </button>
+              <button
+                class="p-2 hover:bg-surface-container rounded text-on-surface-variant"
+              >
+                <span class="material-symbols-outlined text-[20px]">image</span>
+              </button>
+            </div>
+            <!-- Editor Area -->
+            <div
+              class="p-6 flex-1 font-body-lg text-body-lg text-on-surface outline-none"
+              contenteditable="true"
+            >
+              <p class="mb-4">
+                Le marché de l'immobilier de luxe connaît une transformation
+                sans précédent, portée par de nouvelles attentes en matière de
+                durabilité et de technologies intégrées. Les acheteurs
+                institutionnels recherchent désormais des actifs qui allient
+                prestige architectural et performance environnementale.
+              </p>
+              <h2 class="font-h2 text-h2 mt-8 mb-4">
+                L'importance de l'ESG dans les portefeuilles premium
+              </h2>
+              <p>
+                L'intégration des critères Environnementaux, Sociaux et de
+                Gouvernance (ESG) n'est plus une option, mais un prérequis. Les
+                propriétés démontrant une forte efficacité énergétique et une
+                empreinte carbone réduite voient leur valeur surperformer le
+                marché global de 15 à 20%.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Right Pane: Configuration -->
+        <div class="w-[360px] flex-shrink-0 flex flex-col gap-6">
+          <!-- Status Card -->
+          <div
+            class="bg-surface-container-lowest p-6 rounded-DEFAULT shadow-sm border border-outline-variant/50"
+          >
+            <h3
+              class="font-label-caps text-label-caps text-on-surface-variant mb-4 flex items-center gap-2 uppercase tracking-wider"
+            >
+              <span class="material-symbols-outlined text-sm">visibility</span>
+              Visibility &amp; Status
+            </h3>
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-body-md text-body-md text-on-surface"
+                >Current Status</span
+              >
+              <span
+                class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full font-label-caps text-label-caps flex items-center gap-1"
+              >
+                Draft
+              </span>
+            </div>
+            <label
+              class="flex items-center justify-between cursor-pointer group"
+            >
+              <span
+                class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors"
+                >Publish to Live</span
+              >
+              <div class="relative">
+                <input class="sr-only" type="checkbox" />
+                <div
+                  class="block bg-surface-container-high w-10 h-6 rounded-full border border-outline-variant transition-colors"
+                ></div>
+                <div
+                  class="dot absolute left-1 top-1 bg-surface-container-lowest w-4 h-4 rounded-full transition-transform"
+                ></div>
+              </div>
+            </label>
+          </div>
+          <!-- Metadata Card -->
+          <div
+            class="bg-surface-container-lowest p-6 rounded-DEFAULT shadow-sm border border-outline-variant/50 flex flex-col gap-4"
+          >
+            <h3
+              class="font-label-caps text-label-caps text-on-surface-variant mb-2 flex items-center gap-2 uppercase tracking-wider"
+            >
+              <span class="material-symbols-outlined text-sm">label</span>
+              Metadata
+            </h3>
+            <div>
+              <label
+                class="block font-label-caps text-label-caps text-on-surface-variant mb-1"
+                >Author</label
+              >
+              <div
+                class="flex items-center gap-3 p-3 bg-surface-container-low border border-outline-variant rounded-DEFAULT"
+              >
+                <div
+                  class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold font-body-md text-body-md"
+                >
+                  SJ
+                </div>
+                <span class="font-body-md text-body-md text-on-surface flex-1"
+                  >Sarah Jenkins</span
+                >
+                <button class="text-on-surface-variant hover:text-primary">
+                  <span class="material-symbols-outlined text-sm">edit</span>
+                </button>
+              </div>
+            </div>
+            <div>
+              <label
+                class="block font-label-caps text-label-caps text-on-surface-variant mb-1"
+                >Category</label
+              >
+              <select
+                class="w-full p-3 bg-surface-container-lowest border border-outline-variant rounded-DEFAULT font-body-md text-body-md text-on-surface focus:ring-1 focus:ring-primary outline-none appearance-none"
+              >
+                <option>Analyse du Marché</option>
+                <option>Tendances Architecturales</option>
+                <option>Investissement</option>
+              </select>
+            </div>
+            <div>
+              <label
+                class="block font-label-caps text-label-caps text-on-surface-variant mb-1"
+                >Tags</label
+              >
+              <div
+                class="p-3 bg-surface-container-lowest border border-outline-variant rounded-DEFAULT flex flex-wrap gap-2 focus-within:ring-1 focus-within:ring-primary"
+              >
+                <span
+                  class="bg-surface-container px-2 py-1 rounded text-sm flex items-center gap-1"
+                  >Luxe
+                  <button>
+                    <span class="material-symbols-outlined text-[14px]"
+                      >close</span
+                    >
+                  </button></span
+                >
+                <span
+                  class="bg-surface-container px-2 py-1 rounded text-sm flex items-center gap-1"
+                  >ESG
+                  <button>
+                    <span class="material-symbols-outlined text-[14px]"
+                      >close</span
+                    >
+                  </button></span
+                >
+                <input
+                  class="bg-transparent border-none p-0 focus:ring-0 text-sm w-20 outline-none"
+                  placeholder="Add tag..."
+                  type="text"
+                />
+              </div>
+            </div>
+          </div>
+          <!-- SEO Card -->
+          <div
+            class="bg-surface-container-lowest p-6 rounded-DEFAULT shadow-sm border border-outline-variant/50 flex flex-col gap-4"
+          >
+            <h3
+              class="font-label-caps text-label-caps text-on-surface-variant mb-2 flex items-center gap-2 uppercase tracking-wider"
+            >
+              <span class="material-symbols-outlined text-sm">search</span>
+              SEO Settings
+            </h3>
+            <div>
+              <label
+                class="block font-label-caps text-label-caps text-on-surface-variant mb-1 flex justify-between"
+              >
+                Meta Title
+                <span class="text-outline">58/60</span>
+              </label>
+              <input
+                class="w-full p-3 bg-surface-container-lowest border border-outline-variant rounded-DEFAULT font-body-md text-body-md text-on-surface focus:ring-1 focus:ring-primary outline-none"
+                type="text"
+                value="Tendances Immobilier de Luxe &amp; Investissement | BailKey"
+              />
+            </div>
+            <div>
+              <label
+                class="block font-label-caps text-label-caps text-on-surface-variant mb-1 flex justify-between"
+              >
+                Meta Description
+                <span class="text-outline">152/160</span>
+              </label>
+              <textarea
+                class="w-full p-3 bg-surface-container-lowest border border-outline-variant rounded-DEFAULT font-body-md text-body-md text-on-surface focus:ring-1 focus:ring-primary outline-none resize-none"
+                rows="3"
+              >
+Découvrez les nouvelles tendances de l'immobilier de luxe institutionnel. Comment l'ESG et les technologies transforment la valorisation des actifs premium.</textarea
+              >
+            </div>
+          </div>
+          <!-- Schedule Card -->
+          <div
+            class="bg-surface-container-lowest p-6 rounded-DEFAULT shadow-sm border border-outline-variant/50 flex flex-col gap-4"
+          >
+            <h3
+              class="font-label-caps text-label-caps text-on-surface-variant mb-2 flex items-center gap-2 uppercase tracking-wider"
+            >
+              <span class="material-symbols-outlined text-sm"
+                >calendar_month</span
+              >
+              Publishing Schedule
+            </h3>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label
+                  class="block font-label-caps text-label-caps text-on-surface-variant mb-1"
+                  >Date</label
+                >
+                <div class="relative">
+                  <input
+                    class="w-full p-3 pl-10 bg-surface-container-lowest border border-outline-variant rounded-DEFAULT font-body-md text-body-md text-on-surface focus:ring-1 focus:ring-primary outline-none"
+                    type="text"
+                    value="2023-11-15"
+                  />
+                  <span
+                    class="material-symbols-outlined absolute left-3 top-3 text-on-surface-variant"
+                    >calendar_today</span
+                  >
+                </div>
+              </div>
+              <div>
+                <label
+                  class="block font-label-caps text-label-caps text-on-surface-variant mb-1"
+                  >Time</label
+                >
+                <div class="relative">
+                  <input
+                    class="w-full p-3 pl-10 bg-surface-container-lowest border border-outline-variant rounded-DEFAULT font-body-md text-body-md text-on-surface focus:ring-1 focus:ring-primary outline-none"
+                    type="text"
+                    value="09:00 AM"
+                  />
+                  <span
+                    class="material-symbols-outlined absolute left-3 top-3 text-on-surface-variant"
+                    >schedule</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
