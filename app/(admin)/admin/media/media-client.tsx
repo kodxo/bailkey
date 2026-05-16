@@ -4,22 +4,20 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import type { Media, User, Tag } from "@/lib/generated/prisma/client";
-
-type MediaWithRelations = Media & { author: User; tags: Tag[] };
+import type { MediaDTO, TagDTO } from "@/lib/types/dto";
 
 interface MediaClientProps {
-  initialMedia: MediaWithRelations[];
+  initialMedia: MediaDTO[];
 }
 
 const CATEGORIES: string[] = ["Tous", "Images", "PDF", "Plans", "Archives"];
 
 export function MediaClient({ initialMedia }: MediaClientProps) {
   const [mediaFiles, setMediaFiles] =
-    useState<MediaWithRelations[]>(initialMedia);
+    useState<MediaDTO[]>(initialMedia);
   const [selectedCategory, setSelectedCategory] = useState<string>("Tous");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedFile, setSelectedFile] = useState<MediaWithRelations | null>(
+  const [selectedFile, setSelectedFile] = useState<MediaDTO | null>(
     initialMedia[0] || null,
   );
   const [newTagInput, setNewTagInput] = useState<string>("");
@@ -36,7 +34,7 @@ export function MediaClient({ initialMedia }: MediaClientProps) {
   const handleAddTag = () => {
     if (newTagInput.trim() && selectedFile) {
       // Dans un cas réel, appeler une Server Action ici pour lier le tag en base
-      const mockTag: Tag = {
+      const mockTag: TagDTO = {
         id: Date.now().toString(),
         name: newTagInput.trim(),
         slug: newTagInput.trim().toLowerCase(),
@@ -293,7 +291,7 @@ export function MediaClient({ initialMedia }: MediaClientProps) {
                   Mots-clés liés
                 </h3>
                 <div className="flex flex-wrap gap-2 mb-3">
-                  {selectedFile.tags.map((tag: Tag) => (
+                  {selectedFile.tags.map((tag: TagDTO) => (
                     <span
                       key={tag.id}
                       className="bg-surface-container text-on-surface px-3 py-1 rounded-full font-label-caps font-semibold text-xs border border-outline-variant flex items-center gap-1.5 shadow-xs uppercase tracking-wider"

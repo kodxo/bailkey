@@ -4,20 +4,8 @@
 
 import { PostCategory, PostStatus } from "../generated/prisma/enums";
 
-/** Auteur tel que retourné par l'API */
-export interface AuthorDTO {
-  id: string;
-  name: string;
-  role: string | null;
-  avatarUrl: string | null;
-}
-
-/** Tag tel que retourné par l'API */
-export interface TagDTO {
-  id: string;
-  name: string;
-  slug: string;
-}
+import type { AuthorDTO, TagDTO } from "./dto";
+export type { AuthorDTO, TagDTO };
 
 /** Article résumé pour les listes (sans `content`) */
 export interface PostSummaryDTO {

@@ -37,8 +37,8 @@ export default async function AdminArticlesPage() {
             Gestion des Articles
           </h1>
           <p className="text-body-lg font-body-lg text-on-surface-variant">
-            Vue d&apos;ensemble et contrôle sur toutes les ressources publiées et en
-            brouillon.
+            Vue d&apos;ensemble et contrôle sur toutes les ressources publiées
+            et en brouillon.
           </p>
         </div>
         <div className="flex gap-sm overflow-x-auto pb-2 md:pb-0">

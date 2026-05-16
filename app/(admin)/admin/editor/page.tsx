@@ -9,14 +9,14 @@ import { postService } from "@/lib/services/post.service";
 import { useRouter } from "next/navigation";
 import { PostStatus } from "@/lib/generated/prisma/enums";
 
-import type { Post, User, Tag } from "@/lib/generated/prisma/client";
+import type { AdminPostDTO } from "@/lib/types/dto";
 
 export default function AdminEditorPage(props: { searchParams: Promise<{ id?: string }> }) {
   const searchParams = use(props.searchParams);
   const id = searchParams.id;
   const router = useRouter();
   
-  const [post, setPost] = useState<(Post & { author: User; tags: Tag[] }) | null>(null);
+  const [post, setPost] = useState<AdminPostDTO | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

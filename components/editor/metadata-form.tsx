@@ -2,13 +2,13 @@
 
 import React, { useState } from "react";
 import { toast } from "sonner";
-import type { Post, Tag, User } from "@/lib/generated/prisma/client";
-import { PostSaveData } from "@/lib/dal/posts";
+import type { AdminPostDTO, UpdatePostResponseDTO } from "@/lib/types/dto";
+import type { PostSaveDataDTO } from "@/lib/dal/posts";
 
 type PostCategoryType = "GUIDE" | "ANALYSE" | "CAS_CLIENT" | "ACTUALITE";
 
 interface MetadataFormProps {
-  post: Post & { author: User; tags: Tag[] };
+  post: AdminPostDTO;
 }
 
 export const MetadataForm = ({ post }: MetadataFormProps) => {
@@ -34,7 +34,7 @@ export const MetadataForm = ({ post }: MetadataFormProps) => {
   const [publishDate, setPublishDate] = useState(initialDate);
   const [publishTime, setPublishTime] = useState(initialTime);
 
-  const handleSave = async (data: Partial<PostSaveData>) => {
+  const handleSave = async (data: Partial<PostSaveDataDTO>) => {
     try {
       const response = await fetch(`/api/posts/${post.id}`, {
         method: "PATCH",
@@ -44,9 +44,9 @@ export const MetadataForm = ({ post }: MetadataFormProps) => {
         body: JSON.stringify(data),
       });
 
-      const res = await response.json();
+      const res: unknown = await response.json();
 
-      if (!response.ok || !res.success) {
+      if (!response.ok || !res || typeof res !== "object" || !("success" in res) || !(res as UpdatePostResponseDTO).success) {
         toast.error("Erreur de sauvegarde automatique");
       }
     } catch (e) {

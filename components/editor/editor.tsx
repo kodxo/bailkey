@@ -32,8 +32,7 @@ interface EditorProps {
 }
 
 export default function TailwindEditor({ postId, initialHTML }: EditorProps) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [content, setContent] = useState<any>(initialHTML ? initialHTML : undefined);
+  const [content, setContent] = useState<JSONContent | undefined>(initialHTML ? (initialHTML as unknown as JSONContent) : undefined);
   const [openNode, setOpenNode] = useState(false);
   const [openLink, setOpenLink] = useState(false);
   const [openColor, setOpenColor] = useState(false);
@@ -53,8 +52,8 @@ export default function TailwindEditor({ postId, initialHTML }: EditorProps) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ content: htmlContent }),
         });
-        const res = await response.json();
-        if (!response.ok || !res.success) {
+        const res: unknown = await response.json();
+        if (!response.ok || !res || typeof res !== "object" || !("success" in res) || !(res as { success: boolean }).success) {
           toast.error("Échec de la sauvegarde automatique.");
         }
       } catch (err) {

@@ -58,8 +58,8 @@ export const CoverUploader = ({ initialImage, postId }: CoverUploaderProps) => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ coverImage: presignedData.publicUrl }),
           });
-          const updateResult = await res.json();
-          if (!res.ok || !updateResult.success) {
+          const updateResult: unknown = await res.json();
+          if (!res.ok || !updateResult || typeof updateResult !== "object" || !("success" in updateResult) || !(updateResult as { success: boolean }).success) {
              toast.error("Erreur lors de la sauvegarde dans la base de données.");
           }
         }

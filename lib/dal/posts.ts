@@ -5,6 +5,7 @@ import type {
   AuthorDTO,
   TagDTO,
 } from "@/lib/types/post";
+import type { AdminPostDTO } from "@/lib/types/dto";
 import { PostCategory, PostStatus } from "../generated/prisma/enums";
 
 // ---------------------------------------------------------------------------
@@ -181,7 +182,7 @@ export async function getPostBySlug(
 // Admin DAL functions
 // ---------------------------------------------------------------------------
 
-export interface PostSaveData {
+export interface PostSaveDataDTO {
   title?: string;
   content?: string;
   excerpt?: string;
@@ -190,37 +191,100 @@ export interface PostSaveData {
   coverImage?: string;
   status?: PostStatus;
   category?: PostCategory;
-  publishedAt?: Date | null;
+  publishedAt?: string | Date | null;
   tags?: string[];
 }
 
-export async function getAdminPosts() {
+export function serializeAdminPost(post: {
+  id: string;
+  slug: string;
+  title: string;
+  category: PostCategory;
+  status: PostStatus;
+  publishedAt: Date | null;
+  readingTime: number | null;
+  coverImage: string | null;
+  coverImageAlt: string | null;
+  excerpt: string | null;
+  content: string;
+  metaTitle: string | null;
+  metaDescription: string | null;
+  authorId: string;
+  author: {
+    id: string;
+    name: string;
+    role: string | null;
+    avatarUrl: string | null;
+  };
+  tags: {
+    id: string;
+    name: string;
+    slug: string;
+  }[];
+  createdAt: Date;
+  updatedAt: Date;
+}): AdminPostDTO {
+  return {
+    id: post.id,
+    slug: post.slug,
+    title: post.title,
+    category: post.category,
+    status: post.status,
+    publishedAt: post.publishedAt?.toISOString() ?? null,
+    readingTime: post.readingTime,
+    coverImage: post.coverImage,
+    coverImageAlt: post.coverImageAlt,
+    excerpt: post.excerpt,
+    content: post.content,
+    metaTitle: post.metaTitle,
+    metaDescription: post.metaDescription,
+    authorId: post.authorId,
+    author: {
+      id: post.author.id,
+      name: post.author.name,
+      role: post.author.role,
+      avatarUrl: post.author.avatarUrl,
+    },
+    tags: post.tags.map((t) => ({
+      id: t.id,
+      name: t.name,
+      slug: t.slug,
+    })),
+    createdAt: post.createdAt.toISOString(),
+    updatedAt: post.updatedAt.toISOString(),
+  };
+}
+
+export async function getAdminPosts(): Promise<{ success: boolean; posts: AdminPostDTO[]; error?: string }> {
   try {
     const posts = await prisma.post.findMany({
-      include: { author: true },
+      include: { author: true, tags: true },
       orderBy: { createdAt: "desc" },
     });
-    return { success: true, posts };
+    return { success: true, posts: posts.map(serializeAdminPost) };
   } catch (error) {
     console.error("Erreur récupération posts:", error);
-    return { success: false, posts: [] };
+    return { success: false, posts: [], error: "Erreur récupération posts" };
   }
 }
 
-export async function getAdminPostById(id: string) {
+export async function getAdminPostById(id: string): Promise<{ success: boolean; post: AdminPostDTO | null; error?: string }> {
   try {
     const post = await prisma.post.findUnique({
       where: { id },
       include: { author: true, tags: true },
     });
-    return { success: true, post };
+    if (!post) {
+      return { success: false, post: null, error: "Article non trouvé" };
+    }
+    return { success: true, post: serializeAdminPost(post) };
   } catch (error) {
     console.error("Erreur récupération post id:", error);
-    return { success: false, post: null };
+    return { success: false, post: null, error: "Erreur récupération post id" };
   }
 }
 
-export async function createAdminDraftPost() {
+export async function createAdminDraftPost(): Promise<{ success: boolean; post: AdminPostDTO | null; error?: string }> {
   try {
     let defaultAuthor = await prisma.user.findFirst();
     if (!defaultAuthor) {
@@ -242,23 +306,26 @@ export async function createAdminDraftPost() {
         category: PostCategory.ACTUALITE,
         authorId: defaultAuthor.id,
       },
+      include: { author: true, tags: true },
     });
 
-    return { success: true, post: newPost };
+    return { success: true, post: serializeAdminPost(newPost) };
   } catch (error) {
     console.error("Erreur création brouillon:", error);
-    return { success: false, post: null };
+    return { success: false, post: null, error: "Erreur création brouillon" };
   }
 }
 
-export async function updateAdminPost(postId: string, data: PostSaveData) {
+export async function updateAdminPost(postId: string, data: Partial<PostSaveDataDTO>): Promise<{ success: boolean; post: AdminPostDTO | null; error?: string }> {
   try {
-    const { tags, ...restData } = data;
-    
+    const { tags, publishedAt, ...restData } = data;
+    const parsedPublishedAt = typeof publishedAt === "string" ? new Date(publishedAt) : (publishedAt === undefined ? undefined : publishedAt);
+
     const updatedPost = await prisma.post.update({
       where: { id: postId },
       data: {
         ...restData,
+        ...(parsedPublishedAt !== undefined && { publishedAt: parsedPublishedAt }),
         ...(tags && {
           tags: {
             set: [], // Dissocie les anciens tags
@@ -269,10 +336,11 @@ export async function updateAdminPost(postId: string, data: PostSaveData) {
           }
         })
       },
+      include: { author: true, tags: true },
     });
-    return { success: true, post: updatedPost };
+    return { success: true, post: serializeAdminPost(updatedPost) };
   } catch (error) {
     console.error("Erreur de sauvegarde:", error);
-    return { success: false, error: "Sauvegarde échouée" };
+    return { success: false, post: null, error: "Sauvegarde échouée" };
   }
 }
