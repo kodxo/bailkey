@@ -1,7 +1,5 @@
 "use client";
 
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import dynamic from "next/dynamic";
 
 const ContactMap = dynamic(() => import("@/components/ContactMap"), {
@@ -20,8 +18,6 @@ export default function ContactPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar />
-
       <main className="grow pt-32 pb-xl px-gutter max-w-[1440px] mx-auto w-full">
         {/* Header Section  */}
         <header className="mb-xl max-w-3xl">
@@ -36,7 +32,7 @@ export default function ContactPage() {
         {/* Bento Grid Layout  */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
           {/* Contact Form Area (Left Column, 7 spans)  */}
-          <section className="lg:col-span-7 bg-surface-container-lowest border border-outline-variant p-lg rounded-none shadow-[0_32px_64px_-16px_rgba(0,105,106,0.05)] relative overflow-hidden">
+          <section className="lg:col-span-7 bg-surface-container-lowest border border-outline-variant p-lg rounded-none shadow-glass relative overflow-hidden">
             {/* Architectural subtle accent  */}
             <div className="absolute top-0 left-0 w-full h-1 bg-primary"></div>
             <h2 className="font-h2 text-h2 text-on-surface mb-md">
@@ -207,8 +203,6 @@ export default function ContactPage() {
           </section>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 
 // Composant réutilisable pour la FAQ
 const FAQItem = ({
@@ -49,8 +47,6 @@ export default function PricingPage() {
 
   return (
     <>
-      <Navbar />
-
       <main className="pt-32 pb-16">
         {/* Hero Section */}
         <section className="px-6 max-w-7xl mx-auto text-center mb-16">
@@ -140,7 +136,7 @@ export default function PricingPage() {
                     check
                   </span>
                   <span className="font-body-md text-on-surface">
-                    Nombre Max d'Utilisateurs: 1
+                    Nombre Max d&apos;Utilisateurs: 1
                   </span>
                 </li>
               </ul>
@@ -223,7 +219,7 @@ export default function PricingPage() {
                     check
                   </span>
                   <span className="font-body-md text-on-surface">
-                    Nombre Max d'Utilisateurs: 3
+                    Nombre Max d&apos;Utilisateurs: 3
                   </span>
                 </li>
               </ul>
@@ -463,8 +459,6 @@ export default function PricingPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </>
   );
 }

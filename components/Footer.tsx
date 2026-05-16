@@ -5,11 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { usePathname } from "next/navigation";
-import clsx from "clsx";
 
 export function Footer() {
-  const pathname = usePathname();
   const footerRef = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -121,7 +118,7 @@ export function Footer() {
             <ul className="flex flex-col gap-3 text-body-sm text-on-surface-variant">
               <li>
                 <Link className="hover:text-primary transition-colors" href="#">
-                  Centre d'aide
+                  Centre d&apos;aide
                 </Link>
               </li>
               <li>

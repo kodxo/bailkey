@@ -1,12 +1,9 @@
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+/* eslint-disable react/no-unescaped-entities */
 import Image from "next/image";
 
 export default function SolutionsPage() {
   return (
     <>
-      <Navbar />
-
       <main className="pt-[88px]">
         {/* Hero Section */}
         <section className="relative bg-surface-container-lowest border-b border-outline-variant/50 py-24 px-6 lg:px-12 overflow-hidden flex items-center min-h-[716px]">
@@ -46,7 +43,7 @@ export default function SolutionsPage() {
             <div className="relative h-[500px] w-full shadow-2xl bg-surface-container border border-outline-variant/50">
               <Image
                 alt="Façade de bâtiment en verre moderne"
-                className="w-full h-full object-cover grayscale-[20%] contrast-[1.1]"
+                className="w-full h-full object-cover grayscale-20 contrast-[1.1]"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF0ouT2rMGlbbWFQDjetX0rAyvrbM_-7cfZW8yL7x9FTQmXglB8GPmHUL-SRvYJcMIdHgAPmTpnRuxM-X7zh1Bn0zctpXyn9ifm5LmnQsbaJ8nkA8HX244If7vgyxXNvFR0s9WQ_9Wcyq171aHkzkoMroLI4DGV6XQlZ7IApiNyQ2Ddj95EKbVb79OwKQcnd-vtUHpgwe3jTkhgNYq40yeVM2eRVJspBwn9qAA4xkqEXH36SRSozWiTibQDH_ENej-3IxsfE6_uU4"
                 fill
                 priority
@@ -62,7 +59,7 @@ export default function SolutionsPage() {
                   </span>
                 </div>
                 <div className="font-h1 text-h1 text-on-surface">98.4%</div>
-                <div className="w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent my-4"></div>
+                <div className="w-full h-px bg-linear-to-r from-transparent via-primary/50 to-transparent my-4"></div>
                 <div className="font-body-md text-body-md text-on-surface-variant text-sm">
                   +1.2% ce trimestre
                 </div>
@@ -164,7 +161,7 @@ export default function SolutionsPage() {
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8kPcKu1oiKoIQ06mQB3l_1lIxWQlNRSORyF-v2OgQj3QqRPWtu-gW1PYjESLygeBNYMAePgOzCbc-Y4IiItDEaEUy5LZ17BV0J1hpM9HtjA2b4ci6k8dxS1OI21h4obxcgLpLdT-a0C1zAoBMy1H0ao3sjy0dOJ7GNhaWdVvvqevHMLQ6tOKXPRBqCqKQUz4yDI7pg1jmZkSXbcNL_suElNMxBLq_2G6C5-gE7HnX6h2G_gF7pIgrr44FbEWV6ukSJbj-q6fy2yc"
                   fill
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-surface-container-highest to-transparent"></div>
+                <div className="absolute inset-0 bg-linear-to-t from-surface-container-highest to-transparent"></div>
                 <div className="absolute bottom-0 left-0 p-8">
                   <div className="font-label-caps text-label-caps text-primary mb-2">
                     Module Cashbox
@@ -246,7 +243,7 @@ export default function SolutionsPage() {
                     </span>
                   </div>
 
-                  <div className="w-full h-px bg-gradient-to-r from-transparent via-outline-variant/50 to-transparent"></div>
+                  <div className="w-full h-px bg-linear-to-r from-transparent via-outline-variant/50 to-transparent"></div>
 
                   <div className="flex items-center gap-4 p-4 bg-surface border-l-2 border-outline shadow-sm">
                     <span className="material-symbols-outlined text-on-surface-variant">
@@ -265,7 +262,7 @@ export default function SolutionsPage() {
                     </span>
                   </div>
 
-                  <div className="w-full h-px bg-gradient-to-r from-transparent via-outline-variant/50 to-transparent"></div>
+                  <div className="w-full h-px bg-linear-to-r from-transparent via-outline-variant/50 to-transparent"></div>
 
                   <div className="flex items-center gap-4 p-4 bg-surface border-l-2 border-outline shadow-sm">
                     <span className="material-symbols-outlined text-on-surface-variant">
@@ -397,8 +394,6 @@ export default function SolutionsPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </>
   );
 }

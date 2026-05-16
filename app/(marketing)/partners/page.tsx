@@ -1,13 +1,10 @@
 "use client";
 
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import Image from "next/image";
 
 export default function PartnerPage() {
   return (
     <>
-      <Navbar />
       {/* Main Content */}
       <main className="grow pt-32">
         {/* Hero Section */}
@@ -135,7 +132,7 @@ export default function PartnerPage() {
                   consultants, auditeurs et réseaux d&apos;agences cherchant à
                   moderniser leurs outils.
                 </p>
-                <ul className="space-y-xs font-body-md text-sm text-on-surface-variant mb-lg flex-grow">
+                <ul className="space-y-xs font-body-md text-sm text-on-surface-variant mb-lg grow">
                   <li className="flex items-start gap-xs">
                     <span className="material-symbols-outlined text-primary text-sm mt-1">
                       check
@@ -170,7 +167,7 @@ export default function PartnerPage() {
                   Connectez votre solution à BailKey. Créez des synergies pour
                   offrir une valeur ajoutée unique à nos clients communs.
                 </p>
-                <ul className="space-y-xs font-body-md text-sm text-on-surface-variant mb-lg flex-grow">
+                <ul className="space-y-xs font-body-md text-sm text-on-surface-variant mb-lg grow">
                   <li className="flex items-start gap-xs">
                     <span className="material-symbols-outlined text-primary text-sm mt-1">
                       check
@@ -306,7 +303,6 @@ export default function PartnerPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </>
   );
 }

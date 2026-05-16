@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { ResourcesGrid } from "@/components/ResourcesGrid";
 import { getPublishedPosts } from "@/lib/dal/posts";
 
@@ -23,8 +21,6 @@ export default async function ResourcesPage() {
 
   return (
     <>
-      <Navbar />
-
       <main className="grow pt-32 pb-xl px-6 max-w-7xl mx-auto w-full min-h-screen">
         {/* Hero Section */}
         <section className="mb-16 text-center md:text-left">
@@ -71,8 +67,6 @@ export default async function ResourcesPage() {
           </form>
         </section>
       </main>
-
-      <Footer />
     </>
   );
 }

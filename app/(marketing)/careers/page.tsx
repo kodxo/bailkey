@@ -1,13 +1,10 @@
 "use client";
 
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import Image from "next/image";
 
 export default function CareersPage() {
   return (
     <>
-      <Navbar />
       {/* Main Content */}
       <main className="grow flex flex-col">
         {/* Hero Section */}
@@ -215,7 +212,6 @@ export default function CareersPage() {
           </button>
         </section>
       </main>
-      <Footer />
     </>
   );
 }

@@ -2,8 +2,6 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { getPostBySlug } from "@/lib/dal/posts";
 import {
   CATEGORY_LABELS,
@@ -179,8 +177,6 @@ export default async function PostDetailPage({
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar />
-
       <main className="grow pt-[120px] pb-xl px-gutter md:px-xl max-w-7xl mx-auto w-full">
         {/* Article Header */}
         <header className="mb-xl max-w-4xl">
@@ -303,8 +299,6 @@ export default async function PostDetailPage({
           </aside>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

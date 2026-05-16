@@ -5,8 +5,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Image from "next/image";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { HeroBackground } from "@/components/HeroBackground";
 
 if (typeof window !== "undefined") {
@@ -182,7 +180,6 @@ export default function Home() {
 
   return (
     <>
-      <Navbar />
       <main ref={container}>
         <section className="relative min-h-screen flex flex-col items-center justify-start pt-32 pb-16 overflow-hidden">
           <HeroBackground />
@@ -292,7 +289,7 @@ export default function Home() {
                             0%
                           </div>
                           <div className="text-xs font-label-caps text-on-surface-variant">
-                            Taux d'occupation
+                            Taux d&apos;occupation
                           </div>
                         </div>
                         <div className="text-right">
@@ -454,7 +451,7 @@ export default function Home() {
                       DIVERSITÉ DES BIENS
                     </div>
                     <div className="text-h2 font-display font-bold text-on-surface">
-                      Tous types d'actifs
+                      Tous types d&apos;actifs
                     </div>
                   </div>
                   <div className="flex gap-8">
@@ -502,7 +499,7 @@ export default function Home() {
                 </h2>
                 <p className="font-body-lg text-on-surface-variant mb-10 ">
                   Odoo 19 propulse notre moteur de gestion. Création
-                  d'échéanciers, génération automatique de quittances, et
+                  d&apos;échéanciers, génération automatique de quittances, et
                   indexation des loyers sans intervention manuelle.
                 </p>
                 <div className="flex flex-col gap-4 w-full  gsap-card mb-8">
@@ -689,7 +686,7 @@ export default function Home() {
                 </h2>
                 <p className="font-body-lg text-on-surface-variant mb-10 ">
                   Portail locataire dédié et application mobile (Flutter) pour
-                  une gestion fluide. Centralisez les demandes d'intervention et
+                  une gestion fluide. Centralisez les demandes d&apos;intervention et
                   suivez les prestataires en direct.
                 </p>
                 <div className="flex flex-col gap-4 w-full  gsap-card mb-8">
@@ -756,7 +753,6 @@ export default function Home() {
           </section>
         </div>
       </main>
-      <Footer />
     </>
   );
 }

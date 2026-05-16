@@ -1,16 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-
-
 
 export default function AboutPage() {
-
   return (
     <>
-      <Navbar />
       <main className="grow pt-[80px]">
         {/* Hero Section */}
         <section className="relative bg-surface-container-highest overflow-hidden">
@@ -236,7 +230,6 @@ export default function AboutPage() {
           <div className="absolute top-0 right-0 w-32 h-32 border-b-2 border-l-2 border-on-primary/20"></div>
         </section>
       </main>
-      <Footer />
     </>
   );
 }
