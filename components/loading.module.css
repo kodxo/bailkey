@@ -125,6 +125,10 @@
      }
  }
 
+ .animate-progress {
+     animation: translateX 2s infinite linear;
+ }
+
  .animate-pulse-soft {
      animation: pulse-soft 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
  }
