@@ -133,7 +133,22 @@
    ========================================================================== */
 @layer base {
   :root {
-    color-scheme: light;
+    /* --- Personnalisation du thème Clerk (PricingTable & UI) --- */
+    --clerk-color-primary: var(--color-primary);
+    --clerk-color-primary-foreground: var(--color-primary-foreground);
+    --clerk-color-danger: var(--color-error);
+    --clerk-color-success: var(--color-primary-container);
+    --clerk-color-warning: var(--color-tertiary-container);
+    --clerk-color-neutral: var(--color-on-surface);
+    --clerk-color-foreground: var(--color-foreground);
+    --clerk-color-background: var(--color-background);
+    --clerk-color-input: var(--color-surface);
+    --clerk-color-input-foreground: var(--color-on-surface);
+    --clerk-color-ring: color-mix(in srgb, var(--color-primary) 15%, transparent);
+    --clerk-color-shimmer: #ffffff;
+    --clerk-color-modal-backdrop: rgba(0, 0, 0, 0.6);
+    --clerk-border-radius: var(--radius-default);
+    --clerk-spacing: 1rem;
   }
 
   body {

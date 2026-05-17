@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
+import { frFR } from "@clerk/localizations";
+
 import { Inter, Manrope } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
@@ -35,7 +38,7 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-background text-on-surface font-body-md text-body-md overflow-x-hidden">
-        {children}
+        <ClerkProvider localization={frFR}>{children}</ClerkProvider>
         <SpeedInsights />
         <Analytics />
       </body>

@@ -8,20 +8,23 @@ import { MetadataForm } from "@/components/editor/metadata-form";
 import { postService } from "@/lib/services/post.service";
 import { useRouter } from "next/navigation";
 import { PostStatus } from "@/lib/generated/prisma/enums";
+import { BreadcrumbNav } from "@/components/ui/breadcrumb";
 
 import type { AdminPostDTO } from "@/lib/types/dto";
 
-export default function AdminEditorPage(props: { searchParams: Promise<{ id?: string }> }) {
+export default function AdminEditorPage(props: {
+  searchParams: Promise<{ id?: string }>;
+}): React.JSX.Element {
   const searchParams = use(props.searchParams);
   const id = searchParams.id;
   const router = useRouter();
-  
+
   const [post, setPost] = useState<AdminPostDTO | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
-    
+
     async function loadPost() {
       setLoading(true);
       if (id) {
@@ -46,33 +49,41 @@ export default function AdminEditorPage(props: { searchParams: Promise<{ id?: st
         }
       }
     }
-    
+
     loadPost();
-    
+
     return () => {
       isMounted = false;
     };
   }, [id, router]);
 
   if (loading) {
-    return <div className="p-8 text-center text-on-surface-variant font-body-lg font-semibold">Chargement...</div>;
+    return (
+      <div className="p-8 text-center text-on-surface-variant font-body-lg font-semibold">
+        Chargement...
+      </div>
+    );
   }
 
   if (!post) {
-    return <div className="p-8 text-center text-error font-body-lg font-semibold">Impossible de charger ou de créer l&apos;article.</div>;
+    return (
+      <div className="p-8 text-center text-error font-body-lg font-semibold">
+        Impossible de charger ou de créer l&apos;article.
+      </div>
+    );
   }
 
   return (
     <div className="w-full flex flex-col min-h-screen bg-surface">
       {/* TopAppBar */}
       <header className="bg-surface/80 backdrop-blur-xl border-b border-glass-border shadow-sm sticky top-0 h-16 flex justify-between items-center px-6 z-40 w-full">
-        <div className="flex items-center gap-2 text-on-surface-variant font-body-md text-sm md:text-base overflow-hidden whitespace-nowrap">
-          <Link className="hover:text-primary transition-colors font-medium" href="/admin">Contenu</Link>
-          <span className="material-symbols-outlined text-sm">chevron_right</span>
-          <Link className="hover:text-primary transition-colors font-medium" href="/admin">Articles</Link>
-          <span className="material-symbols-outlined text-sm">chevron_right</span>
-          <span className="text-on-surface font-semibold">Éditeur d&apos;article</span>
-        </div>
+        <BreadcrumbNav
+          items={[
+            { label: "Contenu", href: "/admin" },
+            { label: "Articles", href: "/admin" },
+            { label: "Éditeur d'article" },
+          ]}
+        />
         <div className="flex items-center gap-md">
           <div className="flex items-center gap-2">
             <button className="hidden sm:inline-flex px-4 py-2 text-on-surface-variant font-label-caps text-xs md:text-sm hover:bg-surface-container rounded-full transition-colors border border-outline-variant cursor-pointer uppercase font-semibold">

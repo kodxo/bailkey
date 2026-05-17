@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { BreadcrumbNav } from "@/components/ui/breadcrumb";
 import type { MediaDTO, TagDTO } from "@/lib/types/dto";
 
 interface MediaClientProps {
@@ -12,7 +13,7 @@ interface MediaClientProps {
 
 const CATEGORIES: string[] = ["Tous", "Images", "PDF", "Plans", "Archives"];
 
-export function MediaClient({ initialMedia }: MediaClientProps) {
+export function MediaClient({ initialMedia }: MediaClientProps): React.JSX.Element {
   const [mediaFiles, setMediaFiles] =
     useState<MediaDTO[]>(initialMedia);
   const [selectedCategory, setSelectedCategory] = useState<string>("Tous");
@@ -78,20 +79,12 @@ export function MediaClient({ initialMedia }: MediaClientProps) {
     <div className="w-full flex flex-col min-h-screen bg-surface">
       {/* TopAppBar */}
       <header className="bg-surface/80 backdrop-blur-xl border-b border-glass-border shadow-sm sticky top-0 h-16 flex justify-between items-center px-6 z-40 w-full">
-        <div className="flex items-center gap-2 text-on-surface-variant font-body-md text-sm md:text-base overflow-hidden whitespace-nowrap">
-          <Link
-            className="hover:text-primary transition-colors font-medium"
-            href="/admin"
-          >
-            Contenu
-          </Link>
-          <span className="material-symbols-outlined text-sm">
-            chevron_right
-          </span>
-          <span className="text-on-surface font-semibold">
-            Bibliothèque de Médias
-          </span>
-        </div>
+        <BreadcrumbNav
+          items={[
+            { label: "Contenu", href: "/admin" },
+            { label: "Bibliothèque de Médias" },
+          ]}
+        />
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-4">
             <div className="relative hidden lg:block">

@@ -1,5 +1,6 @@
 "use client";
 
+import { PricingTable } from "@clerk/nextjs";
 import { useState } from "react";
 
 // Composant réutilisable pour la FAQ
@@ -39,12 +40,6 @@ const FAQItem = ({
 };
 
 export default function PricingPage() {
-  const [isAnnual, setIsAnnual] = useState(false);
-
-  // Calcul du prix Pro (Exemple: 20% de réduction en annuel)
-  const proPriceMonthly = 15000;
-  const proPriceAnnual = proPriceMonthly * 12 * 0.8; // 144 000 FCFA/an
-
   return (
     <>
       <main className="pt-32 pb-16">
@@ -56,31 +51,32 @@ export default function PricingPage() {
           <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-12">
             Choisissez le plan adapté à vos besoins de gestion locative.
           </p>
-
-          {/* Toggle Mensuel / Annuel */}
-          <div className="inline-flex items-center bg-surface-container p-1 rounded-none border border-outline-variant transition-colors">
-            <button
-              onClick={() => setIsAnnual(false)}
-              className={`px-6 py-2 font-body-md font-medium rounded-none transition-all ${!isAnnual ? "bg-background shadow-sm text-on-background" : "text-on-surface-variant hover:text-on-surface"}`}
-            >
-              Mensuel
-            </button>
-            <button
-              onClick={() => setIsAnnual(true)}
-              className={`px-6 py-2 font-body-md font-medium rounded-none flex items-center gap-2 transition-all ${isAnnual ? "bg-background shadow-sm text-on-background" : "text-on-surface-variant hover:text-on-surface"}`}
-            >
-              Annuel
-              <span className="bg-tertiary-container text-on-tertiary-container font-label-caps text-label-caps px-2 py-0.5 rounded-none">
-                Économisez 20%
-              </span>
-            </button>
-          </div>
         </section>
 
         {/* Pricing Cards */}
         <section className="px-6 max-w-7xl mx-auto pb-24 relative z-10">
+          <PricingTable for="organization" ctaPosition="bottom" />
+          {/*
+          <div className="flex justify-center mb-6">
+            <div className="inline-flex items-center bg-surface-container p-1 rounded-none border border-outline-variant transition-colors">
+              <button
+                onClick={() => setIsAnnual(false)}
+                className={`px-6 py-2 font-body-md font-medium rounded-none transition-all ${!isAnnual ? "bg-background shadow-sm text-on-background" : "text-on-surface-variant hover:text-on-surface"}`}
+              >
+                Mensuel
+              </button>
+              <button
+                onClick={() => setIsAnnual(true)}
+                className={`px-6 py-2 font-body-md font-medium rounded-none flex items-center gap-2 transition-all ${isAnnual ? "bg-background shadow-sm text-on-background" : "text-on-surface-variant hover:text-on-surface"}`}
+              >
+                Annuel
+                <span className="bg-tertiary-container text-on-tertiary-container font-label-caps text-label-caps px-2 py-0.5 rounded-none">
+                  Économisez 20%
+                </span>
+              </button>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-            {/* Starter */}
             <div className="bg-surface border border-outline-variant p-8 flex flex-col rounded-none relative transition-transform hover:-translate-y-1 hover:shadow-lg">
               <div className="mb-8">
                 <h3 className="font-h3 text-h3 text-on-surface mb-2">
@@ -142,7 +138,6 @@ export default function PricingPage() {
               </ul>
             </div>
 
-            {/* Pro */}
             <div className="bg-background border-2 border-primary p-8 flex flex-col rounded-none relative shadow-[0_32px_64px_-16px_rgba(26,101,112,0.15)] transform md:-translate-y-4 transition-transform hover:-translate-y-5">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-on-primary font-label-caps px-4 py-1 rounded-none">
                 LE PLUS POPULAIRE
@@ -225,7 +220,6 @@ export default function PricingPage() {
               </ul>
             </div>
 
-            {/* Agence */}
             <div className="bg-surface-container-low border border-outline-variant p-8 flex flex-col rounded-none relative transition-transform hover:-translate-y-1 hover:shadow-lg">
               <div className="mb-8">
                 <h3 className="font-h3 text-h3 text-on-surface mb-2">Agence</h3>
@@ -278,6 +272,7 @@ export default function PricingPage() {
               </ul>
             </div>
           </div>
+          */}
         </section>
 
         {/* Feature Comparison */}

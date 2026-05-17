@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { Logo } from "@/components/Logo";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { UserButton } from "@clerk/nextjs";
 
 export function AdminNav() {
   const pathname = usePathname() || "";
@@ -18,6 +18,9 @@ export function AdminNav() {
     pathname === "/admin" || pathname.startsWith("/admin/editor");
 
   const isMediaActive = pathname.startsWith("/admin/media");
+  const isUsersActive = pathname.startsWith("/admin/users");
+
+  const isSettingsGroupActive = pathname.startsWith("/admin/users");
 
   return (
     <>
@@ -25,14 +28,7 @@ export function AdminNav() {
       <nav className="hidden md:flex flex-col py-md bg-surface border-r border-outline-variant shadow-none h-screen left-0 w-[88px] fixed top-0 z-50 transition-all duration-300 ease-in-out items-center">
         <div className="mb-lg flex flex-col items-center">
           <Link href="/">
-            <Image
-              alt="BailKey Logo"
-              width={40}
-              height={40}
-              className="object-contain"
-              style={{ width: "auto", height: "auto" }}
-              src="/logo.png"
-            />
+            <Logo height={32} />
           </Link>
         </div>
         <div className="flex-1 flex flex-col gap-sm w-full">
@@ -50,7 +46,11 @@ export function AdminNav() {
               <span
                 className="material-symbols-outlined text-[24px]"
                 data-icon="folder"
-                style={{ fontVariationSettings: isContentActive ? '"FILL" 1' : '"FILL" 0' }}
+                style={{
+                  fontVariationSettings: isContentActive
+                    ? '"FILL" 1'
+                    : '"FILL" 0',
+                }}
               >
                 folder
               </span>
@@ -72,7 +72,10 @@ export function AdminNav() {
                 )}
                 href="/admin"
               >
-                <span className="material-symbols-outlined text-[20px]" data-icon="article">
+                <span
+                  className="material-symbols-outlined text-[20px]"
+                  data-icon="article"
+                >
                   article
                 </span>
                 <span>Articles</span>
@@ -86,7 +89,10 @@ export function AdminNav() {
                 )}
                 href="/admin/media"
               >
-                <span className="material-symbols-outlined text-[20px]" data-icon="photo_library">
+                <span
+                  className="material-symbols-outlined text-[20px]"
+                  data-icon="photo_library"
+                >
                   photo_library
                 </span>
                 <span>Médias</span>
@@ -95,7 +101,10 @@ export function AdminNav() {
                 className="flex items-center gap-sm px-sm py-2.5 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface border-l-4 border-transparent transition-colors font-body-md text-sm"
                 href="/admin"
               >
-                <span className="material-symbols-outlined text-[20px]" data-icon="category">
+                <span
+                  className="material-symbols-outlined text-[20px]"
+                  data-icon="category"
+                >
                   category
                 </span>
                 <span>Catégories</span>
@@ -104,7 +113,10 @@ export function AdminNav() {
                 className="flex items-center gap-sm px-sm py-2.5 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface border-l-4 border-transparent transition-colors font-body-md text-sm"
                 href="/admin"
               >
-                <span className="material-symbols-outlined text-[20px]" data-icon="sell">
+                <span
+                  className="material-symbols-outlined text-[20px]"
+                  data-icon="sell"
+                >
                   sell
                 </span>
                 <span>Mots-clés</span>
@@ -117,7 +129,10 @@ export function AdminNav() {
               href="/admin"
               className="flex flex-col items-center justify-center p-sm w-[64px] h-[64px] text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer rounded"
             >
-              <span className="material-symbols-outlined text-[24px]" data-icon="domain">
+              <span
+                className="material-symbols-outlined text-[24px]"
+                data-icon="domain"
+              >
                 domain
               </span>
               <span className="text-[10px] font-label-caps mt-1">Biens</span>
@@ -133,7 +148,10 @@ export function AdminNav() {
                 className="flex items-center gap-sm px-sm py-2.5 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface border-l-4 border-transparent transition-colors font-body-md text-sm"
                 href="/admin"
               >
-                <span className="material-symbols-outlined text-[20px]" data-icon="apartment">
+                <span
+                  className="material-symbols-outlined text-[20px]"
+                  data-icon="apartment"
+                >
                   apartment
                 </span>
                 <span>Propriétés</span>
@@ -142,7 +160,10 @@ export function AdminNav() {
                 className="flex items-center gap-sm px-sm py-2.5 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface border-l-4 border-transparent transition-colors font-body-md text-sm"
                 href="/admin"
               >
-                <span className="material-symbols-outlined text-[20px]" data-icon="real_estate_agent">
+                <span
+                  className="material-symbols-outlined text-[20px]"
+                  data-icon="real_estate_agent"
+                >
                   real_estate_agent
                 </span>
                 <span>Locataires</span>
@@ -152,10 +173,23 @@ export function AdminNav() {
           {/* Item 3: Settings */}
           <div className="nav-item-group relative flex justify-center w-full group">
             <Link
-              href="/admin"
-              className="flex flex-col items-center justify-center p-sm w-[64px] h-[64px] text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer rounded"
+              href="/admin/users"
+              className={cn(
+                "flex flex-col items-center justify-center p-sm w-[64px] h-[64px] rounded transition-colors cursor-pointer",
+                isSettingsGroupActive
+                  ? "bg-primary-container/10 text-primary font-semibold"
+                  : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
+              )}
             >
-              <span className="material-symbols-outlined text-[24px]" data-icon="settings">
+              <span
+                className="material-symbols-outlined text-[24px]"
+                data-icon="settings"
+                style={{
+                  fontVariationSettings: isSettingsGroupActive
+                    ? '"FILL" 1'
+                    : '"FILL" 0',
+                }}
+              >
                 settings
               </span>
               <span className="text-[10px] font-label-caps mt-1">Config</span>
@@ -168,10 +202,18 @@ export function AdminNav() {
                 </span>
               </div>
               <Link
-                className="flex items-center gap-sm px-sm py-2.5 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface border-l-4 border-transparent transition-colors font-body-md text-sm"
-                href="/admin"
+                className={cn(
+                  "flex items-center gap-sm px-sm py-2.5 transition-colors font-body-md text-sm",
+                  isUsersActive
+                    ? "bg-surface-container-low text-primary border-l-4 border-primary font-medium"
+                    : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface border-l-4 border-transparent"
+                )}
+                href="/admin/users"
               >
-                <span className="material-symbols-outlined text-[20px]" data-icon="group">
+                <span
+                  className="material-symbols-outlined text-[20px]"
+                  data-icon="group"
+                >
                   group
                 </span>
                 <span>Utilisateurs</span>
@@ -180,7 +222,10 @@ export function AdminNav() {
                 className="flex items-center gap-sm px-sm py-2.5 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface border-l-4 border-transparent transition-colors font-body-md text-sm"
                 href="/admin"
               >
-                <span className="material-symbols-outlined text-[20px]" data-icon="security">
+                <span
+                  className="material-symbols-outlined text-[20px]"
+                  data-icon="security"
+                >
                   security
                 </span>
                 <span>Sécurité</span>
@@ -194,26 +239,15 @@ export function AdminNav() {
             href="/admin"
             title="Support"
           >
-            <span className="material-symbols-outlined text-[24px]" data-icon="help">
+            <span
+              className="material-symbols-outlined text-[24px]"
+              data-icon="help"
+            >
               help
             </span>
           </Link>
-          <Link
-            className="flex flex-col items-center justify-center p-sm w-[64px] h-[64px] text-on-surface-variant hover:bg-surface-container-high transition-colors rounded"
-            href="/"
-            title="Déconnexion"
-          >
-            <span className="material-symbols-outlined text-[24px]" data-icon="logout">
-              logout
-            </span>
-          </Link>
-          <Image
-            alt="Administrator profile photo"
-            width={40}
-            height={40}
-            className="w-10 h-10 object-cover mt-sm border border-outline-variant rounded-full"
-            src="/images/admin/profile.png"
-          />
+
+          <UserButton />
         </div>
       </nav>
 
@@ -248,13 +282,18 @@ export function AdminNav() {
           <span className="text-[10px] font-label-caps mt-1">Médias</span>
         </Link>
         <Link
-          className="flex flex-col items-center justify-center w-full h-full text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors"
-          href="/admin"
+          className={cn(
+            "flex flex-col items-center justify-center w-full h-full transition-colors",
+            isUsersActive
+              ? "text-primary bg-surface-container-low font-semibold"
+              : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
+          )}
+          href="/admin/users"
         >
-          <span className="material-symbols-outlined" data-icon="apartment">
-            apartment
+          <span className="material-symbols-outlined" data-icon="group">
+            group
           </span>
-          <span className="text-[10px] font-label-caps mt-1">Propriétés</span>
+          <span className="text-[10px] font-label-caps mt-1">Utilisateurs</span>
         </Link>
         <label
           className="flex flex-col items-center justify-center w-full h-full text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors cursor-pointer"
@@ -294,7 +333,10 @@ export function AdminNav() {
               )}
               href="/admin"
             >
-              <span className="material-symbols-outlined text-[20px]" data-icon="article">
+              <span
+                className="material-symbols-outlined text-[20px]"
+                data-icon="article"
+              >
                 article
               </span>
               <span>Articles</span>
@@ -308,53 +350,13 @@ export function AdminNav() {
               )}
               href="/admin/media"
             >
-              <span className="material-symbols-outlined text-[20px]" data-icon="photo_library">
+              <span
+                className="material-symbols-outlined text-[20px]"
+                data-icon="photo_library"
+              >
                 photo_library
               </span>
               <span>Médias</span>
-            </Link>
-            <Link
-              className="flex items-center gap-sm p-xs text-on-surface hover:bg-surface-container-low transition-colors font-body-md text-base border-l-4 border-transparent"
-              href="/admin"
-            >
-              <span className="material-symbols-outlined text-[20px]" data-icon="category">
-                category
-              </span>
-              <span>Catégories</span>
-            </Link>
-            <Link
-              className="flex items-center gap-sm p-xs text-on-surface hover:bg-surface-container-low transition-colors font-body-md text-base border-l-4 border-transparent"
-              href="/admin"
-            >
-              <span className="material-symbols-outlined text-[20px]" data-icon="sell">
-                sell
-              </span>
-              <span>Mots-clés</span>
-            </Link>
-          </div>
-        </div>
-        <div className="px-sm py-xs border-t border-outline-variant mt-xs">
-          <h3 className="text-label-caps font-label-caps text-on-surface-variant uppercase tracking-wider mb-xs mt-xs">
-            Gestion Patrimoine
-          </h3>
-          <div className="flex flex-col gap-1">
-            <Link
-              className="flex items-center gap-sm p-xs text-on-surface hover:bg-surface-container-low transition-colors font-body-md text-base"
-              href="/admin"
-            >
-              <span className="material-symbols-outlined text-[20px]" data-icon="apartment">
-                apartment
-              </span>
-              <span>Propriétés</span>
-            </Link>
-            <Link
-              className="flex items-center gap-sm p-xs text-on-surface hover:bg-surface-container-low transition-colors font-body-md text-base"
-              href="/admin"
-            >
-              <span className="material-symbols-outlined text-[20px]" data-icon="real_estate_agent">
-                real_estate_agent
-              </span>
-              <span>Locataires</span>
             </Link>
           </div>
         </div>
@@ -364,19 +366,30 @@ export function AdminNav() {
           </h3>
           <div className="flex flex-col gap-1">
             <Link
-              className="flex items-center gap-sm p-xs text-on-surface hover:bg-surface-container-low transition-colors font-body-md text-base"
-              href="/admin"
+              className={cn(
+                "flex items-center gap-sm p-xs rounded transition-colors font-body-md text-base",
+                isUsersActive
+                  ? "bg-surface-container-low text-primary font-medium border-l-4 border-primary"
+                  : "text-on-surface hover:bg-surface-container-low border-l-4 border-transparent"
+              )}
+              href="/admin/users"
             >
-              <span className="material-symbols-outlined text-[20px]" data-icon="settings">
-                settings
+              <span
+                className="material-symbols-outlined text-[20px]"
+                data-icon="group"
+              >
+                group
               </span>
-              <span>Configuration</span>
+              <span>Utilisateurs</span>
             </Link>
             <Link
               className="flex items-center gap-sm p-xs text-on-surface hover:bg-surface-container-low transition-colors font-body-md text-base"
               href="/admin"
             >
-              <span className="material-symbols-outlined text-[20px]" data-icon="security">
+              <span
+                className="material-symbols-outlined text-[20px]"
+                data-icon="security"
+              >
                 security
               </span>
               <span>Sécurité</span>

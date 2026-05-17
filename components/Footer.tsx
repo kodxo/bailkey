@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Logo } from "@/components/Logo";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -33,14 +34,7 @@ export function Footer() {
       <div className="container mx-auto px-gutter max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
           <div className="lg:col-span-2">
-            <Image
-              alt="BailKey Logo"
-              className="h-8 w-auto mb-6"
-              src="/logo.png"
-              width={120}
-              height={32}
-              style={{ width: "auto", height: "auto" }}
-            />
+            <Logo height={32} className="mb-6" />
             <p className="text-body-sm text-on-surface-variant mb-6">
               La plateforme logicielle de référence pour les gestionnaires de
               patrimoine immobilier. Centralisez, analysez et optimisez vos

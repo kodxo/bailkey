@@ -1,4 +1,4 @@
-// On utilise des Enums pour sécuriser les données (éviter les fautes de frappe)
+// models/user.prisma
 enum PostStatus {
     DRAFT
     PUBLISHED

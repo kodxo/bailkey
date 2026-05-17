@@ -2,6 +2,7 @@ import "./global-admin.css";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Logo } from "@/components/Logo";
 import { AdminNav } from "@/components/admin-nav";
 
 export default function AdminLayout({
@@ -19,14 +20,8 @@ export default function AdminLayout({
         {/* TopNavBar (Mobile Header) */}
         <header className="flex justify-between items-center w-full px-md h-16 sticky top-0 z-40 bg-surface border-b border-outline-variant text-primary md:hidden transition-all duration-300 ease-in-out">
           <div className="flex items-center gap-sm">
-            <Link href="/">
-              <Image
-                alt="BailKey Logo"
-                width={120}
-                height={24}
-                className="h-6 w-auto object-contain"
-                src="/logo.png"
-              />
+            <Link href="/" className="flex items-center">
+              <Logo height={24} priority />
             </Link>
           </div>
           <div className="flex items-center gap-sm">

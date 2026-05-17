@@ -1,5 +1,5 @@
 import styles from "@/components/loading.module.css";
-import Image from "next/image";
+import { Logo } from "@/components/Logo";
 import { cn } from "@/lib/utils";
 
 export default async function Loading() {
@@ -56,13 +56,7 @@ export default async function Loading() {
         {/* Typography */}
         <div className="text-center space-y-md">
           <h1 className="font-h2 text-h2 text-primary tracking-tight">
-            <Image
-              src="/logo.png"
-              alt="BailKey Logo"
-              height={200}
-              width={200}
-              className="h-12 w-auto mx-auto"
-            />
+            <Logo height={48} className="mx-auto" priority />
           </h1>
           <p className="font-body-lg text-body-lg text-on-surface-variant font-light tracking-wide">
             Initialisation de votre espace...
@@ -98,7 +92,7 @@ export default async function Loading() {
                 d="M 40 0 L 0 0 0 40"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="1"
+                strokeWidth="1"
               ></path>
             </pattern>
           </defs>
