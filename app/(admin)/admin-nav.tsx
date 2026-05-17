@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 
-export function AdminNav() {
+export function AdminNav(): React.JSX.Element {
   const pathname = usePathname() || "";
 
   const isContentActive =
