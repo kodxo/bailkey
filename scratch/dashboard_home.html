@@ -1,0 +1,265 @@
+<!doctype html>
+
+<html class="light" lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Tableau de bord - BailKey</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Manrope:wght@500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary-fixed": "#002020",
+              "secondary-fixed-dim": "#c4c7c9",
+              "inverse-on-surface": "#ecf2f1",
+              "on-primary-fixed-variant": "#004f50",
+              "muted-foreground": "oklch(0.56 0.021 213.5)",
+              "on-error-container": "#93000a",
+              "surface-container-highest": "#dee4e3",
+              "surface-container-low": "#eff5f4",
+              "on-surface": "#171d1d",
+              "inverse-surface": "#2c3131",
+              card: "oklch(1 0 0)",
+              error: "#ba1a1a",
+              "glass-border": "rgba(255, 255, 255, 0.6)",
+              "surface-tint": "#00696a",
+              "on-tertiary-fixed": "#341100",
+              "surface-bright": "#f5fafa",
+              tertiary: "#94491d",
+              "primary-fixed-dim": "#60d8d9",
+              "primary-container": "#2eb1b2",
+              "on-tertiary-fixed-variant": "#763306",
+              "tertiary-fixed": "#ffdbcb",
+              "primary-foreground": "oklch(0.984 0.014 180.72)",
+              "outline-variant": "#bcc9c9",
+              accent: "oklch(0.963 0.002 197.1)",
+              "on-secondary": "#ffffff",
+              surface: "#f5fafa",
+              foreground: "oklch(0.148 0.004 228.8)",
+              destructive: "oklch(0.577 0.245 27.325)",
+              "on-surface-variant": "#3d4949",
+              "primary-fixed": "#7ff5f5",
+              "inverse-primary": "#60d8d9",
+              "secondary-container": "#dde0e2",
+              border: "oklch(0.925 0.005 214.3)",
+              "tertiary-container": "#e58957",
+              "secondary-foreground": "oklch(0.21 0.006 285.885)",
+              "surface-container-high": "#e4e9e8",
+              "surface-container": "#eaefee",
+              "tertiary-fixed-dim": "#ffb691",
+              secondary: "oklch(0.967 0.001 286.375)",
+              primary: "oklch(0.511 0.096 186.391)",
+              "on-tertiary-container": "#602600",
+              "on-error": "#ffffff",
+              "secondary-fixed": "#e0e3e5",
+              "surface-container-lowest": "#ffffff",
+              "surface-dim": "#d6dbda",
+              outline: "#6d7a79",
+              "on-primary": "#ffffff",
+              "on-tertiary": "#ffffff",
+              "on-secondary-fixed": "#181c1e",
+              "on-primary-container": "#003e3f",
+              muted: "oklch(0.963 0.002 197.1)",
+              "on-secondary-fixed-variant": "#434749",
+              "surface-variant": "#dee4e3",
+              ring: "oklch(0.723 0.014 214.4)",
+              background: "oklch(1 0 0)",
+              "on-secondary-container": "#5f6365",
+              "error-container": "#ffdad6",
+              "accent-foreground": "oklch(0.218 0.008 223.9)",
+              "on-background": "#171d1d",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              base: "0.25rem",
+              md: "1.5rem",
+              xl: "4rem",
+              margin: "2rem",
+              lg: "2.5rem",
+              xs: "0.5rem",
+              sm: "1rem",
+              gutter: "1.5rem",
+            },
+            fontFamily: {
+              "body-lg": ["Inter"],
+              "label-caps": ["Inter"],
+              "body-md": ["Inter"],
+              h3: ["Manrope"],
+              h1: ["Manrope"],
+              display: ["Manrope"],
+              h2: ["Manrope"],
+            },
+            fontSize: {
+              "body-lg": [
+                "18px",
+                {
+                  lineHeight: "1.6",
+                  fontWeight: "400",
+                },
+              ],
+              "label-caps": [
+                "12px",
+                {
+                  lineHeight: "1.0",
+                  letterSpacing: "0.05em",
+                  fontWeight: "600",
+                },
+              ],
+              "body-md": [
+                "16px",
+                {
+                  lineHeight: "1.5",
+                  fontWeight: "400",
+                },
+              ],
+              h3: [
+                "20px",
+                {
+                  lineHeight: "1.4",
+                  fontWeight: "500",
+                },
+              ],
+              h1: [
+                "32px",
+                {
+                  lineHeight: "1.2",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+              display: [
+                "48px",
+                {
+                  lineHeight: "1.1",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              h2: [
+                "24px",
+                {
+                  lineHeight: "1.3",
+                  fontWeight: "600",
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .material-symbols-outlined[data-weight="fill"] {
+        font-variation-settings:
+          "FILL" 1,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+
+      /* Architectural Precision Theme overrides */
+      * {
+        border-radius: 0 !important;
+        font-family: "Manrope", sans-serif;
+      }
+
+      /* Subtle scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d6dbda; /* surface-dim */
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #bcc9c9; /* outline-variant */
+      }
+
+      /* Flyout Menu Transitions */
+      .group:hover .group-hover\:block {
+        display: block !important;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-surface text-on-surface font-body-md h-screen overflow-hidden flex"
+  >
+    <nav
+      class="hidden md:flex fixed left-0 top-0 h-full w-[88px] bg-surface-container-low border-r border-outline-variant flex-col items-center py-6 z-50 shadow-sm"
+      id="desktop-rail-nav"
+    >
+      <div class="mb-8">
+        <img
+          alt="Logo"
+          class="h-8 w-8 object-contain"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnS5KqeUqshbbbqJPQgs8a0afP8rV1MPv3zu_eotZVTLYN7XuLmFRlTP9vnK8WOxyWxkUYephliB5l2X_O54RD3NdYAdNAGsUyWJLbK9euvGwHHytgjQHdkzcSNzmJPNCmqXAlsnq2QYt8ltoSy5VyKyInmGltAjOZywKoACIEpQf7bEtsBmPKz6uY6HJ2PerlTmoKcKNeJS0dFXTdgpwZRJsb6Lfht3mcpXLOnh2Gpsm-XhQaT1SpIYfJEUikztizmwYcSK4I_Yg"
+        />
+      </div>
+      <div class="flex-1 flex flex-col gap-6">
+        <a class="flex flex-col items-center gap-1 group relative" href="#">
+          <div
+            class="p-2 bg-primary-container text-on-primary-container border-0"
+          >
+            <span class="material-symbols-outlined" data-weight="fill"
+              >dashboard</span
+            >
+          </div>
+          <span class="text-[10px] font-label-caps text-primary uppercase"
+            >Board</span
+          >
+        </a>
+        <div
+          class="flex flex-col items-center gap-1 group relative cursor-pointer"
+        >
+          <div
+            class="p-2 text-on-surface-variant hover:bg-surface-container-high transition-colors"
+          >
+            <span class="material-symbols-outlined">description</span>
+          </div>
+          <span
+            class="text-[10px] font-label-caps text-on-surface-variant uppercase group-hover:text-on-surface"
+            >Gestion</span
+          >
+          <div
+            class="hidden group-hover:block absolute left-[88px] top-0 w-64 bg-surface border border-outline-variant shadow-xl p-4 z-50"
+          >
+            <h4
+              class="text-xs font-label-caps text-on-surface-variant mb-3 border-b border-outline-variant pb-2"
+            >
+              Gestion Immobili
+            </h4>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
