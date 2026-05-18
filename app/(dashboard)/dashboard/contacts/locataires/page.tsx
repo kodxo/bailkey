@@ -1,12 +1,12 @@
 import React from "react";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
-import { getTenants } from "@/lib/dal/tenants";
+import { tenantService } from "@/lib/services/property.service";
 import { TenantsDashboard } from "./tenants-dashboard";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardTenantsPage(): Promise<React.JSX.Element> {
-  const res = await getTenants();
+  const res = await tenantService.getTenants();
   const initialTenants = res.success ? res.tenants : [];
 
   return (

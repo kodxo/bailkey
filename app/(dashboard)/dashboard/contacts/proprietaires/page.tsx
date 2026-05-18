@@ -1,12 +1,12 @@
 import React from "react";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
-import { getOwners } from "@/lib/dal/owners";
+import { ownerService } from "@/lib/services/property.service";
 import { OwnersDashboard } from "./owners-dashboard";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardOwnersPage(): Promise<React.JSX.Element> {
-  const res = await getOwners();
+  const res = await ownerService.getOwners();
   const initialOwners = res.success ? res.owners : [];
 
   return (

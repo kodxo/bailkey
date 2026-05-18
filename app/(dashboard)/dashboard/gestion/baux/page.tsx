@@ -1,17 +1,15 @@
 import React from "react";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
-import { getLeases } from "@/lib/dal/leases";
-import { getProperties } from "@/lib/dal/properties";
-import { getTenants } from "@/lib/dal/tenants";
+import { leaseService, propertyService, tenantService } from "@/lib/services/property.service";
 import { LeasesDashboard } from "./leases-dashboard";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardLeasesPage(): Promise<React.JSX.Element> {
   const [leasesRes, propsRes, tenantsRes] = await Promise.all([
-    getLeases(),
-    getProperties(),
-    getTenants(),
+    leaseService.getLeases(),
+    propertyService.getProperties(),
+    tenantService.getTenants(),
   ]);
 
   const initialLeases = leasesRes.success ? leasesRes.leases : [];
