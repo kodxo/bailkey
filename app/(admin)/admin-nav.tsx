@@ -60,29 +60,6 @@ export function AdminNav(): React.JSX.Element {
       ],
     },
     {
-      label: "Patrimoine",
-      mainItem: {
-        label: "Biens",
-        href: "/admin",
-        icon: "domain",
-        isActive: false,
-      },
-      subItems: [
-        {
-          label: "Propriétés",
-          href: "/admin",
-          icon: "apartment",
-          isActive: false,
-        },
-        {
-          label: "Locataires",
-          href: "/admin",
-          icon: "real_estate_agent",
-          isActive: false,
-        },
-      ],
-    },
-    {
       label: "Paramètres",
       mainItem: {
         label: "Config",

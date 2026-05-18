@@ -219,6 +219,169 @@ Résultat : une baisse de 30% des retards dès le deuxième mois.`,
   });
   console.log(`   ✅ Article créé : ${post4.title} (Brouillon)`);
 
+  // ---------------------------------------------------------------------------
+  // 4. CRÉATION DU PATRIMOINE IMMOBILIER (PROPRIÉTÉS, PROPRIÉTAIRES, LOCATAIRES, BAUX)
+  // ---------------------------------------------------------------------------
+  console.log("\n🏢 Création du patrimoine immobilier de démo...");
+
+  const orgId = "org_default_bailkey";
+
+  // Nettoyage préalable
+  await prisma.lease.deleteMany();
+  await prisma.tenant.deleteMany();
+  await prisma.propertyOwner.deleteMany();
+  await prisma.propertyImage.deleteMany();
+  await prisma.property.deleteMany();
+  await prisma.owner.deleteMany();
+
+  // Création Propriétaires
+  const owner1 = await prisma.owner.create({
+    data: {
+      organizationId: orgId,
+      type: "INDIVIDUAL",
+      firstName: "Jean-Paul",
+      lastName: "Kamga",
+      email: "jp.kamga@invest.cm",
+      phone: "+237 671234567",
+      address: "Bonapriso, Douala",
+      identityDocument: "CNI-2021-987654",
+    },
+  });
+
+  const owner2 = await prisma.owner.create({
+    data: {
+      organizationId: orgId,
+      type: "COMPANY",
+      companyName: "SCI Horizon Immo",
+      email: "contact@horizon-immo.cm",
+      phone: "+237 699887766",
+      address: "Avenue de Gaulle, Akwa",
+      registrationNumber: "RC/DLA/2018/B/1452",
+      taxNumber: "M111812345678W",
+    },
+  });
+  console.log("   ✅ 2 Propriétaires créés.");
+
+  // Création Propriétés
+  const prop1 = await prisma.property.create({
+    data: {
+      organizationId: orgId,
+      reference: "APP-AKW-001",
+      designation: "Appartement F4 Moderne - Akwa Résidentiel",
+      description: "Superbe appartement traversant au 3ème étage avec grand balcon et parking surveillé.",
+      propertyType: "APARTMENT",
+      address: "Rue Drouot, Akwa",
+      city: "Douala",
+      neighborhood: "Akwa",
+      area: 145,
+      roomsCount: 4,
+      baseRent: 350000,
+      currency: "XAF",
+      status: "RENTED",
+      createdById: createdAuthors[0].id,
+      owners: {
+        create: [{ ownerId: owner1.id, share: 100 }],
+      },
+    },
+  });
+
+  const prop2 = await prisma.property.create({
+    data: {
+      organizationId: orgId,
+      reference: "VIL-BON-002",
+      designation: "Villa Duplex de Standing - Bonapriso",
+      description: "Villa luxueuse avec piscine, jardin arboré et dépendances sécurisées.",
+      propertyType: "VILLA",
+      address: "Rue des Palmiers, Bonapriso",
+      city: "Douala",
+      neighborhood: "Bonapriso",
+      area: 320,
+      roomsCount: 7,
+      baseRent: 1200000,
+      currency: "XAF",
+      status: "AVAILABLE",
+      createdById: createdAuthors[0].id,
+      owners: {
+        create: [{ ownerId: owner2.id, share: 100 }],
+      },
+    },
+  });
+
+  const prop3 = await prisma.property.create({
+    data: {
+      organizationId: orgId,
+      reference: "COM-KOT-003",
+      designation: "Espace Commercial RDC - Boulevard de la Liberté",
+      description: "Local commercial avec grande vitrine sur un axe très fréquenté.",
+      propertyType: "COMMERCIAL_SPACE",
+      address: "Boulevard de la Liberté, Akwa",
+      city: "Douala",
+      neighborhood: "Akwa",
+      area: 90,
+      roomsCount: 2,
+      baseRent: 500000,
+      currency: "XAF",
+      status: "AVAILABLE",
+      createdById: createdAuthors[0].id,
+      owners: {
+        create: [
+          { ownerId: owner1.id, share: 60 },
+          { ownerId: owner2.id, share: 40 },
+        ],
+      },
+    },
+  });
+  console.log("   ✅ 3 Propriétés créées.");
+
+  // Création Locataires
+  const tenant1 = await prisma.tenant.create({
+    data: {
+      organizationId: orgId,
+      type: "INDIVIDUAL",
+      firstName: "Mireille",
+      lastName: "Bengono",
+      email: "mireille.b@gmail.com",
+      phone: "+237 650998877",
+      address: "Makepe, Douala",
+      identityDocument: "CNI-2019-112233",
+    },
+  });
+
+  const tenant2 = await prisma.tenant.create({
+    data: {
+      organizationId: orgId,
+      type: "COMPANY",
+      companyName: "Tech Solutions SARL",
+      email: "admin@techsolutions.cm",
+      phone: "+237 233445566",
+      address: "Bali, Douala",
+      registrationNumber: "RC/DLA/2020/B/890",
+      taxNumber: "M052012398765A",
+    },
+  });
+  console.log("   ✅ 2 Locataires créés.");
+
+  // Création Baux
+  const lease1 = await prisma.lease.create({
+    data: {
+      organizationId: orgId,
+      propertyId: prop1.id,
+      tenantId: tenant1.id,
+      startDate: new Date(2025, 0, 1),
+      endDate: new Date(2027, 0, 1),
+      rentAmount: 350000,
+      depositAmount: 700000,
+      status: "ACTIVE",
+    },
+  });
+
+  // Mise à jour de la propriété avec le currentLeaseId
+  await prisma.property.update({
+    where: { id: prop1.id },
+    data: { currentLeaseId: lease1.id },
+  });
+  console.log("   ✅ 1 Contrat de bail actif créé.");
+
   console.log("\n🎉 Seeding terminé avec succès !");
 }
 

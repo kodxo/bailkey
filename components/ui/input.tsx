@@ -1,48 +1,45 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   iconName?: string;
   wrapperClassName?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, iconName, wrapperClassName, ...props }, ref) => {
-    if (iconName) {
-      return (
-        <div
-          className={cn(
-            "flex items-center px-sm py-xs bg-surface-container-lowest border border-outline-variant focus-within:border-primary transition-colors duration-200",
-            wrapperClassName
-          )}
-        >
-          <span className="material-symbols-outlined text-outline mr-xs shrink-0 select-none">
-            {iconName}
-          </span>
-          <input
-            type={type}
-            className={cn(
-              "w-full bg-transparent border-none focus:ring-0 text-body-md font-body-md text-on-surface placeholder:text-outline p-0 focus:outline-hidden",
-              className
-            )}
-            ref={ref}
-            {...props}
-          />
-        </div>
-      );
-    }
+    const wrapperStyle = cn(
+      "group flex items-center bg-surface-container-lowest border border-outline-variant/60 hover:border-primary/60 focus-within:border-primary focus-within:ring-3 focus-within:ring-primary/15 rounded-xl transition-all shadow-2xs overflow-hidden px-3 h-10 w-full",
+      wrapperClassName
+    );
 
-    return (
+    const inputElement = (
       <input
         type={type}
         className={cn(
-          "flex w-full px-sm py-xs bg-surface-container-lowest border border-outline-variant text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-hidden focus:border-primary transition-colors duration-200",
+          "w-full bg-transparent border-none focus:ring-0 text-body-md font-medium text-on-surface placeholder:text-on-surface-variant/50 p-0 focus:outline-hidden",
           className
         )}
         ref={ref}
         {...props}
       />
+    );
+
+    if (iconName) {
+      return (
+        <div className={wrapperStyle}>
+          <span className="material-symbols-outlined text-on-surface-variant group-hover:text-primary group-focus-within:text-primary mr-2.5 text-xl shrink-0 select-none transition-colors duration-200">
+            {iconName}
+          </span>
+          {inputElement}
+        </div>
+      );
+    }
+
+    return (
+      <div className={wrapperStyle}>
+        {inputElement}
+      </div>
     );
   }
 );

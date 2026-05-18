@@ -12,7 +12,9 @@ interface CoverUploaderProps {
 }
 
 export const CoverUploader = ({ initialImage, postId }: CoverUploaderProps) => {
-  const [coverImage, setCoverImage] = useState<string>(initialImage || "/images/admin/cover-sample.png");
+  const [coverImage, setCoverImage] = useState<string>(
+    initialImage || "/images/admin/cover-sample.png",
+  );
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -23,7 +25,7 @@ export const CoverUploader = ({ initialImage, postId }: CoverUploaderProps) => {
         toast.error("L'image ne doit pas dépasser 5 Mo.");
         return;
       }
-      
+
       // Temporary local preview
       const localUrl = URL.createObjectURL(file);
       setCoverImage(localUrl);
@@ -32,7 +34,11 @@ export const CoverUploader = ({ initialImage, postId }: CoverUploaderProps) => {
       try {
         // 1. Get Presigned URL
         const presignedData = await getPresignedUrl(file.name, file.type);
-        if (!presignedData.success || !presignedData.uploadUrl || !presignedData.publicUrl) {
+        if (
+          !presignedData.success ||
+          !presignedData.uploadUrl ||
+          !presignedData.publicUrl
+        ) {
           throw new Error(presignedData.error || "Erreur URL R2");
         }
 
@@ -50,7 +56,7 @@ export const CoverUploader = ({ initialImage, postId }: CoverUploaderProps) => {
         // 3. Set the final public URL
         setCoverImage(presignedData.publicUrl);
         toast.success("Image de couverture sauvegardée sur R2.");
-        
+
         // 4. Update the database
         if (postId) {
           const res = await fetch(`/api/posts/${postId}`, {
@@ -59,8 +65,16 @@ export const CoverUploader = ({ initialImage, postId }: CoverUploaderProps) => {
             body: JSON.stringify({ coverImage: presignedData.publicUrl }),
           });
           const updateResult: unknown = await res.json();
-          if (!res.ok || !updateResult || typeof updateResult !== "object" || !("success" in updateResult) || !(updateResult as { success: boolean }).success) {
-             toast.error("Erreur lors de la sauvegarde dans la base de données.");
+          if (
+            !res.ok ||
+            !updateResult ||
+            typeof updateResult !== "object" ||
+            !("success" in updateResult) ||
+            !(updateResult as { success: boolean }).success
+          ) {
+            toast.error(
+              "Erreur lors de la sauvegarde dans la base de données.",
+            );
           }
         }
       } catch (error) {
@@ -99,16 +113,22 @@ export const CoverUploader = ({ initialImage, postId }: CoverUploaderProps) => {
         <div className="relative z-10 flex flex-col items-center bg-surface/80 p-4 rounded backdrop-blur-md border border-glass-border shadow-sm text-center">
           {isUploading ? (
             <>
-              <span className="material-symbols-outlined text-3xl mb-2 text-primary animate-spin" data-icon="refresh">
+              <span
+                className="material-symbols-outlined text-3xl mb-2 text-primary animate-spin"
+                data-icon="refresh"
+              >
                 refresh
               </span>
               <span className="font-body-md text-sm md:text-base font-semibold text-primary animate-pulse">
-                Téléversement sur Cloudflare R2...
+                Téléversement...
               </span>
             </>
           ) : (
             <>
-              <span className="material-symbols-outlined text-3xl mb-2 text-primary" data-icon="cloud_upload">
+              <span
+                className="material-symbols-outlined text-3xl mb-2 text-primary"
+                data-icon="cloud_upload"
+              >
                 cloud_upload
               </span>
               <span className="font-body-md text-sm md:text-base font-medium text-on-surface">
