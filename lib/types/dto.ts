@@ -80,3 +80,24 @@ export interface GetMediaResponseDTO {
   media: MediaDTO[];
   error?: string;
 }
+
+// === ONBOARDING DTOs ===
+export interface OnboardingRequestDTO {
+  role: "owner" | "tenant";
+  operationType: "individual" | "company";
+  firstName?: string;
+  lastName?: string;
+  companyName?: string;
+  idNumber?: string;
+  rccm?: string;
+  niu?: string;
+  phone?: string;
+  address?: string;
+}
+
+export interface OnboardingResponseDTO {
+  success: boolean;
+  message?: string;
+  redirectUrl?: string;
+  error?: string;
+}
