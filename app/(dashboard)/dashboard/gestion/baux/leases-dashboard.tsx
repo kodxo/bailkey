@@ -81,10 +81,10 @@ export function LeasesDashboard({
   const handleStartEdit = (ls: LeaseDTO) => {
     setSelectedLease(ls);
     setFormData({
-      propertyId: ls.property.id,
-      tenantId: ls.tenant.id,
+      propertyId: ls.propertyId,
+      tenantId: ls.tenantId,
       rentAmount: ls.rentAmount,
-      depositAmount: ls.depositAmount,
+      depositAmount: ls.depositAmount ?? "",
       startDate: new Date(ls.startDate).toISOString().split("T")[0],
       endDate: ls.endDate ? new Date(ls.endDate).toISOString().split("T")[0] : "",
       status: ls.status,
@@ -144,11 +144,12 @@ export function LeasesDashboard({
   };
 
   const filteredLeases = leases.filter((l) => {
-    const propName = l.property.designation.toLowerCase();
-    const tenName = `${l.tenant.firstName} ${l.tenant.lastName}`.toLowerCase();
+    const propName = (l.propertyDesignation || "").toLowerCase();
+    const tenName = (l.tenantFullName || "").toLowerCase();
     const matchesSearch =
       propName.includes(searchTerm.toLowerCase()) ||
-      tenName.includes(searchTerm.toLowerCase());
+      tenName.includes(searchTerm.toLowerCase()) ||
+      (l.propertyReference || "").toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || l.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -185,11 +186,11 @@ export function LeasesDashboard({
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-md items-start">
         <div className="lg:col-span-2 flex flex-col gap-md">
-          <div className="bg-surface-container-lowest border border-outline-variant flex flex-col sm:flex-row items-stretch sm:items-center justify-between shadow-xs overflow-hidden">
+          <div className="bg-surface-container-lowest border border-outline-variant flex flex-col sm:flex-row items-stretch sm:items-center justify-between shadow-xs overflow-hidden rounded-xl">
             <div className="flex-1 min-w-[200px] flex items-center border-b sm:border-b-0 sm:border-r border-outline-variant">
               <Input
                 iconName="search"
-                placeholder="Rechercher par propriété ou locataire..."
+                placeholder="Rechercher par propriété, référence ou locataire..."
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
@@ -211,14 +212,14 @@ export function LeasesDashboard({
                   { label: "Brouillon", value: "DRAFT" },
                   { label: "Actif", value: "ACTIVE" },
                   { label: "Résilié", value: "TERMINATED" },
-                  { label: "Suspendu", value: "SUSPENDED" },
+                  { label: "Expiré", value: "EXPIRED" },
                 ]}
                 wrapperClassName="border-none py-sm"
               />
             </div>
           </div>
 
-          <div className="relative flex flex-col transition-all">
+          <div className="relative flex flex-col transition-all bg-surface-container-lowest rounded-xl border border-outline-variant/60 shadow-xs overflow-hidden">
             {isPending && (
               <div className="absolute inset-0 bg-surface/50 backdrop-blur-xs z-20 flex items-center justify-center">
                 <span className="material-symbols-outlined animate-spin text-primary text-3xl">
@@ -246,7 +247,6 @@ export function LeasesDashboard({
                 ) : (
                   currentBatch.map((ls) => {
                     const isSelected = selectedLease?.id === ls.id;
-                    const tenantFullName = `${ls.tenant.firstName} ${ls.tenant.lastName}`;
 
                     return (
                       <TableRow
@@ -262,16 +262,16 @@ export function LeasesDashboard({
                         <TableCell>
                           <div className="flex flex-col">
                             <span className="text-body-md font-bold text-on-surface leading-snug">
-                              {ls.property.designation}
+                              {ls.propertyDesignation}
                             </span>
-                            <span className="text-body-sm text-on-surface-variant">
-                              {ls.property.city}
+                            <span className="text-body-sm font-mono text-primary">
+                              {ls.propertyReference}
                             </span>
                           </div>
                         </TableCell>
                         <TableCell>
                           <span className="text-body-md font-medium text-on-surface">
-                            {tenantFullName}
+                            {ls.tenantFullName}
                           </span>
                         </TableCell>
                         <TableCell>
@@ -288,7 +288,7 @@ export function LeasesDashboard({
                                 style: "currency",
                                 currency: "XAF",
                                 maximumFractionDigits: 0,
-                              }).format(ls.depositAmount)}
+                              }).format(ls.depositAmount || 0)}
                             </span>
                           </div>
                         </TableCell>
@@ -296,7 +296,7 @@ export function LeasesDashboard({
                           {ls.status === "ACTIVE" && <Badge variant="default" dot>Actif</Badge>}
                           {ls.status === "DRAFT" && <Badge variant="surface" dot>Brouillon</Badge>}
                           {ls.status === "TERMINATED" && <Badge variant="destructive">Résilié</Badge>}
-                          {ls.status === "SUSPENDED" && <Badge variant="surface">Suspendu</Badge>}
+                          {ls.status === "EXPIRED" && <Badge variant="surface">Expiré</Badge>}
                         </TableCell>
                         <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                           <Button
@@ -329,7 +329,7 @@ export function LeasesDashboard({
         </div>
 
         <div className="lg:col-span-1 flex flex-col sticky top-6">
-          <Card className="border-outline-variant/60 shadow-md">
+          <Card className="border-outline-variant/60 shadow-md rounded-xl overflow-hidden">
             <CardHeader className="bg-surface-container-low border-b border-outline-variant/40 pb-md flex flex-row items-center justify-between">
               <CardTitle className="text-h3 font-display">
                 {isEditing ? (selectedLease ? "Modifier le Contrat" : "Nouveau Contrat") : "Détails du Contrat"}
@@ -340,7 +340,7 @@ export function LeasesDashboard({
                 </Button>
               )}
             </CardHeader>
-            <CardContent className="pt-md">
+            <CardContent className="pt-md max-h-[calc(100vh-220px)] overflow-y-auto">
               {isEditing ? (
                 <form onSubmit={handleSave} className="flex flex-col gap-md">
                   <div className="flex flex-col gap-xs">
@@ -354,7 +354,7 @@ export function LeasesDashboard({
                         label: `${p.designation} (${p.reference})`,
                         value: p.id,
                       }))}
-                      wrapperClassName="border border-outline-variant rounded p-1"
+                      wrapperClassName="w-full"
                     />
                   </div>
 
@@ -366,10 +366,10 @@ export function LeasesDashboard({
                       value={formData.tenantId}
                       onChange={(e) => setFormData({ ...formData, tenantId: e.target.value })}
                       options={initialTenants.map((t) => ({
-                        label: `${t.firstName} ${t.lastName} (${t.email || t.phone || "sans contact"})`,
+                        label: `${t.firstName || ""} ${t.lastName || ""} ${t.companyName ? `(${t.companyName})` : ""}`.trim() || t.id,
                         value: t.id,
                       }))}
-                      wrapperClassName="border border-outline-variant rounded p-1"
+                      wrapperClassName="w-full"
                     />
                   </div>
 
@@ -439,9 +439,9 @@ export function LeasesDashboard({
                         { label: "Brouillon", value: "DRAFT" },
                         { label: "Actif", value: "ACTIVE" },
                         { label: "Résilié", value: "TERMINATED" },
-                        { label: "Suspendu", value: "SUSPENDED" },
+                        { label: "Expiré", value: "EXPIRED" },
                       ]}
-                      wrapperClassName="border border-outline-variant rounded p-1"
+                      wrapperClassName="w-full"
                     />
                   </div>
 
@@ -453,20 +453,20 @@ export function LeasesDashboard({
                 <div className="flex flex-col gap-md">
                   <div className="border-b border-outline-variant/40 pb-sm">
                     <span className="text-body-sm font-mono text-primary font-bold">
-                      {selectedLease.property.reference}
+                      {selectedLease.propertyReference}
                     </span>
                     <h4 className="text-h2 font-bold text-on-surface mb-xs mt-1">
-                      {selectedLease.property.designation}
+                      {selectedLease.propertyDesignation}
                     </h4>
-                    <p className="text-body-sm text-on-surface-variant">
-                      Locataire: {selectedLease.tenant.firstName} {selectedLease.tenant.lastName}
+                    <p className="text-body-sm text-on-surface-variant font-medium bg-surface-container px-2.5 py-1 rounded-lg inline-block mt-1">
+                      Locataire : {selectedLease.tenantFullName}
                     </p>
                   </div>
 
-                  <div className="flex flex-col gap-sm text-left">
-                    <div className="flex justify-between items-center bg-surface-container-lowest p-2 rounded border border-outline-variant/30">
+                  <div className="flex flex-col gap-2 text-left">
+                    <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
                       <span className="text-label-caps uppercase text-on-surface-variant">Loyer Mensuel</span>
-                      <span className="text-body-md text-on-surface font-bold">
+                      <span className="text-body-md text-on-surface font-bold font-mono">
                         {new Intl.NumberFormat("fr-FR", {
                           style: "currency",
                           currency: "XAF",
@@ -475,28 +475,28 @@ export function LeasesDashboard({
                       </span>
                     </div>
 
-                    <div className="flex justify-between items-center bg-surface-container-lowest p-2 rounded border border-outline-variant/30">
+                    <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
                       <span className="text-label-caps uppercase text-on-surface-variant">Caution versée</span>
-                      <span className="text-body-md text-primary font-bold">
+                      <span className="text-body-md text-primary font-bold font-mono">
                         {new Intl.NumberFormat("fr-FR", {
                           style: "currency",
                           currency: "XAF",
                           maximumFractionDigits: 0,
-                        }).format(selectedLease.depositAmount)}
+                        }).format(selectedLease.depositAmount || 0)}
                       </span>
                     </div>
 
-                    <div className="flex justify-between items-center bg-surface-container-lowest p-2 rounded border border-outline-variant/30">
+                    <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
                       <span className="text-label-caps uppercase text-on-surface-variant">Statut</span>
                       <span>
                         {selectedLease.status === "ACTIVE" && <Badge variant="default">Actif</Badge>}
                         {selectedLease.status === "DRAFT" && <Badge variant="surface">Brouillon</Badge>}
                         {selectedLease.status === "TERMINATED" && <Badge variant="destructive">Résilié</Badge>}
-                        {selectedLease.status === "SUSPENDED" && <Badge variant="surface">Suspendu</Badge>}
+                        {selectedLease.status === "EXPIRED" && <Badge variant="surface">Expiré</Badge>}
                       </span>
                     </div>
 
-                    <div className="flex justify-between items-center bg-surface-container-lowest p-2 rounded border border-outline-variant/30">
+                    <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
                       <span className="text-label-caps uppercase text-on-surface-variant">Période</span>
                       <span className="text-body-sm font-semibold">
                         {new Date(selectedLease.startDate).toLocaleDateString("fr-FR")} →{" "}

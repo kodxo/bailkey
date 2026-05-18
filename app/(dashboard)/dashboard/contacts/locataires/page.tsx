@@ -24,7 +24,8 @@ export default async function DashboardTenantsPage(): Promise<React.JSX.Element>
             Gestion des Locataires
           </h1>
           <p className="text-body-lg font-body-lg text-on-surface-variant">
-            Gérez vos locataires, suivez leurs coordonnées, leurs cautions et leur historique de location.
+            Gérez vos locataires, suivez leurs coordonnées, leurs cautions et
+            leur historique de location.
           </p>
         </div>
       </section>

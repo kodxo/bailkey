@@ -2,8 +2,8 @@
 
 import React, { useState, useTransition } from "react";
 import { LegalEntityType } from "@/lib/generated/prisma/enums";
-import type { OwnerDTO } from "@/lib/types/property";
-import { ownerService } from "@/lib/services/property.service";
+import type { TenantDTO } from "@/lib/types/property";
+import { tenantService } from "@/lib/services/property.service";
 import { toast } from "sonner";
 
 import {
@@ -23,16 +23,16 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { MetricCard } from "@/components/ui/metric-card";
 import { Avatar } from "@/components/ui/avatar";
 
-interface OwnersDashboardProps {
-  initialOwners: OwnerDTO[];
+interface TenantsDashboardProps {
+  initialTenants: TenantDTO[];
 }
 
-export function OwnersDashboard({
-  initialOwners,
-}: OwnersDashboardProps): React.JSX.Element {
-  const [owners, setOwners] = useState<OwnerDTO[]>(initialOwners);
-  const [selectedOwner, setSelectedOwner] = useState<OwnerDTO | null>(
-    initialOwners[0] || null,
+export function TenantsDashboard({
+  initialTenants,
+}: TenantsDashboardProps): React.JSX.Element {
+  const [tenants, setTenants] = useState<TenantDTO[]>(initialTenants);
+  const [selectedTenant, setSelectedTenant] = useState<TenantDTO | null>(
+    initialTenants[0] || null,
   );
 
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -68,7 +68,7 @@ export function OwnersDashboard({
   });
 
   const handleStartCreate = () => {
-    setSelectedOwner(null);
+    setSelectedTenant(null);
     setFormData({
       type: LegalEntityType.INDIVIDUAL,
       firstName: "",
@@ -84,27 +84,27 @@ export function OwnersDashboard({
     setIsEditing(true);
   };
 
-  const handleStartEdit = (own: OwnerDTO) => {
-    setSelectedOwner(own);
+  const handleStartEdit = (ten: TenantDTO) => {
+    setSelectedTenant(ten);
     setFormData({
-      type: own.type,
-      firstName: own.firstName || "",
-      lastName: own.lastName || "",
-      companyName: own.companyName || "",
-      email: own.email || "",
-      phone: own.phone || "",
-      address: own.address || "",
-      identityDocument: own.identityDocument || "",
-      registrationNumber: own.registrationNumber || "",
-      taxNumber: own.taxNumber || "",
+      type: ten.type,
+      firstName: ten.firstName || "",
+      lastName: ten.lastName || "",
+      companyName: ten.companyName || "",
+      email: ten.email || "",
+      phone: ten.phone || "",
+      address: ten.address || "",
+      identityDocument: ten.identityDocument || "",
+      registrationNumber: ten.registrationNumber || "",
+      taxNumber: ten.taxNumber || "",
     });
     setIsEditing(true);
   };
 
   const handleCancelEdit = () => {
     setIsEditing(false);
-    if (owners.length > 0 && !selectedOwner) {
-      setSelectedOwner(owners[0]);
+    if (tenants.length > 0 && !selectedTenant) {
+      setSelectedTenant(tenants[0]);
     }
   };
 
@@ -137,27 +137,30 @@ export function OwnersDashboard({
         taxNumber: formData.taxNumber || null,
       };
 
-      if (selectedOwner) {
-        const res = await ownerService.updateOwner(selectedOwner.id, payload);
-        if (res.success && res.owner) {
-          const updatedOwn = res.owner;
-          setOwners((prev) =>
-            prev.map((o) => (o.id === updatedOwn.id ? updatedOwn : o)),
+      if (selectedTenant) {
+        const res = await tenantService.updateTenant(
+          selectedTenant.id,
+          payload,
+        );
+        if (res.success && res.tenant) {
+          const updatedTen = res.tenant;
+          setTenants((prev) =>
+            prev.map((t) => (t.id === updatedTen.id ? updatedTen : t)),
           );
-          setSelectedOwner(updatedOwn);
+          setSelectedTenant(updatedTen);
           setIsEditing(false);
-          toast.success("Propriétaire mis à jour avec succès.");
+          toast.success("Locataire mis à jour avec succès.");
         } else {
           toast.error(res.error || "Erreur de mise à jour.");
         }
       } else {
-        const res = await ownerService.createOwner(payload);
-        if (res.success && res.owner) {
-          const newOwn = res.owner;
-          setOwners((prev) => [newOwn, ...prev]);
-          setSelectedOwner(newOwn);
+        const res = await tenantService.createTenant(payload);
+        if (res.success && res.tenant) {
+          const newTen = res.tenant;
+          setTenants((prev) => [newTen, ...prev]);
+          setSelectedTenant(newTen);
           setIsEditing(false);
-          toast.success("Propriétaire créé avec succès.");
+          toast.success("Locataire créé avec succès.");
         } else {
           toast.error(res.error || "Erreur de création.");
         }
@@ -165,29 +168,29 @@ export function OwnersDashboard({
     });
   };
 
-  const filteredOwners = owners.filter((o) => {
+  const filteredTenants = tenants.filter((t) => {
     const fullName =
-      `${o.firstName || ""} ${o.lastName || ""} ${o.companyName || ""}`.toLowerCase();
+      `${t.firstName || ""} ${t.lastName || ""} ${t.companyName || ""}`.toLowerCase();
     const matchesSearch =
       fullName.includes(searchTerm.toLowerCase()) ||
-      (o.email && o.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (o.phone && o.phone.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesType = typeFilter === "all" || o.type === typeFilter;
+      (t.email && t.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (t.phone && t.phone.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesType = typeFilter === "all" || t.type === typeFilter;
     return matchesSearch && matchesType;
   });
 
-  const totalCount = filteredOwners.length;
+  const totalCount = filteredTenants.length;
   const totalPages = Math.ceil(totalCount / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
-  const currentBatch = filteredOwners.slice(startIndex, startIndex + pageSize);
+  const currentBatch = filteredTenants.slice(startIndex, startIndex + pageSize);
 
-  const individualCount = owners.filter((o) => o.type === "INDIVIDUAL").length;
-  const companyCount = owners.filter((o) => o.type === "COMPANY").length;
+  const individualCount = tenants.filter((t) => t.type === "INDIVIDUAL").length;
+  const companyCount = tenants.filter((t) => t.type === "COMPANY").length;
 
   return (
     <div className="flex flex-col gap-lg">
       <section className="flex gap-sm overflow-x-auto pb-2 md:pb-0">
-        <MetricCard value={owners.length} label="Total Propriétaires" />
+        <MetricCard value={tenants.length} label="Total Locataires" />
         <MetricCard
           value={individualCount}
           label="Particuliers"
@@ -210,7 +213,7 @@ export function OwnersDashboard({
             >
               person_add
             </span>
-            Nouveau Propriétaire
+            Nouveau Locataire
           </Button>
         </div>
       </section>
@@ -259,7 +262,7 @@ export function OwnersDashboard({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>PROPRIÉTAIRE</TableHead>
+                  <TableHead>LOCATAIRE</TableHead>
                   <TableHead>CONTACT</TableHead>
                   <TableHead>TYPE</TableHead>
                   <TableHead className="text-right">ACTIONS</TableHead>
@@ -272,24 +275,24 @@ export function OwnersDashboard({
                       colSpan={4}
                       className="p-lg text-center text-on-surface-variant font-medium"
                     >
-                      Aucun propriétaire trouvé.
+                      Aucun locataire trouvé.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  currentBatch.map((own) => {
-                    const isSelected = selectedOwner?.id === own.id;
+                  currentBatch.map((ten) => {
+                    const isSelected = selectedTenant?.id === ten.id;
                     const displayName =
-                      own.type === "COMPANY"
-                        ? own.companyName || "Société"
-                        : `${own.firstName || ""} ${own.lastName || ""}`.trim() ||
+                      ten.type === "COMPANY"
+                        ? ten.companyName || "Société"
+                        : `${ten.firstName || ""} ${ten.lastName || ""}`.trim() ||
                           "Anonyme";
-                    const initial = displayName.charAt(0).toUpperCase() || "P";
+                    const initial = displayName.charAt(0).toUpperCase() || "T";
 
                     return (
                       <TableRow
-                        key={own.id}
+                        key={ten.id}
                         onClick={() => {
-                          setSelectedOwner(own);
+                          setSelectedTenant(ten);
                           setIsEditing(false);
                         }}
                         className={`cursor-pointer transition-colors ${
@@ -311,18 +314,18 @@ export function OwnersDashboard({
                                 {displayName}
                               </span>
                               <span className="text-body-sm text-on-surface-variant truncate max-w-[200px]">
-                                {own.email || "Aucun email"}
+                                {ten.email || "Aucun email"}
                               </span>
                             </div>
                           </div>
                         </TableCell>
                         <TableCell>
                           <span className="text-body-md text-on-surface-variant">
-                            {own.phone || "Non renseigné"}
+                            {ten.phone || "Non renseigné"}
                           </span>
                         </TableCell>
                         <TableCell>
-                          {own.type === "COMPANY" ? (
+                          {ten.type === "COMPANY" ? (
                             <Badge variant="default" dot>
                               Société
                             </Badge>
@@ -340,7 +343,7 @@ export function OwnersDashboard({
                             variant="outline"
                             size="sm"
                             disabled={isPending || isEditing}
-                            onClick={() => handleStartEdit(own)}
+                            onClick={() => handleStartEdit(ten)}
                           >
                             <span
                               className="material-symbols-outlined text-sm mr-1 select-none"
@@ -379,10 +382,10 @@ export function OwnersDashboard({
             <CardHeader className="bg-surface-container-low border-b border-outline-variant/40 pb-md flex flex-row items-center justify-between">
               <CardTitle className="text-h3 font-display">
                 {isEditing
-                  ? selectedOwner
-                    ? "Modifier Propriétaire"
-                    : "Nouveau Propriétaire"
-                  : "Fiche Propriétaire"}
+                  ? selectedTenant
+                    ? "Modifier Locataire"
+                    : "Nouveau Locataire"
+                  : "Fiche Locataire"}
               </CardTitle>
               {isEditing && (
                 <Button variant="ghost" size="sm" onClick={handleCancelEdit}>
@@ -453,7 +456,7 @@ export function OwnersDashboard({
                       </label>
                       <Input
                         required
-                        placeholder="ex: SCI Akwa Immo"
+                        placeholder="ex: SARL Logistique"
                         value={formData.companyName}
                         onChange={(e) =>
                           setFormData({
@@ -472,7 +475,7 @@ export function OwnersDashboard({
                       </label>
                       <Input
                         type="email"
-                        placeholder="contact@domaine.com"
+                        placeholder="locataire@domaine.com"
                         value={formData.email}
                         onChange={(e) =>
                           setFormData({ ...formData, email: e.target.value })
@@ -496,10 +499,10 @@ export function OwnersDashboard({
 
                   <div className="flex flex-col gap-xs">
                     <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
-                      Adresse Postale
+                      Adresse Actuelle
                     </label>
                     <Input
-                      placeholder="ex: BP 1234, Douala"
+                      placeholder="ex: Quartier Bonapriso, Douala"
                       value={formData.address}
                       onChange={(e) =>
                         setFormData({ ...formData, address: e.target.value })
@@ -562,33 +565,33 @@ export function OwnersDashboard({
                   >
                     {isPending
                       ? "Enregistrement..."
-                      : "Enregistrer le propriétaire"}
+                      : "Enregistrer le locataire"}
                   </Button>
                 </form>
-              ) : selectedOwner ? (
+              ) : selectedTenant ? (
                 <div className="flex flex-col items-center text-center">
                   <Avatar
                     src=""
                     alt={
-                      selectedOwner.firstName ||
-                      selectedOwner.companyName ||
-                      "O"
+                      selectedTenant.firstName ||
+                      selectedTenant.companyName ||
+                      "T"
                     }
                     fallback={
-                      (selectedOwner.type === "COMPANY"
-                        ? selectedOwner.companyName?.charAt(0)
-                        : selectedOwner.firstName?.charAt(0)) || "P"
+                      (selectedTenant.type === "COMPANY"
+                        ? selectedTenant.companyName?.charAt(0)
+                        : selectedTenant.firstName?.charAt(0)) || "T"
                     }
                     size="lg"
                     className="mb-sm shadow-sm border-2 border-primary/20"
                   />
                   <h4 className="text-h2 font-bold text-on-surface mb-xs">
-                    {selectedOwner.type === "COMPANY"
-                      ? selectedOwner.companyName
-                      : `${selectedOwner.firstName || ""} ${selectedOwner.lastName || ""}`}
+                    {selectedTenant.type === "COMPANY"
+                      ? selectedTenant.companyName
+                      : `${selectedTenant.firstName || ""} ${selectedTenant.lastName || ""}`}
                   </h4>
                   <p className="text-body-md text-on-surface-variant mb-md font-mono bg-surface-container px-2 py-1 rounded break-all max-w-full">
-                    {selectedOwner.email || "Aucun email renseigné"}
+                    {selectedTenant.email || "Aucun email renseigné"}
                   </p>
 
                   <div className="w-full border-t border-outline-variant/40 pt-md flex flex-col gap-sm text-left">
@@ -596,7 +599,7 @@ export function OwnersDashboard({
                       <span className="text-label-caps uppercase text-on-surface-variant">
                         Type
                       </span>
-                      {selectedOwner.type === "COMPANY" ? (
+                      {selectedTenant.type === "COMPANY" ? (
                         <Badge variant="default">Société</Badge>
                       ) : (
                         <Badge variant="surface">Particulier</Badge>
@@ -608,7 +611,7 @@ export function OwnersDashboard({
                         Téléphone
                       </span>
                       <span className="text-body-sm font-semibold">
-                        {selectedOwner.phone || "N/D"}
+                        {selectedTenant.phone || "N/D"}
                       </span>
                     </div>
 
@@ -617,22 +620,22 @@ export function OwnersDashboard({
                         Adresse
                       </span>
                       <span className="text-body-sm font-semibold truncate max-w-[180px]">
-                        {selectedOwner.address || "N/D"}
+                        {selectedTenant.address || "N/D"}
                       </span>
                     </div>
 
                     <div className="flex justify-between items-center bg-surface-container-lowest p-2 rounded border border-outline-variant/30">
                       <span className="text-label-caps uppercase text-on-surface-variant">
-                        Biens rattachés
+                        Baux en cours
                       </span>
                       <span className="text-body-sm font-bold text-primary">
-                        {selectedOwner.propertiesCount}
+                        {selectedTenant.activeLeasesCount}
                       </span>
                     </div>
                   </div>
 
                   <Button
-                    onClick={() => handleStartEdit(selectedOwner)}
+                    onClick={() => handleStartEdit(selectedTenant)}
                     className="w-full mt-md"
                   >
                     <span
@@ -648,13 +651,13 @@ export function OwnersDashboard({
                 <div className="py-xl flex flex-col items-center text-on-surface-variant text-center">
                   <span
                     className="material-symbols-outlined text-4xl mb-sm opacity-60"
-                    data-icon="person_4"
+                    data-icon="real_estate_agent"
                   >
-                    person_4
+                    real_estate_agent
                   </span>
                   <p className="text-body-md">
-                    Sélectionnez un propriétaire pour afficher ses informations
-                    ou ajoutez-en un nouveau.
+                    Sélectionnez un locataire pour afficher ses informations ou
+                    ajoutez-en un nouveau.
                   </p>
                 </div>
               )}

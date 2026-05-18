@@ -32,7 +32,7 @@ export function TenantsDashboard({
 }: TenantsDashboardProps): React.JSX.Element {
   const [tenants, setTenants] = useState<TenantDTO[]>(initialTenants);
   const [selectedTenant, setSelectedTenant] = useState<TenantDTO | null>(
-    initialTenants[0] || null
+    initialTenants[0] || null,
   );
 
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -99,9 +99,12 @@ export function TenantsDashboard({
     }
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = (e: React.SubmitEvent) => {
     e.preventDefault();
-    if (formData.type === LegalEntityType.INDIVIDUAL && (!formData.firstName || !formData.lastName)) {
+    if (
+      formData.type === LegalEntityType.INDIVIDUAL &&
+      (!formData.firstName || !formData.lastName)
+    ) {
       toast.error("Veuillez remplir le nom et le prénom.");
       return;
     }
@@ -123,10 +126,15 @@ export function TenantsDashboard({
       };
 
       if (selectedTenant) {
-        const res = await tenantService.updateTenant(selectedTenant.id, payload);
+        const res = await tenantService.updateTenant(
+          selectedTenant.id,
+          payload,
+        );
         if (res.success && res.tenant) {
           const updatedTen = res.tenant;
-          setTenants((prev) => prev.map((t) => (t.id === updatedTen.id ? updatedTen : t)));
+          setTenants((prev) =>
+            prev.map((t) => (t.id === updatedTen.id ? updatedTen : t)),
+          );
           setSelectedTenant(updatedTen);
           setIsEditing(false);
           toast.success("Locataire mis à jour avec succès.");
@@ -149,7 +157,8 @@ export function TenantsDashboard({
   };
 
   const filteredTenants = tenants.filter((t) => {
-    const fullName = `${t.firstName || ""} ${t.lastName || ""} ${t.companyName || ""}`.toLowerCase();
+    const fullName =
+      `${t.firstName || ""} ${t.lastName || ""} ${t.companyName || ""}`.toLowerCase();
     return (
       fullName.includes(searchTerm.toLowerCase()) ||
       (t.email && t.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -162,7 +171,9 @@ export function TenantsDashboard({
   const startIndex = (currentPage - 1) * pageSize;
   const currentBatch = filteredTenants.slice(startIndex, startIndex + pageSize);
 
-  const activeTenantsCount = tenants.filter((t) => t.activeLeasesCount > 0).length;
+  const activeTenantsCount = tenants.filter(
+    (t) => t.activeLeasesCount > 0,
+  ).length;
 
   return (
     <div className="flex flex-col gap-lg">
@@ -174,8 +185,17 @@ export function TenantsDashboard({
           valueClassName="text-primary font-bold"
         />
         <div className="ml-auto flex items-center">
-          <Button onClick={handleStartCreate} disabled={isPending || isEditing} size="lg">
-            <span className="material-symbols-outlined mr-2 select-none" data-icon="person_add">person_add</span>
+          <Button
+            onClick={handleStartCreate}
+            disabled={isPending || isEditing}
+            size="lg"
+          >
+            <span
+              className="material-symbols-outlined mr-2 select-none"
+              data-icon="person_add"
+            >
+              person_add
+            </span>
             Nouveau Locataire
           </Button>
         </div>
@@ -218,7 +238,10 @@ export function TenantsDashboard({
               <TableBody>
                 {currentBatch.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="p-lg text-center text-on-surface-variant font-medium">
+                    <TableCell
+                      colSpan={4}
+                      className="p-lg text-center text-on-surface-variant font-medium"
+                    >
                       Aucun locataire trouvé.
                     </TableCell>
                   </TableRow>
@@ -228,7 +251,8 @@ export function TenantsDashboard({
                     const displayName =
                       ten.type === "COMPANY"
                         ? ten.companyName || "Société sans nom"
-                        : `${ten.firstName || ""} ${ten.lastName || ""}`.trim() || "Sans nom";
+                        : `${ten.firstName || ""} ${ten.lastName || ""}`.trim() ||
+                          "Sans nom";
                     const initial = displayName.charAt(0).toUpperCase();
 
                     return (
@@ -239,17 +263,29 @@ export function TenantsDashboard({
                           setIsEditing(false);
                         }}
                         className={`cursor-pointer transition-colors ${
-                          isSelected ? "bg-primary-container/10 font-medium" : ""
+                          isSelected
+                            ? "bg-primary-container/10 font-medium"
+                            : ""
                         }`}
                       >
                         <TableCell>
                           <div className="flex items-center gap-sm">
-                            <Avatar src="" alt={displayName} fallback={initial} size="md" />
+                            <Avatar
+                              src=""
+                              alt={displayName}
+                              fallback={initial}
+                              size="md"
+                            />
                             <div className="flex flex-col">
                               <span className="text-body-md font-bold text-on-surface leading-snug flex items-center gap-1.5">
                                 {displayName}
                                 {ten.type === "COMPANY" && (
-                                  <Badge variant="surface" className="text-[10px] px-1 py-0 font-mono">PRO</Badge>
+                                  <Badge
+                                    variant="surface"
+                                    className="text-[10px] px-1 py-0 font-mono"
+                                  >
+                                    PRO
+                                  </Badge>
                                 )}
                               </span>
                               <span className="text-body-sm text-on-surface-variant truncate max-w-[200px]">
@@ -265,19 +301,29 @@ export function TenantsDashboard({
                         </TableCell>
                         <TableCell>
                           {ten.activeLeasesCount > 0 ? (
-                            <Badge variant="default" dot>{ten.activeLeasesCount} Actif(s)</Badge>
+                            <Badge variant="default" dot>
+                              {ten.activeLeasesCount} Actif(s)
+                            </Badge>
                           ) : (
                             <Badge variant="surface">Aucun</Badge>
                           )}
                         </TableCell>
-                        <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                        <TableCell
+                          className="text-right"
+                          onClick={(e) => e.stopPropagation()}
+                        >
                           <Button
                             variant="outline"
                             size="sm"
                             disabled={isPending || isEditing}
                             onClick={() => handleStartEdit(ten)}
                           >
-                            <span className="material-symbols-outlined text-sm mr-1 select-none" data-icon="edit">edit</span>
+                            <span
+                              className="material-symbols-outlined text-sm mr-1 select-none"
+                              data-icon="edit"
+                            >
+                              edit
+                            </span>
                             Éditer
                           </Button>
                         </TableCell>
@@ -293,9 +339,13 @@ export function TenantsDashboard({
               start={startIndex + 1}
               end={Math.min(startIndex + pageSize, totalCount)}
               disabledPrev={currentPage <= 1 || isPending}
-              disabledNext={currentPage >= totalPages || totalPages <= 1 || isPending}
+              disabledNext={
+                currentPage >= totalPages || totalPages <= 1 || isPending
+              }
               onPrev={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              onNext={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              onNext={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
             />
           </div>
         </div>
@@ -304,7 +354,11 @@ export function TenantsDashboard({
           <Card className="border-outline-variant/60 shadow-md rounded-xl overflow-hidden">
             <CardHeader className="bg-surface-container-low border-b border-outline-variant/40 pb-md flex flex-row items-center justify-between">
               <CardTitle className="text-h3 font-display">
-                {isEditing ? (selectedTenant ? "Modifier Locataire" : "Nouveau Locataire") : "Fiche Locataire"}
+                {isEditing
+                  ? selectedTenant
+                    ? "Modifier Locataire"
+                    : "Nouveau Locataire"
+                  : "Fiche Locataire"}
               </CardTitle>
               {isEditing && (
                 <Button variant="ghost" size="sm" onClick={handleCancelEdit}>
@@ -321,9 +375,17 @@ export function TenantsDashboard({
                     </label>
                     <Select
                       value={formData.type}
-                      onChange={(e) => setFormData({ ...formData, type: e.target.value as LegalEntityType })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          type: e.target.value as LegalEntityType,
+                        })
+                      }
                       options={[
-                        { label: "Particulier (Individu)", value: "INDIVIDUAL" },
+                        {
+                          label: "Particulier (Individu)",
+                          value: "INDIVIDUAL",
+                        },
                         { label: "Société / Entreprise", value: "COMPANY" },
                       ]}
                       wrapperClassName="w-full"
@@ -340,7 +402,12 @@ export function TenantsDashboard({
                           required={formData.type === "INDIVIDUAL"}
                           placeholder="ex: Jean"
                           value={formData.firstName}
-                          onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              firstName: e.target.value,
+                            })
+                          }
                         />
                       </div>
                       <div className="flex flex-col gap-xs">
@@ -351,7 +418,12 @@ export function TenantsDashboard({
                           required={formData.type === "INDIVIDUAL"}
                           placeholder="ex: Dupont"
                           value={formData.lastName}
-                          onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              lastName: e.target.value,
+                            })
+                          }
                         />
                       </div>
                     </div>
@@ -364,7 +436,12 @@ export function TenantsDashboard({
                         required={formData.type === "COMPANY"}
                         placeholder="ex: BailKey Cameroun SA"
                         value={formData.companyName}
-                        onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            companyName: e.target.value,
+                          })
+                        }
                       />
                     </div>
                   )}
@@ -377,7 +454,9 @@ export function TenantsDashboard({
                       type="email"
                       placeholder="locataire@domaine.com"
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
                     />
                   </div>
 
@@ -388,7 +467,9 @@ export function TenantsDashboard({
                     <Input
                       placeholder="+237 60000000"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, phone: e.target.value })
+                      }
                     />
                   </div>
 
@@ -397,9 +478,18 @@ export function TenantsDashboard({
                       N° Pièce d&apos;identité (CNI / Passeport / RCCM)
                     </label>
                     <Input
-                      placeholder={formData.type === "INDIVIDUAL" ? "N° de CNI ou Passeport" : "N° de RCCM"}
+                      placeholder={
+                        formData.type === "INDIVIDUAL"
+                          ? "N° de CNI ou Passeport"
+                          : "N° de RCCM"
+                      }
                       value={formData.identityDocument}
-                      onChange={(e) => setFormData({ ...formData, identityDocument: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          identityDocument: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
@@ -410,29 +500,51 @@ export function TenantsDashboard({
                     <Input
                       placeholder="Adresse complète"
                       value={formData.address}
-                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, address: e.target.value })
+                      }
                     />
                   </div>
 
-                  <Button type="submit" disabled={isPending} className="w-full mt-sm">
-                    {isPending ? "Enregistrement..." : "Enregistrer le locataire"}
+                  <Button
+                    type="submit"
+                    disabled={isPending}
+                    className="w-full mt-sm"
+                  >
+                    {isPending
+                      ? "Enregistrement..."
+                      : "Enregistrer le locataire"}
                   </Button>
                 </form>
               ) : selectedTenant ? (
                 <div className="flex flex-col items-center text-center">
                   <Avatar
                     src=""
-                    alt={selectedTenant.companyName || selectedTenant.firstName || ""}
-                    fallback={(selectedTenant.companyName || selectedTenant.firstName || "L").charAt(0)}
+                    alt={
+                      selectedTenant.companyName ||
+                      selectedTenant.firstName ||
+                      ""
+                    }
+                    fallback={(
+                      selectedTenant.companyName ||
+                      selectedTenant.firstName ||
+                      "L"
+                    ).charAt(0)}
                     size="lg"
                     className="mb-sm shadow-sm border-2 border-primary/20"
                   />
                   <h4 className="text-h2 font-bold text-on-surface mb-xs flex items-center justify-center gap-2">
                     {selectedTenant.type === "COMPANY"
                       ? selectedTenant.companyName || "Société sans nom"
-                      : `${selectedTenant.firstName || ""} ${selectedTenant.lastName || ""}`.trim() || "Sans nom"}
+                      : `${selectedTenant.firstName || ""} ${selectedTenant.lastName || ""}`.trim() ||
+                        "Sans nom"}
                     {selectedTenant.type === "COMPANY" && (
-                      <Badge variant="surface" className="text-xs px-2 py-0.5 font-mono">PRO</Badge>
+                      <Badge
+                        variant="surface"
+                        className="text-xs px-2 py-0.5 font-mono"
+                      >
+                        PRO
+                      </Badge>
                     )}
                   </h4>
                   <p className="text-body-md text-on-surface-variant mb-md font-mono bg-surface-container px-3 py-1 rounded-lg break-all max-w-full">
@@ -441,13 +553,19 @@ export function TenantsDashboard({
 
                   <div className="w-full border-t border-outline-variant/40 pt-md flex flex-col gap-2 text-left">
                     <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
-                      <span className="text-label-caps uppercase text-on-surface-variant">Téléphone</span>
-                      <span className="text-body-sm font-semibold font-mono">{selectedTenant.phone || "N/D"}</span>
+                      <span className="text-label-caps uppercase text-on-surface-variant">
+                        Téléphone
+                      </span>
+                      <span className="text-body-sm font-semibold font-mono">
+                        {selectedTenant.phone || "N/D"}
+                      </span>
                     </div>
 
                     <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
                       <span className="text-label-caps uppercase text-on-surface-variant">
-                        {selectedTenant.type === "COMPANY" ? "RCCM" : "Pièce CNI"}
+                        {selectedTenant.type === "COMPANY"
+                          ? "RCCM"
+                          : "Pièce CNI"}
                       </span>
                       <span className="text-body-sm font-semibold truncate max-w-[180px]">
                         {selectedTenant.identityDocument || "N/D"}
@@ -455,30 +573,48 @@ export function TenantsDashboard({
                     </div>
 
                     <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
-                      <span className="text-label-caps uppercase text-on-surface-variant">Adresse</span>
+                      <span className="text-label-caps uppercase text-on-surface-variant">
+                        Adresse
+                      </span>
                       <span className="text-body-sm font-semibold truncate max-w-[180px]">
                         {selectedTenant.address || "N/D"}
                       </span>
                     </div>
 
                     <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
-                      <span className="text-label-caps uppercase text-on-surface-variant">Baux rattachés</span>
-                      <span className="text-body-sm font-bold text-primary">{selectedTenant.activeLeasesCount}</span>
+                      <span className="text-label-caps uppercase text-on-surface-variant">
+                        Baux rattachés
+                      </span>
+                      <span className="text-body-sm font-bold text-primary">
+                        {selectedTenant.activeLeasesCount}
+                      </span>
                     </div>
                   </div>
 
-                  <Button onClick={() => handleStartEdit(selectedTenant)} className="w-full mt-md">
-                    <span className="material-symbols-outlined text-sm mr-2 select-none" data-icon="edit">edit</span>
+                  <Button
+                    onClick={() => handleStartEdit(selectedTenant)}
+                    className="w-full mt-md"
+                  >
+                    <span
+                      className="material-symbols-outlined text-sm mr-2 select-none"
+                      data-icon="edit"
+                    >
+                      edit
+                    </span>
                     Éditer la fiche
                   </Button>
                 </div>
               ) : (
                 <div className="py-xl flex flex-col items-center text-on-surface-variant text-center">
-                  <span className="material-symbols-outlined text-4xl mb-sm opacity-60" data-icon="person">
+                  <span
+                    className="material-symbols-outlined text-4xl mb-sm opacity-60"
+                    data-icon="person"
+                  >
                     person
                   </span>
                   <p className="text-body-md">
-                    Sélectionnez un locataire pour afficher ses informations ou ajoutez-en un nouveau.
+                    Sélectionnez un locataire pour afficher ses informations ou
+                    ajoutez-en un nouveau.
                   </p>
                 </div>
               )}

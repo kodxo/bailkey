@@ -212,7 +212,7 @@ export async function updateAdminLease(
           currentLeaseId: updated.id,
         },
       });
-    } else if (existing.status === LeaseStatus.ACTIVE && updated.status !== LeaseStatus.ACTIVE) {
+    } else if (existing.status === LeaseStatus.ACTIVE) {
       await prisma.property.update({
         where: { id: updated.propertyId },
         data: {
