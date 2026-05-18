@@ -22,6 +22,13 @@ import { TablePagination } from "@/components/ui/pagination";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { MetricCard } from "@/components/ui/metric-card";
 
+export interface OrganizationBrief {
+  id: string;
+  name: string;
+  slug: string;
+  imageUrl: string | null;
+}
+
 export interface UserItem {
   id: string;
   email: string;
@@ -31,6 +38,7 @@ export interface UserItem {
   role: Roles;
   createdAt: number;
   lastSignInAt: number | null;
+  organizations?: OrganizationBrief[];
 }
 
 export interface UsersDashboardProps {

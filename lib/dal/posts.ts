@@ -7,17 +7,12 @@ import type {
 } from "@/lib/types/post";
 import type { AdminPostDTO } from "@/lib/types/dto";
 import { PostCategory, PostStatus } from "../generated/prisma/enums";
+import { getClerkAuthor, getClerkAuthorsMap } from "@/lib/clerk/authors";
+import { auth } from "@clerk/nextjs/server";
 
 // ---------------------------------------------------------------------------
 // Internal Prisma result types
 // ---------------------------------------------------------------------------
-
-interface PrismaAuthor {
-  id: string;
-  name: string;
-  role: string | null;
-  avatarUrl: string | null;
-}
 
 interface PrismaTag {
   id: string;
@@ -36,7 +31,7 @@ interface PrismaPostBase {
   coverImage: string | null;
   coverImageAlt: string | null;
   excerpt: string | null;
-  author: PrismaAuthor;
+  authorId: string;
   tags: PrismaTag[];
 }
 
@@ -51,15 +46,6 @@ interface PrismaPostFull extends PrismaPostBase {
 // Serializers — Prisma → DTO
 // ---------------------------------------------------------------------------
 
-function serializeAuthor(author: PrismaAuthor): AuthorDTO {
-  return {
-    id: author.id,
-    name: author.name,
-    role: author.role,
-    avatarUrl: author.avatarUrl,
-  };
-}
-
 function serializeTag(tag: PrismaTag): TagDTO {
   return {
     id: tag.id,
@@ -68,7 +54,17 @@ function serializeTag(tag: PrismaTag): TagDTO {
   };
 }
 
-function serializePostSummary(post: PrismaPostBase): PostSummaryDTO {
+function serializePostSummary(
+  post: PrismaPostBase,
+  authorsMap: Record<string, AuthorDTO>
+): PostSummaryDTO {
+  const author = authorsMap[post.authorId] || {
+    id: post.authorId,
+    name: "Auteur inconnu",
+    role: "Rédacteur",
+    avatarUrl: null,
+  };
+
   return {
     id: post.id,
     slug: post.slug,
@@ -80,7 +76,7 @@ function serializePostSummary(post: PrismaPostBase): PostSummaryDTO {
     coverImage: post.coverImage,
     coverImageAlt: post.coverImageAlt,
     excerpt: post.excerpt,
-    author: serializeAuthor(post.author),
+    author,
     tags: post.tags.map(serializeTag),
   };
 }
@@ -88,13 +84,14 @@ function serializePostSummary(post: PrismaPostBase): PostSummaryDTO {
 function serializePostDetail(
   post: PrismaPostFull,
   relatedPosts: PrismaPostBase[],
+  authorsMap: Record<string, AuthorDTO>
 ): PostDetailDTO {
   return {
-    ...serializePostSummary(post),
+    ...serializePostSummary(post, authorsMap),
     content: post.content,
     metaTitle: post.metaTitle,
     metaDescription: post.metaDescription,
-    relatedPosts: relatedPosts.map(serializePostSummary),
+    relatedPosts: relatedPosts.map((p) => serializePostSummary(p, authorsMap)),
   };
 }
 
@@ -103,7 +100,6 @@ function serializePostDetail(
 // ---------------------------------------------------------------------------
 
 const POST_SUMMARY_INCLUDE = {
-  author: true,
   tags: true,
 } as const;
 
@@ -116,7 +112,7 @@ const POST_SUMMARY_INCLUDE = {
  * Filtre optionnel par catégorie.
  */
 export async function getPublishedPosts(
-  category?: PostCategory,
+  category?: PostCategory
 ): Promise<{ posts: PostSummaryDTO[]; total: number }> {
   const where = {
     status: "PUBLISHED" as const,
@@ -132,8 +128,11 @@ export async function getPublishedPosts(
     prisma.post.count({ where }),
   ]);
 
+  const authorIds = posts.map((p) => p.authorId);
+  const authorsMap = await getClerkAuthorsMap(authorIds);
+
   return {
-    posts: posts.map(serializePostSummary),
+    posts: posts.map((p) => serializePostSummary(p, authorsMap)),
     total,
   };
 }
@@ -143,7 +142,7 @@ export async function getPublishedPosts(
  * Retourne `null` si non trouvé.
  */
 export async function getPostBySlug(
-  slug: string,
+  slug: string
 ): Promise<PostDetailDTO | null> {
   const post = await prisma.post.findUnique({
     where: { slug },
@@ -175,7 +174,10 @@ export async function getPostBySlug(
     });
   }
 
-  return serializePostDetail(post, relatedPosts);
+  const authorIds = [post.authorId, ...relatedPosts.map((rp) => rp.authorId)];
+  const authorsMap = await getClerkAuthorsMap(authorIds);
+
+  return serializePostDetail(post, relatedPosts, authorsMap);
 }
 
 // ---------------------------------------------------------------------------
@@ -195,35 +197,32 @@ export interface PostSaveDataDTO {
   tags?: string[];
 }
 
-export function serializeAdminPost(post: {
-  id: string;
-  slug: string;
-  title: string;
-  category: PostCategory;
-  status: PostStatus;
-  publishedAt: Date | null;
-  readingTime: number | null;
-  coverImage: string | null;
-  coverImageAlt: string | null;
-  excerpt: string | null;
-  content: string;
-  metaTitle: string | null;
-  metaDescription: string | null;
-  authorId: string;
-  author: {
+export function serializeAdminPost(
+  post: {
     id: string;
-    name: string;
-    role: string | null;
-    avatarUrl: string | null;
-  };
-  tags: {
-    id: string;
-    name: string;
     slug: string;
-  }[];
-  createdAt: Date;
-  updatedAt: Date;
-}): AdminPostDTO {
+    title: string;
+    category: PostCategory;
+    status: PostStatus;
+    publishedAt: Date | null;
+    readingTime: number | null;
+    coverImage: string | null;
+    coverImageAlt: string | null;
+    excerpt: string | null;
+    content: string;
+    metaTitle: string | null;
+    metaDescription: string | null;
+    authorId: string;
+    tags: {
+      id: string;
+      name: string;
+      slug: string;
+    }[];
+    createdAt: Date;
+    updatedAt: Date;
+  },
+  author: AuthorDTO
+): AdminPostDTO {
   return {
     id: post.id,
     slug: post.slug,
@@ -239,12 +238,7 @@ export function serializeAdminPost(post: {
     metaTitle: post.metaTitle,
     metaDescription: post.metaDescription,
     authorId: post.authorId,
-    author: {
-      id: post.author.id,
-      name: post.author.name,
-      role: post.author.role,
-      avatarUrl: post.author.avatarUrl,
-    },
+    author,
     tags: post.tags.map((t) => ({
       id: t.id,
       name: t.name,
@@ -255,47 +249,69 @@ export function serializeAdminPost(post: {
   };
 }
 
-export async function getAdminPosts(): Promise<{ success: boolean; posts: AdminPostDTO[]; error?: string }> {
+export async function getAdminPosts(): Promise<{
+  success: boolean;
+  posts: AdminPostDTO[];
+  error?: string;
+}> {
   try {
     const posts = await prisma.post.findMany({
-      include: { author: true, tags: true },
+      include: { tags: true },
       orderBy: { createdAt: "desc" },
     });
-    return { success: true, posts: posts.map(serializeAdminPost) };
-  } catch (error) {
+
+    const authorIds = posts.map((p) => p.authorId);
+    const authorsMap = await getClerkAuthorsMap(authorIds);
+
+    return {
+      success: true,
+      posts: posts.map((p) =>
+        serializeAdminPost(
+          p,
+          authorsMap[p.authorId] || {
+            id: p.authorId,
+            name: "Auteur inconnu",
+            role: "Rédacteur",
+            avatarUrl: null,
+          }
+        )
+      ),
+    };
+  } catch (error: unknown) {
     console.error("Erreur récupération posts:", error);
     return { success: false, posts: [], error: "Erreur récupération posts" };
   }
 }
 
-export async function getAdminPostById(id: string): Promise<{ success: boolean; post: AdminPostDTO | null; error?: string }> {
+export async function getAdminPostById(id: string): Promise<{
+  success: boolean;
+  post: AdminPostDTO | null;
+  error?: string;
+}> {
   try {
     const post = await prisma.post.findUnique({
       where: { id },
-      include: { author: true, tags: true },
+      include: { tags: true },
     });
     if (!post) {
       return { success: false, post: null, error: "Article non trouvé" };
     }
-    return { success: true, post: serializeAdminPost(post) };
-  } catch (error) {
+    const author = await getClerkAuthor(post.authorId);
+    return { success: true, post: serializeAdminPost(post, author) };
+  } catch (error: unknown) {
     console.error("Erreur récupération post id:", error);
     return { success: false, post: null, error: "Erreur récupération post id" };
   }
 }
 
-export async function createAdminDraftPost(): Promise<{ success: boolean; post: AdminPostDTO | null; error?: string }> {
+export async function createAdminDraftPost(): Promise<{
+  success: boolean;
+  post: AdminPostDTO | null;
+  error?: string;
+}> {
   try {
-    let defaultAuthor = await prisma.user.findFirst();
-    if (!defaultAuthor) {
-      defaultAuthor = await prisma.user.create({
-        data: {
-          name: "Sarah Jenkins",
-          role: "Rédactrice",
-          avatarUrl: "/images/admin/avatar1.png",
-        },
-      });
-    }
+    const { userId } = await auth();
+    const currentAuthorId = userId || "user_seed_laurent";
 
     const newPost = await prisma.post.create({
       data: {
@@ -304,42 +320,60 @@ export async function createAdminDraftPost(): Promise<{ success: boolean; post: 
         content: "",
         excerpt: "",
         category: PostCategory.ACTUALITE,
-        authorId: defaultAuthor.id,
+        authorId: currentAuthorId,
       },
-      include: { author: true, tags: true },
+      include: { tags: true },
     });
 
-    return { success: true, post: serializeAdminPost(newPost) };
-  } catch (error) {
+    const author = await getClerkAuthor(newPost.authorId);
+    return { success: true, post: serializeAdminPost(newPost, author) };
+  } catch (error: unknown) {
     console.error("Erreur création brouillon:", error);
     return { success: false, post: null, error: "Erreur création brouillon" };
   }
 }
 
-export async function updateAdminPost(postId: string, data: Partial<PostSaveDataDTO>): Promise<{ success: boolean; post: AdminPostDTO | null; error?: string }> {
+export async function updateAdminPost(
+  postId: string,
+  data: Partial<PostSaveDataDTO>
+): Promise<{ success: boolean; post: AdminPostDTO | null; error?: string }> {
   try {
     const { tags, publishedAt, ...restData } = data;
-    const parsedPublishedAt = typeof publishedAt === "string" ? new Date(publishedAt) : (publishedAt === undefined ? undefined : publishedAt);
+    const parsedPublishedAt =
+      typeof publishedAt === "string"
+        ? new Date(publishedAt)
+        : publishedAt === undefined
+        ? undefined
+        : publishedAt;
 
     const updatedPost = await prisma.post.update({
       where: { id: postId },
       data: {
         ...restData,
-        ...(parsedPublishedAt !== undefined && { publishedAt: parsedPublishedAt }),
+        ...(parsedPublishedAt !== undefined && {
+          publishedAt: parsedPublishedAt,
+        }),
         ...(tags && {
           tags: {
             set: [], // Dissocie les anciens tags
             connectOrCreate: tags.map((tag: string) => ({
               where: { name: tag },
-              create: { name: tag, slug: tag.toLowerCase().replace(/[^a-z0-9]+/g, '-') }
-            }))
-          }
-        })
+              create: {
+                name: tag,
+                slug: tag
+                  .toLowerCase()
+                  .replace(/[^a-z0-9]+/g, "-"),
+              },
+            })),
+          },
+        }),
       },
-      include: { author: true, tags: true },
+      include: { tags: true },
     });
-    return { success: true, post: serializeAdminPost(updatedPost) };
-  } catch (error) {
+
+    const author = await getClerkAuthor(updatedPost.authorId);
+    return { success: true, post: serializeAdminPost(updatedPost, author) };
+  } catch (error: unknown) {
     console.error("Erreur de sauvegarde:", error);
     return { success: false, post: null, error: "Sauvegarde échouée" };
   }

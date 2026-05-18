@@ -168,7 +168,7 @@ export default function DashboardPage(): React.JSX.Element {
           <div className="p-0 flex-1 overflow-y-auto max-h-[380px]">
             <ul className="divide-y divide-outline-variant/20">
               <li className="p-4 hover:bg-surface-container-lowest transition-colors flex gap-4 items-start">
-                <div className="bg-primary-container/20 p-2 rounded-full flex-shrink-0 mt-1">
+                <div className="bg-primary-container/20 p-2 rounded-full shrink-0 mt-1">
                   <span className="material-symbols-outlined text-primary text-[20px]">
                     payments
                   </span>
@@ -189,7 +189,7 @@ export default function DashboardPage(): React.JSX.Element {
                 </div>
               </li>
               <li className="p-4 hover:bg-surface-container-lowest transition-colors flex gap-4 items-start">
-                <div className="bg-tertiary-container/20 p-2 rounded-full flex-shrink-0 mt-1">
+                <div className="bg-tertiary-container/20 p-2 rounded-full shrink-0 mt-1">
                   <span className="material-symbols-outlined text-tertiary text-[20px]">
                     handyman
                   </span>
@@ -207,7 +207,7 @@ export default function DashboardPage(): React.JSX.Element {
                 </div>
               </li>
               <li className="p-4 hover:bg-surface-container-lowest transition-colors flex gap-4 items-start">
-                <div className="bg-error-container/30 p-2 rounded-full flex-shrink-0 mt-1">
+                <div className="bg-error-container/30 p-2 rounded-full shrink-0 mt-1">
                   <span className="material-symbols-outlined text-error text-[20px]">
                     warning
                   </span>
@@ -223,7 +223,7 @@ export default function DashboardPage(): React.JSX.Element {
                 </div>
               </li>
               <li className="p-4 hover:bg-surface-container-lowest transition-colors flex gap-4 items-start">
-                <div className="bg-surface-container-high p-2 rounded-full flex-shrink-0 mt-1">
+                <div className="bg-surface-container-high p-2 rounded-full shrink-0 mt-1">
                   <span className="material-symbols-outlined text-on-surface-variant text-[20px]">
                     description
                   </span>

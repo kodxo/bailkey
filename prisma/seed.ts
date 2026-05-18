@@ -7,43 +7,37 @@ async function main() {
   console.log("🧹 Nettoyage des données existantes...");
   await prisma.post.deleteMany();
   await prisma.tag.deleteMany();
-  await prisma.user.deleteMany();
 
   // ---------------------------------------------------------------------------
-  // 1. CRÉATION DES AUTEURS (USERS)
+  // 1. RÉFÉRENCEMENT DES AUTEURS (CLERK DÉMO)
   // ---------------------------------------------------------------------------
-  console.log("👤 Création des auteurs...");
+  console.log("👤 Référencement des auteurs de démo (gérés par Clerk)...");
 
-  const authors = [
+  const createdAuthors = [
     {
+      id: "user_seed_laurent",
       name: "Laurent N.",
       role: "Expert en Stratégie Foncière",
-      avatarUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200&h=200",
     },
     {
+      id: "user_seed_sophie",
       name: "Sophie M.",
       role: "Juriste Immobilier & Régulation",
-      avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200&h=200",
     },
     {
+      id: "user_seed_tech",
       name: "Pôle Ingénierie",
       role: "Équipe Technique Bailkey",
-      avatarUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=200&h=200",
     },
     {
+      id: "user_seed_marc",
       name: "Marc A.",
       role: "Directeur de l'Innovation",
-      avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200&h=200",
-    }
+    },
   ];
 
-  const createdAuthors = [];
-  for (const author of authors) {
-    const user = await prisma.user.create({
-      data: author,
-    });
-    createdAuthors.push(user);
-    console.log(`   ✅ Auteur créé : ${user.name} (${user.role})`);
+  for (const author of createdAuthors) {
+    console.log(`   ✅ Auteur référencé : ${author.name} (${author.role})`);
   }
 
   // ---------------------------------------------------------------------------
@@ -61,7 +55,7 @@ async function main() {
     { name: "Immobilier Commercial", slug: "immobilier-commercial" },
     { name: "Automatisation", slug: "automatisation" },
     { name: "Législation", slug: "legislation" },
-    { name: "Afrique Centrale", slug: "afrique-centrale" }
+    { name: "Afrique Centrale", slug: "afrique-centrale" },
   ];
 
   const createdTags = [];
@@ -85,11 +79,14 @@ async function main() {
       status: "PUBLISHED",
       publishedAt: new Date(new Date().setDate(new Date().getDate() - 10)),
       readingTime: 6,
-      coverImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
+      coverImage:
+        "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
       coverImageAlt: "Vue aérienne d'un quartier d'affaires moderne",
-      excerpt: "La fragmentation des données immobilières ralentit la rentabilité. Découvrez comment centraliser vos actifs sur l'axe Douala-Yaoundé.",
+      excerpt:
+        "La fragmentation des données immobilières ralentit la rentabilité. Découvrez comment centraliser vos actifs sur l'axe Douala-Yaoundé.",
       metaTitle: "Digitalisation Gestion Locative Douala Yaoundé | Bailkey",
-      metaDescription: "Guide complet pour digitaliser et optimiser la gestion de vos actifs immobiliers au Cameroun avec des outils SaaS modernes.",
+      metaDescription:
+        "Guide complet pour digitaliser et optimiser la gestion de vos actifs immobiliers au Cameroun avec des outils SaaS modernes.",
       content: `La gestion immobilière moderne exige une précision chirurgicale. La véritable rentabilité ne naît pas seulement de l'acquisition de nouveaux actifs, mais de la maîtrise absolue des flux opérationnels existants.
 
 ## La centralisation des données : Un enjeu majeur
@@ -101,26 +98,34 @@ Aujourd'hui, de nombreux gestionnaires opérant sur plusieurs villes s'appuient 
 En centralisant vos données (baux, paiements, interventions techniques) sur une plateforme cloud unique, vous gagnez en visibilité immédiate, peu importe où vous vous trouvez.`,
       authorId: createdAuthors[0].id, // Laurent N.
       tags: {
-        connect: [{ slug: "digitalisation" }, { slug: "gestion-locative" }, { slug: "afrique-centrale" }]
-      }
-    }
+        connect: [
+          { slug: "digitalisation" },
+          { slug: "gestion-locative" },
+          { slug: "afrique-centrale" },
+        ],
+      },
+    },
   });
   console.log(`   ✅ Article créé : ${post1.title}`);
 
   // Post 2 : Analyse
   const post2 = await prisma.post.create({
     data: {
-      title: "Optimisation de l'infrastructure SaaS : Pourquoi nous utilisons Next.js",
+      title:
+        "Optimisation de l'infrastructure SaaS : Pourquoi nous utilisons Next.js",
       slug: "optimisation-infrastructure-saas-nextjs",
       category: "ANALYSE",
       status: "PUBLISHED",
       publishedAt: new Date(new Date().setDate(new Date().getDate() - 5)),
       readingTime: 8,
-      coverImage: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&q=80&w=1200",
+      coverImage:
+        "https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&q=80&w=1200",
       coverImageAlt: "Architecture serveur et code",
-      excerpt: "Plongée technique dans l'architecture qui permet à Bailkey de traiter des milliers de lots locatifs sans latence.",
+      excerpt:
+        "Plongée technique dans l'architecture qui permet à Bailkey de traiter des milliers de lots locatifs sans latence.",
       metaTitle: "Architecture SaaS Next.js pour l'Immobilier",
-      metaDescription: "Découvrez nos choix architecturaux avec Next.js et Prisma pour garantir des performances extrêmes à nos gestionnaires immobiliers.",
+      metaDescription:
+        "Découvrez nos choix architecturaux avec Next.js et Prisma pour garantir des performances extrêmes à nos gestionnaires immobiliers.",
       content: `La performance d'une plateforme métier ne doit faire l'objet d'aucun compromis. Pour garantir une expérience fluide à nos utilisateurs, même lors du traitement de milliers de données locatives, le choix de la stack technique est crucial.
 
 ## Server Components et vitesse d'exécution
@@ -132,9 +137,13 @@ En utilisant les Server Components de Next.js, nous réduisons drastiquement la 
 Couplé à Prisma, notre architecture garantit l'intégrité absolue des données financières de nos clients. Un schéma strict est la première ligne de défense contre les erreurs d'incohérence comptable.`,
       authorId: createdAuthors[2].id, // Pôle Ingénierie
       tags: {
-        connect: [{ slug: "tech" }, { slug: "saas" }, { slug: "automatisation" }]
-      }
-    }
+        connect: [
+          { slug: "tech" },
+          { slug: "saas" },
+          { slug: "automatisation" },
+        ],
+      },
+    },
   });
   console.log(`   ✅ Article créé : ${post2.title}`);
 
@@ -152,11 +161,14 @@ Couplé à Prisma, notre architecture garantit l'intégrité absolue des donnée
       status: "PUBLISHED",
       publishedAt: new Date(new Date().setDate(new Date().getDate() - 2)),
       readingTime: 5,
-      coverImage: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1200",
+      coverImage:
+        "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1200",
       coverImageAlt: "Façade d'un immeuble de rapport",
-      excerpt: "Analyse détaillée de la stratégie mise en place par une agence leader pour automatiser ses relances et sécuriser ses revenus locatifs.",
+      excerpt:
+        "Analyse détaillée de la stratégie mise en place par une agence leader pour automatiser ses relances et sécuriser ses revenus locatifs.",
       metaTitle: "Étude de Cas : Réduction des Impayés | Bailkey",
-      metaDescription: "Découvrez comment l'automatisation des relances avec Bailkey permet de réduire significativement les retards de paiement de loyers.",
+      metaDescription:
+        "Découvrez comment l'automatisation des relances avec Bailkey permet de réduire significativement les retards de paiement de loyers.",
       content: `Gérer les retards de paiement est l'une des tâches les plus chronophages pour un gestionnaire locatif. L'agence Haussmann gérait historiquement ses relances manuellement.
 
 ## Le problème des relances manuelles
@@ -175,12 +187,12 @@ En intégrant Bailkey, l'agence a configuré des scénarios de relance :
 Résultat : une baisse de 30% des retards dès le deuxième mois.`,
       authorId: createdAuthors[1].id, // Sophie M.
       tags: {
-        connect: [{ slug: "automatisation" }, { slug: "rentabilite" }]
+        connect: [{ slug: "automatisation" }, { slug: "rentabilite" }],
       },
       relatedPosts: {
-        connect: [{ id: post1.id }] // Lier l'étude de cas au guide sur la digitalisation
-      }
-    }
+        connect: [{ id: post1.id }], // Lier l'étude de cas au guide sur la digitalisation
+      },
+    },
   });
   console.log(`   ✅ Article créé : ${post3.title}`);
 
@@ -192,7 +204,8 @@ Résultat : une baisse de 30% des retards dès le deuxième mois.`,
       category: "ACTUALITE",
       status: "DRAFT",
       // Pas de publishedAt ni readingTime pour un draft
-      excerpt: "Un tour d'horizon complet des changements législatifs à venir, notamment sur les normes énergétiques et l'encadrement des loyers.",
+      excerpt:
+        "Un tour d'horizon complet des changements législatifs à venir, notamment sur les normes énergétiques et l'encadrement des loyers.",
       metaTitle: "Réglementations Immobilières 2026",
       content: `Ce texte est en cours de rédaction. Il abordera :
 - Les nouvelles normes DPE
@@ -200,9 +213,9 @@ Résultat : une baisse de 30% des retards dès le deuxième mois.`,
 - Comment anticiper avec Bailkey`,
       authorId: createdAuthors[1].id, // Sophie M.
       tags: {
-        connect: [{ slug: "legislation" }, { slug: "fiscalite" }]
-      }
-    }
+        connect: [{ slug: "legislation" }, { slug: "fiscalite" }],
+      },
+    },
   });
   console.log(`   ✅ Article créé : ${post4.title} (Brouillon)`);
 
@@ -210,7 +223,7 @@ Résultat : une baisse de 30% des retards dès le deuxième mois.`,
 }
 
 main()
-  .catch((e) => {
+  .catch((e: unknown) => {
     console.error("❌ Erreur durant le seeding:", e);
     process.exit(1);
   })

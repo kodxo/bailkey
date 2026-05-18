@@ -1,0 +1,239 @@
+// ==========================================
+// 🏢 1. PROPRIÉTÉ (PROPERTY)
+// ==========================================
+
+model Property {
+  id String @id @default(cuid())
+
+  // --- 🔐 Multi-tenant & Audit (Clerk) ---
+  organizationId String // ID de l'agence (Clerk)
+  createdById    String // ID de l'agent (Clerk)
+
+  // --- 📝 Infos Générales ---
+  reference    String // ex: REF-2026-001
+  designation  String
+  description  String?      @db.Text
+  propertyType PropertyType
+
+  // --- 📍 Localisation ---
+  address      String  @db.Text
+  country      String  @default("Cameroun")
+  city         String
+  neighborhood String?
+  zone         String?
+
+  // --- 📐 Caractéristiques ---
+  area       Float? // Surface (m²)
+  roomsCount Int?
+  floor      String?
+
+  // --- 📜 Légal & Cadastral ---
+  landTitle        String? // Titre foncier
+  parcelNumber     String? // N° Parcelle
+  cadastralSection String?
+
+  // --- 💰 Financier ---
+  baseRent        Decimal         @db.Decimal(10, 2)
+  currentRent     Decimal?        @db.Decimal(10, 2)
+  currency        String          @default("XAF")
+  commissionType  CommissionType?
+  commissionValue Float?
+
+  // --- 📊 Statut ---
+  status PropertyStatus @default(AVAILABLE)
+
+  // --- 🔗 Relations ---
+  images PropertyImage[] // Galerie d'images (Cloudflare R2)
+  owners PropertyOwner[] // Liste des propriétaires (Indivision)
+
+  currentLeaseId String? @unique
+  currentLease   Lease?  @relation("CurrentLease", fields: [currentLeaseId], references: [id], onDelete: SetNull)
+  leaseHistory   Lease[] @relation("PropertyLeases")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([organizationId, reference])
+  @@index([organizationId])
+  @@index([status])
+  @@index([city])
+}
+
+// ==========================================
+// 🖼️ 2. IMAGES / MÉDIAS (Cloudflare R2)
+// ==========================================
+
+model PropertyImage {
+  id String @id @default(cuid())
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  // --- ☁️ Cloudflare R2 ---
+  url     String // URL publique
+  fileKey String // Clé exacte de l'objet (requis pour suppression)
+
+  // --- 🏷️ Métadonnées ---
+  isCover   Boolean @default(false)
+  caption   String?
+  sortOrder Int     @default(0)
+  size      Int?
+  mimeType  String?
+
+  createdAt DateTime @default(now())
+
+  @@unique([propertyId, fileKey])
+  @@index([propertyId])
+}
+
+// ==========================================
+// 👔 3. PROPRIÉTAIRE (OWNER)
+// ==========================================
+
+model Owner {
+  id             String @id @default(cuid())
+  organizationId String
+
+  clerkUserId String?         @unique // Portail propriétaire
+  type        LegalEntityType @default(INDIVIDUAL)
+
+  firstName        String?
+  lastName         String?
+  identityDocument String? // CNI / Passeport
+
+  companyName        String?
+  registrationNumber String? // RCCM
+  taxNumber          String? // NIU / NIF
+
+  email   String?
+  phone   String?
+  address String? @db.Text
+
+  properties PropertyOwner[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+// ==========================================
+// 🤝 4. INDIVISION (TABLE DE LIAISON)
+// ==========================================
+
+model PropertyOwner {
+  id String @id @default(cuid())
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  ownerId String
+  owner   Owner  @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+
+  share Float @default(100.0) // % de possession
+
+  @@unique([propertyId, ownerId])
+  @@index([propertyId])
+  @@index([ownerId])
+}
+
+// ==========================================
+// 🧑‍💼 5. LOCATAIRE (TENANT)
+// ==========================================
+
+model Tenant {
+  id             String @id @default(cuid())
+  organizationId String
+
+  clerkUserId String?         @unique // Portail locataire
+  type        LegalEntityType @default(INDIVIDUAL)
+
+  firstName        String?
+  lastName         String?
+  identityDocument String? // CNI / Passeport
+
+  companyName        String?
+  registrationNumber String? // RCCM
+  taxNumber          String? // NIU / NIF
+
+  email   String?
+  phone   String?
+  address String? @db.Text
+
+  leases Lease[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+// ==========================================
+// 📄 6. BAIL / CONTRAT DE LOCATION (LEASE)
+// ==========================================
+
+model Lease {
+  id             String @id @default(cuid())
+  organizationId String
+
+  propertyId        String
+  property          Property  @relation("PropertyLeases", fields: [propertyId], references: [id], onDelete: Restrict)
+  activeForProperty Property? @relation("CurrentLease")
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  // --- 📅 Période ---
+  startDate DateTime  @db.Date
+  endDate   DateTime? @db.Date // Optionnel si contrat à durée indéterminée
+
+  // --- 💰 Termes du contrat ---
+  rentAmount    Decimal  @db.Decimal(10, 2)
+  depositAmount Decimal? @db.Decimal(10, 2) // Caution
+
+  status LeaseStatus @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([propertyId])
+  @@index([tenantId])
+}
+
+// ==========================================
+// 📋 7. ÉNUMÉRATIONS (ENUMS)
+// ==========================================
+
+enum PropertyType {
+  APARTMENT
+  VILLA
+  STUDIO
+  COMMERCIAL_SPACE
+  LAND
+  WAREHOUSE
+}
+
+enum PropertyStatus {
+  AVAILABLE
+  RENTED
+  UNDER_MAINTENANCE
+  UNAVAILABLE
+}
+
+enum CommissionType {
+  FIXED_AMOUNT
+  PERCENTAGE
+}
+
+enum LegalEntityType {
+  INDIVIDUAL
+  COMPANY
+}
+
+enum LeaseStatus {
+  DRAFT // Brouillon / En cours de signature
+  ACTIVE // En cours
+  TERMINATED // Résilié
+  EXPIRED // Arrivé à terme
+}
