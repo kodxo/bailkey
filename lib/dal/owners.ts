@@ -41,7 +41,7 @@ export function serializeOwner(raw: {
   };
 }
 
-export async function getAdminOwners(): Promise<{
+export async function getOwners(): Promise<{
   success: boolean;
   owners: OwnerDTO[];
   totalCount: number;
@@ -61,7 +61,7 @@ export async function getAdminOwners(): Promise<{
       totalCount: owners.length,
     };
   } catch (error: unknown) {
-    console.error("Erreur getAdminOwners:", error);
+    console.error("Erreur getOwners:", error);
     return {
       success: false,
       owners: [],
@@ -71,7 +71,7 @@ export async function getAdminOwners(): Promise<{
   }
 }
 
-export async function getAdminOwnerById(id: string): Promise<{
+export async function getOwnerById(id: string): Promise<{
   success: boolean;
   owner: OwnerDTO | null;
   error?: string;
@@ -89,7 +89,7 @@ export async function getAdminOwnerById(id: string): Promise<{
 
     return { success: true, owner: serializeOwner(owner) };
   } catch (error: unknown) {
-    console.error("Erreur getAdminOwnerById:", error);
+    console.error("Erreur getOwnerById:", error);
     return {
       success: false,
       owner: null,
@@ -112,7 +112,7 @@ export interface SaveOwnerInputDTO {
   address?: string | null;
 }
 
-export async function createAdminOwner(
+export async function createOwner(
   input: SaveOwnerInputDTO
 ): Promise<{ success: boolean; owner: OwnerDTO | null; error?: string }> {
   try {
@@ -138,7 +138,7 @@ export async function createAdminOwner(
 
     return { success: true, owner: serializeOwner(newOwner) };
   } catch (error: unknown) {
-    console.error("Erreur createAdminOwner:", error);
+    console.error("Erreur createOwner:", error);
     return {
       success: false,
       owner: null,
@@ -147,7 +147,7 @@ export async function createAdminOwner(
   }
 }
 
-export async function updateAdminOwner(
+export async function updateOwner(
   id: string,
   input: Partial<SaveOwnerInputDTO>
 ): Promise<{ success: boolean; owner: OwnerDTO | null; error?: string }> {
@@ -166,7 +166,7 @@ export async function updateAdminOwner(
 
     return { success: true, owner: serializeOwner(updated) };
   } catch (error: unknown) {
-    console.error("Erreur updateAdminOwner:", error);
+    console.error("Erreur updateOwner:", error);
     return {
       success: false,
       owner: null,

@@ -1,12 +1,12 @@
 import React from "react";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
-import { getAdminTenants } from "@/lib/dal/tenants";
+import { getTenants } from "@/lib/dal/tenants";
 import { TenantsDashboard } from "./tenants-dashboard";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardTenantsPage(): Promise<React.JSX.Element> {
-  const res = await getAdminTenants();
+  const res = await getTenants();
   const initialTenants = res.success ? res.tenants : [];
 
   return (

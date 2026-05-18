@@ -1,9 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getAdminProperties, createAdminProperty, type SavePropertyInputDTO } from "@/lib/dal/properties";
+import { getProperties, createProperty, type SavePropertyInputDTO } from "@/lib/dal/properties";
 import type { GetPropertiesResponseDTO, SavePropertyResponseDTO } from "@/lib/types/property";
 
 export async function GET(): Promise<NextResponse<GetPropertiesResponseDTO>> {
-  const result = await getAdminProperties();
+  const result = await getProperties();
   if (result.success && result.properties) {
     return NextResponse.json({
       success: true,
@@ -27,7 +27,7 @@ export async function POST(
 ): Promise<NextResponse<SavePropertyResponseDTO>> {
   try {
     const body: SavePropertyInputDTO = await request.json();
-    const result = await createAdminProperty(body);
+    const result = await createProperty(body);
 
     if (result.success && result.property) {
       return NextResponse.json({ success: true, property: result.property });

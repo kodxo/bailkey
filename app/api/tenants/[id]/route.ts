@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getAdminTenantById, updateAdminTenant, type SaveTenantInputDTO } from "@/lib/dal/tenants";
+import { getTenantById, updateTenant, type SaveTenantInputDTO } from "@/lib/dal/tenants";
 import type { SaveTenantResponseDTO } from "@/lib/types/property";
 
 interface RouteParams {
@@ -11,7 +11,7 @@ export async function GET(
   { params }: RouteParams
 ): Promise<NextResponse<{ success: boolean; tenant: unknown | null; error?: string }>> {
   const resolvedParams = await params;
-  const result = await getAdminTenantById(resolvedParams.id);
+  const result = await getTenantById(resolvedParams.id);
   if (result.success && result.tenant) {
     return NextResponse.json({ success: true, tenant: result.tenant });
   }
@@ -32,7 +32,7 @@ export async function PATCH(
   try {
     const resolvedParams = await params;
     const body: Partial<SaveTenantInputDTO> = await request.json();
-    const result = await updateAdminTenant(resolvedParams.id, body);
+    const result = await updateTenant(resolvedParams.id, body);
 
     if (result.success && result.tenant) {
       return NextResponse.json({ success: true, tenant: result.tenant });

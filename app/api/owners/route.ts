@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import {
-  getAdminOwners,
-  createAdminOwner,
+  getOwners,
+  createOwner,
   type SaveOwnerInputDTO,
 } from "@/lib/dal/owners";
 import type {
@@ -10,7 +10,7 @@ import type {
 } from "@/lib/types/property";
 
 export async function GET(): Promise<NextResponse<GetOwnersResponseDTO>> {
-  const result = await getAdminOwners();
+  const result = await getOwners();
   if (result.success && result.owners) {
     return NextResponse.json({
       success: true,
@@ -34,7 +34,7 @@ export async function POST(
 ): Promise<NextResponse<SaveOwnerResponseDTO>> {
   try {
     const body: SaveOwnerInputDTO = await request.json();
-    const result = await createAdminOwner(body);
+    const result = await createOwner(body);
 
     if (result.success && result.owner) {
       return NextResponse.json({ success: true, owner: result.owner });

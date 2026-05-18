@@ -1,9 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getAdminLeases, createAdminLease, type SaveLeaseInputDTO } from "@/lib/dal/leases";
+import { getLeases, createLease, type SaveLeaseInputDTO } from "@/lib/dal/leases";
 import type { GetLeasesResponseDTO, SaveLeaseResponseDTO } from "@/lib/types/property";
 
 export async function GET(): Promise<NextResponse<GetLeasesResponseDTO>> {
-  const result = await getAdminLeases();
+  const result = await getLeases();
   if (result.success && result.leases) {
     return NextResponse.json({
       success: true,
@@ -27,7 +27,7 @@ export async function POST(
 ): Promise<NextResponse<SaveLeaseResponseDTO>> {
   try {
     const body: SaveLeaseInputDTO = await request.json();
-    const result = await createAdminLease(body);
+    const result = await createLease(body);
 
     if (result.success && result.lease) {
       return NextResponse.json({ success: true, lease: result.lease });

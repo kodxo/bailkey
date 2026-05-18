@@ -1,15 +1,15 @@
 import React from "react";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
-import { getAdminProperties } from "@/lib/dal/properties";
-import { getAdminOwners } from "@/lib/dal/owners";
+import { getProperties } from "@/lib/dal/properties";
+import { getOwners } from "@/lib/dal/owners";
 import { PropertiesDashboard } from "./properties-dashboard";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPropertiesPage(): Promise<React.JSX.Element> {
   const [propertiesRes, ownersRes] = await Promise.all([
-    getAdminProperties(),
-    getAdminOwners(),
+    getProperties(),
+    getOwners(),
   ]);
 
   const initialProperties = propertiesRes.success ? propertiesRes.properties : [];

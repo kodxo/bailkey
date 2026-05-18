@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getAdminLeaseById, updateAdminLease, type SaveLeaseInputDTO } from "@/lib/dal/leases";
+import { getLeaseById, updateLease, type SaveLeaseInputDTO } from "@/lib/dal/leases";
 import type { SaveLeaseResponseDTO } from "@/lib/types/property";
 
 interface RouteParams {
@@ -11,7 +11,7 @@ export async function GET(
   { params }: RouteParams
 ): Promise<NextResponse<{ success: boolean; lease: unknown | null; error?: string }>> {
   const resolvedParams = await params;
-  const result = await getAdminLeaseById(resolvedParams.id);
+  const result = await getLeaseById(resolvedParams.id);
   if (result.success && result.lease) {
     return NextResponse.json({ success: true, lease: result.lease });
   }
@@ -32,7 +32,7 @@ export async function PATCH(
   try {
     const resolvedParams = await params;
     const body: Partial<SaveLeaseInputDTO> = await request.json();
-    const result = await updateAdminLease(resolvedParams.id, body);
+    const result = await updateLease(resolvedParams.id, body);
 
     if (result.success && result.lease) {
       return NextResponse.json({ success: true, lease: result.lease });

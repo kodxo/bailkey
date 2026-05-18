@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getAdminPropertyById, updateAdminProperty, type SavePropertyInputDTO } from "@/lib/dal/properties";
+import { getPropertyById, updateProperty, type SavePropertyInputDTO } from "@/lib/dal/properties";
 import type { GetPropertyByIdResponseDTO, SavePropertyResponseDTO } from "@/lib/types/property";
 
 interface RouteParams {
@@ -11,7 +11,7 @@ export async function GET(
   { params }: RouteParams
 ): Promise<NextResponse<GetPropertyByIdResponseDTO>> {
   const resolvedParams = await params;
-  const result = await getAdminPropertyById(resolvedParams.id);
+  const result = await getPropertyById(resolvedParams.id);
   if (result.success && result.property) {
     return NextResponse.json({ success: true, property: result.property });
   }
@@ -32,7 +32,7 @@ export async function PATCH(
   try {
     const resolvedParams = await params;
     const body: Partial<SavePropertyInputDTO> = await request.json();
-    const result = await updateAdminProperty(resolvedParams.id, body);
+    const result = await updateProperty(resolvedParams.id, body);
 
     if (result.success && result.property) {
       return NextResponse.json({ success: true, property: result.property });

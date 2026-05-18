@@ -3,6 +3,8 @@ import Link from "next/link";
 import { postService } from "@/lib/services/post.service";
 import { PostStatus } from "@/lib/generated/prisma/enums";
 
+export const dynamic = "force-dynamic";
+
 import { MetricCard } from "@/components/ui/metric-card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";

@@ -129,7 +129,7 @@ export function serializeProperty(raw: {
 }
 
 // DAL Methods
-export async function getAdminProperties(): Promise<{
+export async function getProperties(): Promise<{
   success: boolean;
   properties: PropertyDTO[];
   totalCount: number;
@@ -152,7 +152,7 @@ export async function getAdminProperties(): Promise<{
       totalCount: properties.length,
     };
   } catch (error: unknown) {
-    console.error("Erreur getAdminProperties:", error);
+    console.error("Erreur getProperties:", error);
     return {
       success: false,
       properties: [],
@@ -162,7 +162,7 @@ export async function getAdminProperties(): Promise<{
   }
 }
 
-export async function getAdminPropertyById(id: string): Promise<{
+export async function getPropertyById(id: string): Promise<{
   success: boolean;
   property: PropertyDTO | null;
   error?: string;
@@ -183,7 +183,7 @@ export async function getAdminPropertyById(id: string): Promise<{
 
     return { success: true, property: serializeProperty(property) };
   } catch (error: unknown) {
-    console.error("Erreur getAdminPropertyById:", error);
+    console.error("Erreur getPropertyById:", error);
     return {
       success: false,
       property: null,
@@ -219,7 +219,7 @@ export interface SavePropertyInputDTO {
   images?: { url: string; fileKey: string; isCover?: boolean; caption?: string | null; sortOrder?: number }[];
 }
 
-export async function createAdminProperty(
+export async function createProperty(
   input: SavePropertyInputDTO
 ): Promise<{ success: boolean; property: PropertyDTO | null; error?: string }> {
   try {
@@ -277,7 +277,7 @@ export async function createAdminProperty(
 
     return { success: true, property: serializeProperty(newProperty) };
   } catch (error: unknown) {
-    console.error("Erreur createAdminProperty:", error);
+    console.error("Erreur createProperty:", error);
     return {
       success: false,
       property: null,
@@ -286,7 +286,7 @@ export async function createAdminProperty(
   }
 }
 
-export async function updateAdminProperty(
+export async function updateProperty(
   id: string,
   input: Partial<SavePropertyInputDTO>
 ): Promise<{ success: boolean; property: PropertyDTO | null; error?: string }> {
@@ -341,7 +341,7 @@ export async function updateAdminProperty(
 
     return { success: true, property: serializeProperty(updated) };
   } catch (error: unknown) {
-    console.error("Erreur updateAdminProperty:", error);
+    console.error("Erreur updateProperty:", error);
     return {
       success: false,
       property: null,

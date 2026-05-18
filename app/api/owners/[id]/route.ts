@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getAdminOwnerById, updateAdminOwner, type SaveOwnerInputDTO } from "@/lib/dal/owners";
+import { getOwnerById, updateOwner, type SaveOwnerInputDTO } from "@/lib/dal/owners";
 import type { SaveOwnerResponseDTO } from "@/lib/types/property";
 
 interface RouteParams {
@@ -11,7 +11,7 @@ export async function GET(
   { params }: RouteParams
 ): Promise<NextResponse<{ success: boolean; owner: unknown | null; error?: string }>> {
   const resolvedParams = await params;
-  const result = await getAdminOwnerById(resolvedParams.id);
+  const result = await getOwnerById(resolvedParams.id);
   if (result.success && result.owner) {
     return NextResponse.json({ success: true, owner: result.owner });
   }
@@ -32,7 +32,7 @@ export async function PATCH(
   try {
     const resolvedParams = await params;
     const body: Partial<SaveOwnerInputDTO> = await request.json();
-    const result = await updateAdminOwner(resolvedParams.id, body);
+    const result = await updateOwner(resolvedParams.id, body);
 
     if (result.success && result.owner) {
       return NextResponse.json({ success: true, owner: result.owner });

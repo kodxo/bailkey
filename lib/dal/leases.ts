@@ -62,7 +62,7 @@ export function serializeLease(raw: {
   };
 }
 
-export async function getAdminLeases(): Promise<{
+export async function getLeases(): Promise<{
   success: boolean;
   leases: LeaseDTO[];
   totalCount: number;
@@ -82,7 +82,7 @@ export async function getAdminLeases(): Promise<{
       totalCount: leases.length,
     };
   } catch (error: unknown) {
-    console.error("Erreur getAdminLeases:", error);
+    console.error("Erreur getLeases:", error);
     return {
       success: false,
       leases: [],
@@ -92,7 +92,7 @@ export async function getAdminLeases(): Promise<{
   }
 }
 
-export async function getAdminLeaseById(id: string): Promise<{
+export async function getLeaseById(id: string): Promise<{
   success: boolean;
   lease: LeaseDTO | null;
   error?: string;
@@ -110,7 +110,7 @@ export async function getAdminLeaseById(id: string): Promise<{
 
     return { success: true, lease: serializeLease(lease) };
   } catch (error: unknown) {
-    console.error("Erreur getAdminLeaseById:", error);
+    console.error("Erreur getLeaseById:", error);
     return {
       success: false,
       lease: null,
@@ -129,7 +129,7 @@ export interface SaveLeaseInputDTO {
   status?: LeaseStatus;
 }
 
-export async function createAdminLease(
+export async function createLease(
   input: SaveLeaseInputDTO
 ): Promise<{ success: boolean; lease: LeaseDTO | null; error?: string }> {
   try {
@@ -165,7 +165,7 @@ export async function createAdminLease(
 
     return { success: true, lease: serializeLease(newLease) };
   } catch (error: unknown) {
-    console.error("Erreur createAdminLease:", error);
+    console.error("Erreur createLease:", error);
     return {
       success: false,
       lease: null,
@@ -174,7 +174,7 @@ export async function createAdminLease(
   }
 }
 
-export async function updateAdminLease(
+export async function updateLease(
   id: string,
   input: Partial<SaveLeaseInputDTO>
 ): Promise<{ success: boolean; lease: LeaseDTO | null; error?: string }> {
@@ -224,7 +224,7 @@ export async function updateAdminLease(
 
     return { success: true, lease: serializeLease(updated) };
   } catch (error: unknown) {
-    console.error("Erreur updateAdminLease:", error);
+    console.error("Erreur updateLease:", error);
     return {
       success: false,
       lease: null,

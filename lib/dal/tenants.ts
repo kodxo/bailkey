@@ -41,7 +41,7 @@ export function serializeTenant(raw: {
   };
 }
 
-export async function getAdminTenants(): Promise<{
+export async function getTenants(): Promise<{
   success: boolean;
   tenants: TenantDTO[];
   totalCount: number;
@@ -61,7 +61,7 @@ export async function getAdminTenants(): Promise<{
       totalCount: tenants.length,
     };
   } catch (error: unknown) {
-    console.error("Erreur getAdminTenants:", error);
+    console.error("Erreur getTenants:", error);
     return {
       success: false,
       tenants: [],
@@ -71,7 +71,7 @@ export async function getAdminTenants(): Promise<{
   }
 }
 
-export async function getAdminTenantById(id: string): Promise<{
+export async function getTenantById(id: string): Promise<{
   success: boolean;
   tenant: TenantDTO | null;
   error?: string;
@@ -89,7 +89,7 @@ export async function getAdminTenantById(id: string): Promise<{
 
     return { success: true, tenant: serializeTenant(tenant) };
   } catch (error: unknown) {
-    console.error("Erreur getAdminTenantById:", error);
+    console.error("Erreur getTenantById:", error);
     return {
       success: false,
       tenant: null,
@@ -112,7 +112,7 @@ export interface SaveTenantInputDTO {
   address?: string | null;
 }
 
-export async function createAdminTenant(
+export async function createTenant(
   input: SaveTenantInputDTO
 ): Promise<{ success: boolean; tenant: TenantDTO | null; error?: string }> {
   try {
@@ -138,7 +138,7 @@ export async function createAdminTenant(
 
     return { success: true, tenant: serializeTenant(newTenant) };
   } catch (error: unknown) {
-    console.error("Erreur createAdminTenant:", error);
+    console.error("Erreur createTenant:", error);
     return {
       success: false,
       tenant: null,
@@ -147,7 +147,7 @@ export async function createAdminTenant(
   }
 }
 
-export async function updateAdminTenant(
+export async function updateTenant(
   id: string,
   input: Partial<SaveTenantInputDTO>
 ): Promise<{ success: boolean; tenant: TenantDTO | null; error?: string }> {
@@ -166,7 +166,7 @@ export async function updateAdminTenant(
 
     return { success: true, tenant: serializeTenant(updated) };
   } catch (error: unknown) {
-    console.error("Erreur updateAdminTenant:", error);
+    console.error("Erreur updateTenant:", error);
     return {
       success: false,
       tenant: null,
