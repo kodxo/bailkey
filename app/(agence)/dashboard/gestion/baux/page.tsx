@@ -2,13 +2,22 @@ import React, { Suspense } from "react";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
 import { LeasesDataContainer } from "./leases-data-container";
 import { LeasesSkeleton } from "./leases-skeleton";
+import {
+  DashboardPageContainer,
+  DashboardPageHeader,
+} from "@/components/layout/dashboard-page-layout";
 
 export const dynamic = "force-dynamic";
 
-export default function DashboardLeasesPage(): React.JSX.Element {
+export default async function DashboardLeasesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; pageSize?: string; search?: string; status?: string; selectedLeaseId?: string }>;
+}): Promise<React.JSX.Element> {
+  const params = await searchParams;
   return (
-    <div className="p-md w-full max-w-[1400px] mx-auto flex flex-col gap-lg">
-      <section className="border-b border-outline-variant pb-md flex flex-col gap-sm">
+    <DashboardPageContainer>
+      <DashboardPageHeader>
         <BreadcrumbNav
           items={[
             { label: "Tableau de bord", href: "/dashboard" },
@@ -21,14 +30,15 @@ export default function DashboardLeasesPage(): React.JSX.Element {
             Contrats de Location (Baux)
           </h1>
           <p className="text-body-lg font-body-lg text-on-surface-variant">
-            Gérez vos contrats de location, le montant des cautions et les dates d&apos;échéance.
+            Gérez vos contrats de location, le montant des cautions et les dates
+            d&apos;échéance.
           </p>
         </div>
-      </section>
+      </DashboardPageHeader>
 
-      <Suspense fallback={<LeasesSkeleton />}>
-        <LeasesDataContainer />
+      <Suspense fallback={<LeasesSkeleton />} key={JSON.stringify(params)}>
+        <LeasesDataContainer searchParams={params} />
       </Suspense>
-    </div>
+    </DashboardPageContainer>
   );
 }

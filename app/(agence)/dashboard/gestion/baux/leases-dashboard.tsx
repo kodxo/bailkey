@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useState, useActionState, useEffect } from "react";
 import { LeaseStatus } from "@/lib/generated/prisma/enums";
 import type { LeaseDTO, PropertyDTO, TenantDTO } from "@/lib/types/property";
-import { createLeaseAction, updateLeaseAction } from "@/app/actions/lease.actions";
+import { createLeaseAction, updateLeaseAction, type LeaseActionState } from "@/lib/actions/lease.actions";
 import { toast } from "sonner";
+import { LeaseSchedulesList } from "@/components/schedules/lease-schedules-list";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 import {
   Table,
@@ -21,30 +23,135 @@ import { Select } from "@/components/ui/select";
 import { TablePagination } from "@/components/ui/pagination";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { MetricCard } from "@/components/ui/metric-card";
+import {
+  DashboardLayout,
+  DashboardMetrics,
+  DashboardSplitGrid,
+  DashboardMain,
+  DashboardSidebar,
+  DashboardToolbar,
+} from "@/components/layout/dashboard-split-pane";
 
 interface LeasesDashboardProps {
   initialLeases: LeaseDTO[];
   initialProperties: PropertyDTO[];
   initialTenants: TenantDTO[];
+  initialSelectedLease?: LeaseDTO | null;
+  totalCount?: number;
+  activeCount?: number;
+  draftCount?: number;
+  currentPage?: number;
+  pageSize?: number;
+  initialSearch?: string;
+  initialStatus?: string;
 }
 
 export function LeasesDashboard({
   initialLeases,
   initialProperties,
   initialTenants,
+  initialSelectedLease = null,
+  totalCount = 0,
+  activeCount = 0,
+  draftCount = 0,
+  currentPage = 1,
+  pageSize = 10,
+  initialSearch = "",
+  initialStatus = "all",
 }: LeasesDashboardProps): React.JSX.Element {
   const [leases, setLeases] = useState<LeaseDTO[]>(initialLeases);
-  const [selectedLease, setSelectedLease] = useState<LeaseDTO | null>(
-    initialLeases[0] || null
-  );
+  // Update local state when initialLeases changes from server
+  React.useEffect(() => {
+    setLeases(initialLeases);
+  }, [initialLeases]);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const pageSize = 10;
+  const selectedLeaseId = searchParams.get("selectedLeaseId");
+  let selectedLease = null;
+  if (initialSelectedLease) {
+    selectedLease = initialSelectedLease;
+  } else {
+    selectedLease = leases.find((l) => l.id === selectedLeaseId) || (leases.length > 0 && !selectedLeaseId ? leases[0] : null);
+  }
+
+  const setSelectedLease = (ls: LeaseDTO | null) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (ls) {
+      params.set("selectedLeaseId", ls.id);
+    } else {
+      params.delete("selectedLeaseId");
+    }
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const [searchTerm, setSearchTerm] = useState<string>(initialSearch);
+
+  React.useEffect(() => {
+    const handler = setTimeout(() => {
+      if (searchTerm !== initialSearch) {
+        const params = new URLSearchParams(searchParams.toString());
+        if (searchTerm) params.set("search", searchTerm);
+        else params.delete("search");
+        params.set("page", "1");
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      }
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchTerm, initialSearch, pathname, router, searchParams]);
+
+  const handleStatusChange = (val: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (val && val !== "all") params.set("status", val);
+    else params.delete("status");
+    params.set("page", "1");
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", newPage.toString());
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const handlePageSizeChange = (newPageSize: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("pageSize", newPageSize.toString());
+    params.set("page", "1");
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [isPending, startTransition] = useTransition();
+  const [activeTab, setActiveTab] = useState<"details" | "schedules">("details");
+
+  const [state, formAction, isPending] = useActionState(
+    async (prevState: LeaseActionState | null, formData: FormData) => {
+      if (selectedLease) {
+        return updateLeaseAction(selectedLease.id, prevState, formData);
+      }
+      return createLeaseAction(prevState, formData);
+    },
+    null
+  );
+
+  useEffect(() => {
+    if (state?.success && state.lease) {
+      if (selectedLease) {
+        setLeases((prev) => prev.map((l) => (l.id === state.lease!.id ? state.lease! : l)));
+        toast.success("Contrat de location mis à jour.");
+      } else {
+        setLeases((prev) => [state.lease!, ...prev]);
+        toast.success("Contrat de location créé avec succès.");
+      }
+      setSelectedLease(state.lease);
+      setIsEditing(false);
+    } else if (state?.error) {
+      toast.error(state.error);
+    }
+  }, [state]);
 
   const [formData, setFormData] = useState<{
     propertyId: string;
@@ -53,6 +160,8 @@ export function LeasesDashboard({
     depositAmount: number | "";
     startDate: string;
     endDate: string;
+    paymentFrequency: string;
+    paymentDay: number | "";
     status: LeaseStatus;
   }>({
     propertyId: initialProperties[0]?.id || "",
@@ -61,6 +170,8 @@ export function LeasesDashboard({
     depositAmount: "",
     startDate: new Date().toISOString().split("T")[0],
     endDate: new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString().split("T")[0],
+    paymentFrequency: "MONTHLY",
+    paymentDay: 5,
     status: LeaseStatus.ACTIVE,
   });
 
@@ -73,9 +184,12 @@ export function LeasesDashboard({
       depositAmount: "",
       startDate: new Date().toISOString().split("T")[0],
       endDate: new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString().split("T")[0],
+      paymentFrequency: "MONTHLY",
+      paymentDay: 5,
       status: LeaseStatus.ACTIVE,
     });
     setIsEditing(true);
+    setActiveTab("details");
   };
 
   const handleStartEdit = (ls: LeaseDTO) => {
@@ -87,6 +201,8 @@ export function LeasesDashboard({
       depositAmount: ls.depositAmount ?? "",
       startDate: new Date(ls.startDate).toISOString().split("T")[0],
       endDate: ls.endDate ? new Date(ls.endDate).toISOString().split("T")[0] : "",
+      paymentFrequency: "MONTHLY",
+      paymentDay: 5,
       status: ls.status,
     });
     setIsEditing(true);
@@ -94,85 +210,22 @@ export function LeasesDashboard({
 
   const handleCancelEdit = () => {
     setIsEditing(false);
-    if (leases.length > 0 && !selectedLease) {
+    if (leases.length > 0 && !selectedLeaseId) {
       setSelectedLease(leases[0]);
     }
   };
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.propertyId || !formData.tenantId || formData.rentAmount === "" || formData.depositAmount === "") {
-      toast.error("Veuillez remplir tous les champs requis.");
-      return;
-    }
-
-    startTransition(async () => {
-      const payload = {
-        propertyId: formData.propertyId,
-        tenantId: formData.tenantId,
-        rentAmount: Number(formData.rentAmount),
-        depositAmount: Number(formData.depositAmount),
-        startDate: new Date(formData.startDate),
-        endDate: formData.endDate ? new Date(formData.endDate) : null,
-        status: formData.status,
-      };
-
-      if (selectedLease) {
-        const res = await updateLeaseAction(selectedLease.id, payload);
-        if (res.success && res.lease) {
-          const updatedLs = res.lease;
-          setLeases((prev) => prev.map((l) => (l.id === updatedLs.id ? updatedLs : l)));
-          setSelectedLease(updatedLs);
-          setIsEditing(false);
-          toast.success("Contrat de location mis à jour.");
-        } else {
-          toast.error(res.error || "Erreur de mise à jour.");
-        }
-      } else {
-        const res = await createLeaseAction(payload);
-        if (res.success && res.lease) {
-          const newLs = res.lease;
-          setLeases((prev) => [newLs, ...prev]);
-          setSelectedLease(newLs);
-          setIsEditing(false);
-          toast.success("Contrat de location créé avec succès.");
-        } else {
-          toast.error(res.error || "Erreur de création.");
-        }
-      }
-    });
-  };
-
-  const filteredLeases = leases.filter((l) => {
-    const propName = (l.propertyDesignation || "").toLowerCase();
-    const tenName = (l.tenantFullName || "").toLowerCase();
-    const matchesSearch =
-      propName.includes(searchTerm.toLowerCase()) ||
-      tenName.includes(searchTerm.toLowerCase()) ||
-      (l.propertyReference || "").toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === "all" || l.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
-
-  const totalCount = filteredLeases.length;
-  const totalPages = Math.ceil(totalCount / pageSize);
-  const startIndex = (currentPage - 1) * pageSize;
-  const currentBatch = filteredLeases.slice(startIndex, startIndex + pageSize);
-
-  const activeCount = leases.filter((l) => l.status === "ACTIVE").length;
-  const pendingCount = leases.filter((l) => l.status === "DRAFT").length;
-
   return (
-    <div className="flex flex-col gap-lg">
-      <section className="flex gap-sm overflow-x-auto pb-2 md:pb-0">
-        <MetricCard value={leases.length} label="Total Baux" />
+    <DashboardLayout>
+      <DashboardMetrics>
+        <MetricCard value={totalCount} label="Total Baux" />
         <MetricCard
           value={activeCount}
           label="Baux Actifs"
           valueClassName="text-primary font-bold"
         />
         <MetricCard
-          value={pendingCount}
+          value={draftCount}
           label="Brouillons"
           valueClassName="text-tertiary font-bold"
         />
@@ -182,31 +235,25 @@ export function LeasesDashboard({
             Nouveau Bail
           </Button>
         </div>
-      </section>
+      </DashboardMetrics>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-md items-start">
-        <div className="lg:col-span-2 flex flex-col gap-md">
-          <div className="bg-surface-container-lowest border border-outline-variant flex flex-col sm:flex-row items-stretch sm:items-center justify-between shadow-xs overflow-hidden rounded-xl">
+      <DashboardSplitGrid>
+        <DashboardMain>
+          <DashboardToolbar>
             <div className="flex-1 min-w-[200px] flex items-center border-b sm:border-b-0 sm:border-r border-outline-variant">
               <Input
                 iconName="search"
                 placeholder="Rechercher par propriété, référence ou locataire..."
                 value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  setCurrentPage(1);
-                }}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 wrapperClassName="border-none w-full bg-transparent px-sm py-sm"
               />
             </div>
             <div className="flex items-center px-sm py-xs">
               <Select
                 label="Statut:"
-                value={statusFilter}
-                onChange={(e) => {
-                  setStatusFilter(e.target.value);
-                  setCurrentPage(1);
-                }}
+                value={initialStatus}
+                onChange={(e) => handleStatusChange(e.target.value)}
                 options={[
                   { label: "Tous", value: "all" },
                   { label: "Brouillon", value: "DRAFT" },
@@ -217,17 +264,9 @@ export function LeasesDashboard({
                 wrapperClassName="border-none py-sm"
               />
             </div>
-          </div>
+          </DashboardToolbar>
 
-          <div className="relative flex flex-col transition-all bg-surface-container-lowest rounded-xl border border-outline-variant/60 shadow-xs overflow-hidden">
-            {isPending && (
-              <div className="absolute inset-0 bg-surface/50 backdrop-blur-xs z-20 flex items-center justify-center">
-                <span className="material-symbols-outlined animate-spin text-primary text-3xl">
-                  progress_activity
-                </span>
-              </div>
-            )}
-            <Table>
+            <Table wrapperClassName="max-h-[calc(100vh-250px)] rounded-xl border border-outline-variant/60 shadow-xs relative transition-all bg-surface-container-lowest">
               <TableHeader>
                 <TableRow>
                   <TableHead>PROPRIÉTÉ</TableHead>
@@ -238,14 +277,14 @@ export function LeasesDashboard({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentBatch.length === 0 ? (
+                {leases.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={5} className="p-lg text-center text-on-surface-variant font-medium">
                       Aucun contrat de location trouvé.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  currentBatch.map((ls) => {
+                  leases.map((ls) => {
                     const isSelected = selectedLease?.id === ls.id;
 
                     return (
@@ -255,8 +294,10 @@ export function LeasesDashboard({
                           setSelectedLease(ls);
                           setIsEditing(false);
                         }}
-                        className={`cursor-pointer transition-colors ${
-                          isSelected ? "bg-primary-container/10 font-medium" : ""
+                        className={`cursor-pointer transition-colors relative ${
+                          isSelected 
+                            ? "bg-primary/5 font-medium after:absolute after:inset-y-0 after:left-0 after:w-1 after:bg-primary" 
+                            : "hover:bg-surface-container-low"
                         }`}
                       >
                         <TableCell>
@@ -318,17 +359,28 @@ export function LeasesDashboard({
 
             <TablePagination
               total={totalCount}
-              start={startIndex + 1}
-              end={Math.min(startIndex + pageSize, totalCount)}
+              start={(currentPage - 1) * pageSize + 1}
+              end={Math.min(currentPage * pageSize, totalCount)}
               disabledPrev={currentPage <= 1 || isPending}
               disabledNext={currentPage >= totalPages || totalPages <= 1 || isPending}
-              onPrev={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              onNext={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              onPrev={() => handlePageChange(Math.max(currentPage - 1, 1))}
+              onNext={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
+              pageSize={pageSize}
+              onPageSizeChange={handlePageSizeChange}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
             />
-          </div>
-        </div>
+          {isPending && (
+            <div className="absolute inset-0 bg-surface/50 backdrop-blur-xs z-20 flex items-center justify-center">
+              <span className="material-symbols-outlined animate-spin text-primary text-3xl">
+                progress_activity
+              </span>
+            </div>
+          )}
+        </DashboardMain>
 
-        <div className="lg:col-span-1 flex flex-col sticky top-6">
+        <DashboardSidebar>
           <Card className="border-outline-variant/60 shadow-md rounded-xl overflow-hidden">
             <CardHeader className="bg-surface-container-low border-b border-outline-variant/40 pb-md flex flex-row items-center justify-between">
               <CardTitle className="text-h3 font-display">
@@ -342,20 +394,21 @@ export function LeasesDashboard({
             </CardHeader>
             <CardContent className="pt-md max-h-[calc(100vh-220px)] overflow-y-auto">
               {isEditing ? (
-                <form onSubmit={handleSave} className="flex flex-col gap-md">
+                <form action={formAction} className="flex flex-col gap-md">
                   <div className="flex flex-col gap-xs">
                     <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
                       Bien Immobilier *
                     </label>
                     <Select
-                      value={formData.propertyId}
-                      onChange={(e) => setFormData({ ...formData, propertyId: e.target.value })}
+                      name="propertyId"
+                      defaultValue={formData.propertyId}
                       options={initialProperties.map((p) => ({
                         label: `${p.designation} (${p.reference})`,
                         value: p.id,
                       }))}
                       wrapperClassName="w-full"
                     />
+                    {state?.errors?.propertyId && <p className="text-xs text-error">{state.errors.propertyId[0]}</p>}
                   </div>
 
                   <div className="flex flex-col gap-xs">
@@ -363,14 +416,15 @@ export function LeasesDashboard({
                       Locataire *
                     </label>
                     <Select
-                      value={formData.tenantId}
-                      onChange={(e) => setFormData({ ...formData, tenantId: e.target.value })}
+                      name="tenantId"
+                      defaultValue={formData.tenantId}
                       options={initialTenants.map((t) => ({
                         label: `${t.firstName || ""} ${t.lastName || ""} ${t.companyName ? `(${t.companyName})` : ""}`.trim() || t.id,
                         value: t.id,
                       }))}
                       wrapperClassName="w-full"
                     />
+                    {state?.errors?.tenantId && <p className="text-xs text-error">{state.errors.tenantId[0]}</p>}
                   </div>
 
                   <div className="grid grid-cols-2 gap-sm">
@@ -379,28 +433,25 @@ export function LeasesDashboard({
                         Loyer convenu *
                       </label>
                       <Input
+                        name="rentAmount"
                         required
                         type="number"
                         placeholder="ex: 250000"
-                        value={formData.rentAmount}
-                        onChange={(e) =>
-                          setFormData({ ...formData, rentAmount: e.target.value === "" ? "" : Number(e.target.value) })
-                        }
+                        defaultValue={formData.rentAmount}
                       />
+                      {state?.errors?.rentAmount && <p className="text-xs text-error">{state.errors.rentAmount[0]}</p>}
                     </div>
                     <div className="flex flex-col gap-xs">
                       <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
-                        Dépôt de Garantie (Caution) *
+                        Dépôt de Garantie (Caution)
                       </label>
                       <Input
-                        required
+                        name="depositAmount"
                         type="number"
                         placeholder="ex: 500000"
-                        value={formData.depositAmount}
-                        onChange={(e) =>
-                          setFormData({ ...formData, depositAmount: e.target.value === "" ? "" : Number(e.target.value) })
-                        }
+                        defaultValue={formData.depositAmount}
                       />
+                      {state?.errors?.depositAmount && <p className="text-xs text-error">{state.errors.depositAmount[0]}</p>}
                     </div>
                   </div>
 
@@ -410,21 +461,56 @@ export function LeasesDashboard({
                         Date de début *
                       </label>
                       <Input
+                        name="startDate"
                         required
                         type="date"
-                        value={formData.startDate}
-                        onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                        defaultValue={formData.startDate}
                       />
+                      {state?.errors?.startDate && <p className="text-xs text-error">{state.errors.startDate[0]}</p>}
                     </div>
                     <div className="flex flex-col gap-xs">
                       <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
                         Date de fin
                       </label>
                       <Input
+                        name="endDate"
                         type="date"
-                        value={formData.endDate}
-                        onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                        defaultValue={formData.endDate}
                       />
+                      {state?.errors?.endDate && <p className="text-xs text-error">{state.errors.endDate[0]}</p>}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-sm">
+                    <div className="flex flex-col gap-xs">
+                      <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
+                        Périodicité
+                      </label>
+                      <Select
+                        name="paymentFrequency"
+                        defaultValue={formData.paymentFrequency}
+                        options={[
+                          { label: "Mensuelle", value: "MONTHLY" },
+                          { label: "Trimestrielle", value: "QUARTERLY" },
+                          { label: "Semestrielle", value: "SEMI_ANNUALLY" },
+                          { label: "Annuelle", value: "ANNUALLY" },
+                        ]}
+                        wrapperClassName="w-full"
+                      />
+                      {state?.errors?.paymentFrequency && <p className="text-xs text-error">{state.errors.paymentFrequency[0]}</p>}
+                    </div>
+                    <div className="flex flex-col gap-xs">
+                      <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
+                        Jour de paiement
+                      </label>
+                      <Input
+                        name="paymentDay"
+                        type="number"
+                        min="1"
+                        max="31"
+                        defaultValue={formData.paymentDay}
+                      />
+                      {state?.errors?.paymentDay && <p className="text-xs text-error">{state.errors.paymentDay[0]}</p>}
                     </div>
                   </div>
 
@@ -433,8 +519,8 @@ export function LeasesDashboard({
                       Statut du contrat
                     </label>
                     <Select
-                      value={formData.status}
-                      onChange={(e) => setFormData({ ...formData, status: e.target.value as LeaseStatus })}
+                      name="status"
+                      defaultValue={formData.status}
                       options={[
                         { label: "Brouillon", value: "DRAFT" },
                         { label: "Actif", value: "ACTIVE" },
@@ -443,6 +529,7 @@ export function LeasesDashboard({
                       ]}
                       wrapperClassName="w-full"
                     />
+                    {state?.errors?.status && <p className="text-xs text-error">{state.errors.status[0]}</p>}
                   </div>
 
                   <Button type="submit" disabled={isPending} className="w-full mt-sm">
@@ -451,64 +538,93 @@ export function LeasesDashboard({
                 </form>
               ) : selectedLease ? (
                 <div className="flex flex-col gap-md">
-                  <div className="border-b border-outline-variant/40 pb-sm">
-                    <span className="text-body-sm font-mono text-primary font-bold">
-                      {selectedLease.propertyReference}
-                    </span>
-                    <h4 className="text-h2 font-bold text-on-surface mb-xs mt-1">
-                      {selectedLease.propertyDesignation}
-                    </h4>
-                    <p className="text-body-sm text-on-surface-variant font-medium bg-surface-container px-2.5 py-1 rounded-lg inline-block mt-1">
-                      Locataire : {selectedLease.tenantFullName}
-                    </p>
+                  <div className="flex border-b border-outline-variant/40 mb-2">
+                    <button
+                      className={`flex-1 py-2 text-sm font-semibold border-b-2 transition-colors ${
+                        activeTab === "details"
+                          ? "border-primary text-primary"
+                          : "border-transparent text-on-surface-variant hover:text-on-surface"
+                      }`}
+                      onClick={() => setActiveTab("details")}
+                    >
+                      Détails
+                    </button>
+                    <button
+                      className={`flex-1 py-2 text-sm font-semibold border-b-2 transition-colors ${
+                        activeTab === "schedules"
+                          ? "border-primary text-primary"
+                          : "border-transparent text-on-surface-variant hover:text-on-surface"
+                      }`}
+                      onClick={() => setActiveTab("schedules")}
+                    >
+                      Échéancier
+                    </button>
                   </div>
 
-                  <div className="flex flex-col gap-2 text-left">
-                    <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
-                      <span className="text-label-caps uppercase text-on-surface-variant">Loyer Mensuel</span>
-                      <span className="text-body-md text-on-surface font-bold font-mono">
-                        {new Intl.NumberFormat("fr-FR", {
-                          style: "currency",
-                          currency: "XAF",
-                          maximumFractionDigits: 0,
-                        }).format(selectedLease.rentAmount)}
-                      </span>
-                    </div>
+                  {activeTab === "details" ? (
+                    <>
+                      <div className="border-b border-outline-variant/40 pb-sm">
+                        <span className="text-body-sm font-mono text-primary font-bold">
+                          {selectedLease.propertyReference}
+                        </span>
+                        <h4 className="text-h2 font-bold text-on-surface mb-xs mt-1">
+                          {selectedLease.propertyDesignation}
+                        </h4>
+                        <p className="text-body-sm text-on-surface-variant font-medium bg-surface-container px-2.5 py-1 rounded-lg inline-block mt-1">
+                          Locataire : {selectedLease.tenantFullName}
+                        </p>
+                      </div>
 
-                    <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
-                      <span className="text-label-caps uppercase text-on-surface-variant">Caution versée</span>
-                      <span className="text-body-md text-primary font-bold font-mono">
-                        {new Intl.NumberFormat("fr-FR", {
-                          style: "currency",
-                          currency: "XAF",
-                          maximumFractionDigits: 0,
-                        }).format(selectedLease.depositAmount || 0)}
-                      </span>
-                    </div>
+                      <div className="flex flex-col gap-2 text-left">
+                        <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
+                          <span className="text-label-caps uppercase text-on-surface-variant">Loyer Mensuel</span>
+                          <span className="text-body-md text-on-surface font-bold font-mono">
+                            {new Intl.NumberFormat("fr-FR", {
+                              style: "currency",
+                              currency: "XAF",
+                              maximumFractionDigits: 0,
+                            }).format(selectedLease.rentAmount)}
+                          </span>
+                        </div>
 
-                    <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
-                      <span className="text-label-caps uppercase text-on-surface-variant">Statut</span>
-                      <span>
-                        {selectedLease.status === "ACTIVE" && <Badge variant="default">Actif</Badge>}
-                        {selectedLease.status === "DRAFT" && <Badge variant="surface">Brouillon</Badge>}
-                        {selectedLease.status === "TERMINATED" && <Badge variant="destructive">Résilié</Badge>}
-                        {selectedLease.status === "EXPIRED" && <Badge variant="surface">Expiré</Badge>}
-                      </span>
-                    </div>
+                        <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
+                          <span className="text-label-caps uppercase text-on-surface-variant">Caution versée</span>
+                          <span className="text-body-md text-primary font-bold font-mono">
+                            {new Intl.NumberFormat("fr-FR", {
+                              style: "currency",
+                              currency: "XAF",
+                              maximumFractionDigits: 0,
+                            }).format(selectedLease.depositAmount || 0)}
+                          </span>
+                        </div>
 
-                    <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
-                      <span className="text-label-caps uppercase text-on-surface-variant">Période</span>
-                      <span className="text-body-sm font-semibold">
-                        {new Date(selectedLease.startDate).toLocaleDateString("fr-FR")} →{" "}
-                        {selectedLease.endDate ? new Date(selectedLease.endDate).toLocaleDateString("fr-FR") : "Indéterminée"}
-                      </span>
-                    </div>
-                  </div>
+                        <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
+                          <span className="text-label-caps uppercase text-on-surface-variant">Statut</span>
+                          <span>
+                            {selectedLease.status === "ACTIVE" && <Badge variant="default">Actif</Badge>}
+                            {selectedLease.status === "DRAFT" && <Badge variant="surface">Brouillon</Badge>}
+                            {selectedLease.status === "TERMINATED" && <Badge variant="destructive">Résilié</Badge>}
+                            {selectedLease.status === "EXPIRED" && <Badge variant="surface">Expiré</Badge>}
+                          </span>
+                        </div>
 
-                  <Button onClick={() => handleStartEdit(selectedLease)} className="w-full mt-sm">
-                    <span className="material-symbols-outlined text-sm mr-2 select-none" data-icon="edit">edit</span>
-                    Modifier le contrat
-                  </Button>
+                        <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
+                          <span className="text-label-caps uppercase text-on-surface-variant">Période</span>
+                          <span className="text-body-sm font-semibold">
+                            {new Date(selectedLease.startDate).toLocaleDateString("fr-FR")} →{" "}
+                            {selectedLease.endDate ? new Date(selectedLease.endDate).toLocaleDateString("fr-FR") : "Indéterminée"}
+                          </span>
+                        </div>
+                      </div>
+
+                      <Button onClick={() => handleStartEdit(selectedLease)} className="w-full mt-sm">
+                        <span className="material-symbols-outlined text-sm mr-2 select-none" data-icon="edit">edit</span>
+                        Modifier le contrat
+                      </Button>
+                    </>
+                  ) : (
+                    <LeaseSchedulesList leaseId={selectedLease.id} />
+                  )}
                 </div>
               ) : (
                 <div className="py-xl flex flex-col items-center text-on-surface-variant text-center">
@@ -522,8 +638,8 @@ export function LeasesDashboard({
               )}
             </CardContent>
           </Card>
-        </div>
-      </div>
-    </div>
+        </DashboardSidebar>
+      </DashboardSplitGrid>
+    </DashboardLayout>
   );
 }

@@ -444,7 +444,7 @@ export default function Home() {
                   priority
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
+                <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent"></div>
                 <div className="absolute bottom-8 left-8 right-8 bg-surface/90 backdrop-blur-md p-6 border border-outline-variant/30 flex justify-between items-center shadow-lg feature-float-card">
                   <div>
                     <div className="text-xs font-label-caps text-on-surface-variant mb-1">
@@ -540,7 +540,7 @@ export default function Home() {
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
+                <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent"></div>
                 <div className="absolute bottom-8 left-8 right-8 bg-surface/90 backdrop-blur-md p-6 border border-outline-variant/30 flex justify-between items-center shadow-lg feature-float-card">
                   <div>
                     <div className="text-xs font-label-caps text-on-surface-variant mb-1">
@@ -631,7 +631,7 @@ export default function Home() {
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
+                <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent"></div>
                 <div className="absolute bottom-8 left-8 right-8 bg-surface/90 backdrop-blur-md p-6 border border-outline-variant/30 flex justify-between items-center shadow-lg feature-float-card">
                   <div>
                     <div className="text-xs font-label-caps text-on-surface-variant mb-1">

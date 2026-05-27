@@ -5,6 +5,7 @@ import { frFR } from "@clerk/localizations";
 import { Inter, Manrope } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -41,6 +42,7 @@ export default function RootLayout({
         <ClerkProvider localization={frFR}>{children}</ClerkProvider>
         <SpeedInsights />
         <Analytics />
+        <Toaster />
       </body>
     </html>
   );

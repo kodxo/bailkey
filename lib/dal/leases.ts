@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/db";
 import { getAuthContext } from "@/lib/clerk/auth-context";
-import { LeaseStatus, LegalEntityType } from "../generated/prisma/enums";
+import { LeaseStatus, LegalEntityType, PaymentFrequency } from "../generated/prisma/enums";
 import type { LeaseDTO } from "@/lib/types/property";
+import { generateRentSchedulesForLease } from "./schedules";
 
 
 export function serializeLease(raw: {
@@ -62,24 +63,65 @@ export function serializeLease(raw: {
   };
 }
 
-export async function getLeases(): Promise<{
+export async function getLeases(params?: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  status?: string;
+}): Promise<{
   success: boolean;
   leases: LeaseDTO[];
   totalCount: number;
+  activeCount: number;
+  draftCount: number;
   error?: string;
 }> {
   try {
     const { orgId } = await getAuthContext();
-    const leases = await prisma.lease.findMany({
-      where: { organizationId: orgId },
-      include: { property: true, tenant: true },
-      orderBy: { createdAt: "desc" },
-    });
+    
+    const page = params?.page || 1;
+    const pageSize = params?.pageSize || 10;
+    const search = params?.search?.trim() || "";
+    const statusFilter = params?.status && params.status !== "all" ? params.status : undefined;
+
+    // Constuire le filtre `where` de base
+    const whereClause: any = { organizationId: orgId };
+    
+    if (statusFilter) {
+      whereClause.status = statusFilter;
+    }
+    
+    if (search) {
+      whereClause.OR = [
+        { property: { designation: { contains: search, mode: 'insensitive' } } },
+        { property: { reference: { contains: search, mode: 'insensitive' } } },
+        { tenant: { firstName: { contains: search, mode: 'insensitive' } } },
+        { tenant: { lastName: { contains: search, mode: 'insensitive' } } },
+        { tenant: { companyName: { contains: search, mode: 'insensitive' } } },
+      ];
+    }
+
+    const skip = (page - 1) * pageSize;
+
+    const [leases, totalCount, activeCount, draftCount] = await prisma.$transaction([
+      prisma.lease.findMany({
+        where: whereClause,
+        include: { property: true, tenant: true },
+        orderBy: { createdAt: "desc" },
+        skip,
+        take: pageSize,
+      }),
+      prisma.lease.count({ where: whereClause }),
+      prisma.lease.count({ where: { organizationId: orgId, status: LeaseStatus.ACTIVE } }),
+      prisma.lease.count({ where: { organizationId: orgId, status: LeaseStatus.DRAFT } }),
+    ]);
 
     return {
       success: true,
       leases: leases.map(serializeLease),
-      totalCount: leases.length,
+      totalCount,
+      activeCount,
+      draftCount,
     };
   } catch (error: unknown) {
     console.error("Erreur getLeases:", error);
@@ -87,6 +129,8 @@ export async function getLeases(): Promise<{
       success: false,
       leases: [],
       totalCount: 0,
+      activeCount: 0,
+      draftCount: 0,
       error: "Erreur lors de la récupération des baux",
     };
   }
@@ -126,6 +170,8 @@ export interface SaveLeaseInputDTO {
   endDate?: string | Date | null;
   rentAmount: number;
   depositAmount?: number | null;
+  paymentFrequency?: PaymentFrequency;
+  paymentDay?: number;
   status?: LeaseStatus;
 }
 
@@ -147,6 +193,8 @@ export async function createLease(
         ...(parsedEndDate && { endDate: parsedEndDate }),
         rentAmount: input.rentAmount,
         depositAmount: input.depositAmount,
+        paymentFrequency: input.paymentFrequency || PaymentFrequency.MONTHLY,
+        paymentDay: input.paymentDay || 5,
         status: input.status || LeaseStatus.ACTIVE,
       },
       include: { property: true, tenant: true },
@@ -161,6 +209,9 @@ export async function createLease(
           currentLeaseId: newLease.id,
         },
       });
+
+      // Generate rent schedules (échéances) automatically
+      await generateRentSchedulesForLease(newLease.id);
     }
 
     return { success: true, lease: serializeLease(newLease) };

@@ -34,3 +34,24 @@ enum LeaseStatus {
   TERMINATED // Résilié
   EXPIRED // Arrivé à terme
 }
+
+enum PaymentFrequency {
+  MONTHLY
+  QUARTERLY
+  SEMI_ANNUALLY
+  ANNUALLY
+}
+
+enum ScheduleStatus {
+  PENDING // En attente (la date limite n'est pas encore passée)
+  PARTIAL // Payé partiellement
+  PAID // Entièrement payé
+  OVERDUE // En retard (date limite dépassée, non soldé)
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+  MOBILE_MONEY
+  CHEQUE
+}

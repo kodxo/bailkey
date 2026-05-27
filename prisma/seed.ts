@@ -3,6 +3,7 @@ dotenv.config({ path: '.env.local' });
 dotenv.config();
 
 import { prisma } from "@/lib/db";
+import { generateRentSchedulesForLease } from "@/lib/dal/schedules";
 
 async function main() {
   console.log("🚀 Démarrage du seeding pour Bailkey...");
@@ -31,6 +32,8 @@ async function main() {
 
   // Nettoyage de la base de données
   console.log("🧹 Nettoyage des données existantes...");
+  await prisma.payment.deleteMany();
+  await prisma.rentSchedule.deleteMany();
   await prisma.post.deleteMany();
   await prisma.tag.deleteMany();
   await prisma.lease.deleteMany();
@@ -244,20 +247,88 @@ async function main() {
         organizationId: orgId,
         propertyId: prop1.id,
         tenantId: tenant1.id,
-        startDate: new Date(2025, 0, 1),
-        endDate: new Date(2027, 0, 1),
+        startDate: new Date(Date.UTC(2023, 0, 1)),
+        endDate: new Date(Date.UTC(2025, 11, 31)),
         rentAmount: 350000,
         depositAmount: 700000,
         status: "ACTIVE",
       },
     });
 
-    // Mise à jour de la propriété avec le currentLeaseId
+    const lease2 = await prisma.lease.create({
+      data: {
+        organizationId: orgId,
+        propertyId: prop2.id,
+        tenantId: tenant2.id,
+        startDate: new Date(Date.UTC(2024, 0, 1)),
+        endDate: new Date(Date.UTC(2026, 11, 31)),
+        rentAmount: 1200000,
+        depositAmount: 2400000,
+        status: "ACTIVE",
+      },
+    });
+
+    // Mise à jour des propriétés avec le currentLeaseId
     await prisma.property.update({
       where: { id: prop1.id },
       data: { currentLeaseId: lease1.id },
     });
-    console.log("      ✅ 1 Contrat de bail actif créé.");
+    await prisma.property.update({
+      where: { id: prop2.id },
+      data: { currentLeaseId: lease2.id },
+    });
+    console.log("      ✅ 2 Contrats de bail actifs créés.");
+
+    // Génération des échéances pour les baux
+    await generateRentSchedulesForLease(lease1.id, orgId);
+    await generateRentSchedulesForLease(lease2.id, orgId);
+    console.log("      ✅ Échéances générées pour les contrats.");
+
+    // Simulation de paiements et d'états
+    console.log("      ✅ Simulation des paiements (PAID, PARTIAL, OVERDUE)...");
+    
+    // Récupérer les échéances générées pour lease1 (350000)
+    const schedules1 = await prisma.rentSchedule.findMany({ where: { leaseId: lease1.id }, orderBy: { dueDate: 'asc' } });
+    if (schedules1.length >= 3) {
+      // 1ère échéance: Payée
+      await prisma.payment.create({
+        data: { organizationId: orgId, scheduleId: schedules1[0].id, amount: 350000, paymentDate: schedules1[0].dueDate, paymentMethod: "BANK_TRANSFER", reference: "Virement Loyer" }
+      });
+      await prisma.rentSchedule.update({ where: { id: schedules1[0].id }, data: { amountPaid: 350000, status: "PAID", isLocked: true } });
+
+      // 2ème échéance: Payée
+      await prisma.payment.create({
+        data: { organizationId: orgId, scheduleId: schedules1[1].id, amount: 350000, paymentDate: schedules1[1].dueDate, paymentMethod: "CASH", reference: "Espèces Loyer" }
+      });
+      await prisma.rentSchedule.update({ where: { id: schedules1[1].id }, data: { amountPaid: 350000, status: "PAID", isLocked: true } });
+
+      // 3ème échéance: Partielle
+      await prisma.payment.create({
+        data: { organizationId: orgId, scheduleId: schedules1[2].id, amount: 150000, paymentDate: schedules1[2].dueDate, paymentMethod: "MOBILE_MONEY", reference: "MoMo Partiel" }
+      });
+      await prisma.rentSchedule.update({ where: { id: schedules1[2].id }, data: { amountPaid: 150000, status: "PARTIAL", isLocked: true } });
+
+      // 4ème échéance: En retard (simulée via date passée)
+      if (schedules1[3] && schedules1[3].dueDate < new Date()) {
+         await prisma.rentSchedule.update({ where: { id: schedules1[3].id }, data: { status: "OVERDUE" } });
+      }
+    }
+
+    // Récupérer les échéances générées pour lease2 (1200000)
+    const schedules2 = await prisma.rentSchedule.findMany({ where: { leaseId: lease2.id }, orderBy: { dueDate: 'asc' } });
+    if (schedules2.length >= 2) {
+      // 1ère échéance: Payée
+      await prisma.payment.create({
+        data: { organizationId: orgId, scheduleId: schedules2[0].id, amount: 1200000, paymentDate: schedules2[0].dueDate, paymentMethod: "CHEQUE", reference: "Chèque CHQ-999" }
+      });
+      await prisma.rentSchedule.update({ where: { id: schedules2[0].id }, data: { amountPaid: 1200000, status: "PAID", isLocked: true } });
+      
+      // 2ème échéance: En retard
+      if (schedules2[1] && schedules2[1].dueDate < new Date()) {
+         await prisma.rentSchedule.update({ where: { id: schedules2[1].id }, data: { status: "OVERDUE" } });
+      }
+    }
+
   }
 
   console.log("\n🎉 Seeding terminé avec succès pour toutes les organisations !");

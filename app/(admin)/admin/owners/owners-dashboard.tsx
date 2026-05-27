@@ -3,7 +3,7 @@
 import React, { useState, useTransition } from "react";
 import { LegalEntityType } from "@/lib/generated/prisma/enums";
 import type { OwnerDTO } from "@/lib/types/property";
-import { createOwnerAction, updateOwnerAction } from "@/app/actions/owner.actions";
+import { createOwnerAction, updateOwnerAction } from "@/lib/actions/owner.actions";
 import { toast } from "sonner";
 
 import {

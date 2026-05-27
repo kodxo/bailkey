@@ -218,7 +218,7 @@ export function HeroBackground() {
       </svg>
 
       {/* Overlay très léger pour assurer la lisibilité parfaite du texte */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-background/80 z-10 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-linear-to-b from-background/60 via-transparent to-background/80 z-10 pointer-events-none"></div>
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { Roles } from "@/types/globals";
 export async function setRole(formData: FormData) {
   const client = await clerkClient();
 
-  if (!(await checkRole("admin"))) {
+  if (!(await checkRole("super_admin"))) {
     return { message: "Not Authorized" };
   }
 
@@ -27,7 +27,7 @@ export async function setRole(formData: FormData) {
 export async function removeRole(formData: FormData) {
   const client = await clerkClient();
 
-  if (!(await checkRole("admin"))) {
+  if (!(await checkRole("super_admin"))) {
     return { message: "Not Authorized" };
   }
 

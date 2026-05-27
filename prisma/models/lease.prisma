@@ -21,7 +21,14 @@ model Lease {
   rentAmount    Decimal  @db.Decimal(10, 2)
   depositAmount Decimal? @db.Decimal(10, 2) // Caution
 
+  // --- 🗓️ Paramètres de facturation (NOUVEAU) ---
+  paymentFrequency PaymentFrequency @default(MONTHLY)
+  paymentDay       Int              @default(5) // Le loyer est attendu le 5 de chaque mois
+
   status LeaseStatus @default(ACTIVE)
+
+  // --- 🔗 Relations ---
+  schedules RentSchedule[] // Échéancier généré pour ce bail
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

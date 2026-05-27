@@ -1,0 +1,35 @@
+// ==========================================
+// 📅 7. ÉCHÉANCE DE PAIEMENT (RENT SCHEDULE)
+// ==========================================
+
+model RentSchedule {
+  id             String @id @default(cuid())
+  organizationId String
+
+  leaseId String
+  lease   Lease  @relation(fields: [leaseId], references: [id], onDelete: Cascade)
+
+  // --- ⏳ Période concernée ---
+  periodStart DateTime @db.Date // Début du mois couvert (ex: 01/10/2026)
+  periodEnd   DateTime @db.Date // Fin du mois couvert (ex: 31/10/2026)
+  dueDate     DateTime @db.Date // Date limite de paiement (ex: 05/10/2026)
+
+  // --- 💵 Montants ---
+  amount     Decimal @db.Decimal(10, 2) // Loyer attendu
+  amountPaid Decimal @default(0.00) @db.Decimal(10, 2) // Total encaissé à ce jour
+
+  // --- 📊 Statut ---
+  status   ScheduleStatus @default(PENDING)
+  isLocked Boolean        @default(false) // Sécurité: Devient true dès qu'un paiement partiel/total est lié
+
+  // --- 🔗 Relations ---
+  payments Payment[] // Liste des paiements liés à cette échéance
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([leaseId])
+  @@index([status])
+  @@index([dueDate])
+}

@@ -7,7 +7,7 @@ import {
   CommissionType,
 } from "@/lib/generated/prisma/enums";
 import type { PropertyDTO, OwnerDTO } from "@/lib/types/property";
-import { createPropertyAction, updatePropertyAction } from "@/app/actions/property.actions";
+import { createPropertyAction, updatePropertyAction } from "@/lib/actions/property.actions";
 import { toast } from "sonner";
 
 import {

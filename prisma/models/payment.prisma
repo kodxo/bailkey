@@ -1,0 +1,24 @@
+// ==========================================
+// 💳 8. PAIEMENT / QUITTANCE (PAYMENT)
+// ==========================================
+
+model Payment {
+  id             String @id @default(cuid())
+  organizationId String
+
+  scheduleId String
+  schedule   RentSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  // --- 💰 Détails de la transaction ---
+  amount        Decimal       @db.Decimal(10, 2)
+  paymentDate   DateTime      @default(now())
+  paymentMethod PaymentMethod @default(CASH)
+  reference     String? // N° Transaction MoMo, Virement, N° Chèque...
+  notes         String?       @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([scheduleId])
+}
