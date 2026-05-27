@@ -1,14 +1,15 @@
 import React from "react";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
-import { propertyService, ownerService } from "@/lib/services/property.service";
+import { getProperties } from "@/lib/dal/properties";
+import { getOwners } from "@/lib/dal/owners";
 import { PropertiesDashboard } from "./properties-dashboard";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPropertiesPage(): Promise<React.JSX.Element> {
   const [propertiesRes, ownersRes] = await Promise.all([
-    propertyService.getProperties(),
-    ownerService.getOwners(),
+    getProperties(),
+    getOwners(),
   ]);
 
   const initialProperties = propertiesRes.success ? propertiesRes.properties : [];

@@ -3,7 +3,7 @@
 import React, { useState, useTransition } from "react";
 import { LegalEntityType } from "@/lib/generated/prisma/enums";
 import type { TenantDTO } from "@/lib/types/property";
-import { tenantService } from "@/lib/services/property.service";
+import { createTenantAction, updateTenantAction } from "@/app/actions/tenant.actions";
 import { toast } from "sonner";
 
 import {
@@ -138,7 +138,7 @@ export function TenantsDashboard({
       };
 
       if (selectedTenant) {
-        const res = await tenantService.updateTenant(
+        const res = await updateTenantAction(
           selectedTenant.id,
           payload,
         );
@@ -154,7 +154,7 @@ export function TenantsDashboard({
           toast.error(res.error || "Erreur de mise à jour.");
         }
       } else {
-        const res = await tenantService.createTenant(payload);
+        const res = await createTenantAction(payload);
         if (res.success && res.tenant) {
           const newTen = res.tenant;
           setTenants((prev) => [newTen, ...prev]);

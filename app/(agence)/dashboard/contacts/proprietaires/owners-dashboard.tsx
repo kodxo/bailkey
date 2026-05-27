@@ -3,7 +3,7 @@
 import React, { useState, useTransition } from "react";
 import { LegalEntityType } from "@/lib/generated/prisma/enums";
 import type { OwnerDTO } from "@/lib/types/property";
-import { ownerService } from "@/lib/services/property.service";
+import { createOwnerAction, updateOwnerAction } from "@/app/actions/owner.actions";
 import { toast } from "sonner";
 
 import {
@@ -138,7 +138,7 @@ export function OwnersDashboard({
       };
 
       if (selectedOwner) {
-        const res = await ownerService.updateOwner(selectedOwner.id, payload);
+        const res = await updateOwnerAction(selectedOwner.id, payload);
         if (res.success && res.owner) {
           const updatedOwn = res.owner;
           setOwners((prev) =>
@@ -151,7 +151,7 @@ export function OwnersDashboard({
           toast.error(res.error || "Erreur de mise à jour.");
         }
       } else {
-        const res = await ownerService.createOwner(payload);
+        const res = await createOwnerAction(payload);
         if (res.success && res.owner) {
           const newOwn = res.owner;
           setOwners((prev) => [newOwn, ...prev]);

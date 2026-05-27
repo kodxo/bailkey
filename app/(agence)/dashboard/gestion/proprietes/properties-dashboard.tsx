@@ -3,10 +3,8 @@
 import React, { useState, useTransition } from "react";
 import { PropertyType, PropertyStatus } from "@/lib/generated/prisma/enums";
 import type { PropertyDTO, OwnerDTO } from "@/lib/types/property";
-import {
-  propertyService,
-  uploadService,
-} from "@/lib/services/property.service";
+import { createPropertyAction, updatePropertyAction } from "@/app/actions/property.actions";
+import { uploadService } from "@/lib/services/property.service";
 import { toast } from "sonner";
 
 import {
@@ -315,7 +313,7 @@ export function PropertiesDashboard({
       };
 
       if (selectedProperty) {
-        const res = await propertyService.updateProperty(
+        const res = await updatePropertyAction(
           selectedProperty.id,
           payload,
         );
@@ -331,7 +329,7 @@ export function PropertiesDashboard({
           toast.error(res.error || "Erreur lors de la mise à jour.");
         }
       } else {
-        const res = await propertyService.createProperty(payload);
+        const res = await createPropertyAction(payload);
         if (res.success && res.property) {
           const newProp = res.property;
           setProperties((prev) => [newProp, ...prev]);

@@ -7,7 +7,7 @@ import {
   CommissionType,
 } from "@/lib/generated/prisma/enums";
 import type { PropertyDTO, OwnerDTO } from "@/lib/types/property";
-import { propertyService } from "@/lib/services/property.service";
+import { createPropertyAction, updatePropertyAction } from "@/app/actions/property.actions";
 import { toast } from "sonner";
 
 import {
@@ -149,7 +149,7 @@ export function PropertiesDashboard({
 
       if (selectedProperty) {
         // Update
-        const res = await propertyService.updateProperty(
+        const res = await updatePropertyAction(
           selectedProperty.id,
           payload,
         );
@@ -166,7 +166,7 @@ export function PropertiesDashboard({
         }
       } else {
         // Create
-        const res = await propertyService.createProperty(payload);
+        const res = await createPropertyAction(payload);
         if (res.success && res.property) {
           const newProp = res.property;
           setProperties((prev) => [newProp, ...prev]);

@@ -3,7 +3,7 @@
 import React, { useState, useTransition } from "react";
 import { LeaseStatus } from "@/lib/generated/prisma/enums";
 import type { LeaseDTO, PropertyDTO, TenantDTO } from "@/lib/types/property";
-import { leaseService } from "@/lib/services/property.service";
+import { createLeaseAction, updateLeaseAction } from "@/app/actions/lease.actions";
 import { toast } from "sonner";
 
 import {
@@ -118,7 +118,7 @@ export function LeasesDashboard({
       };
 
       if (selectedLease) {
-        const res = await leaseService.updateLease(selectedLease.id, payload);
+        const res = await updateLeaseAction(selectedLease.id, payload);
         if (res.success && res.lease) {
           const updatedLs = res.lease;
           setLeases((prev) => prev.map((l) => (l.id === updatedLs.id ? updatedLs : l)));
@@ -129,7 +129,7 @@ export function LeasesDashboard({
           toast.error(res.error || "Erreur de mise à jour.");
         }
       } else {
-        const res = await leaseService.createLease(payload);
+        const res = await createLeaseAction(payload);
         if (res.success && res.lease) {
           const newLs = res.lease;
           setLeases((prev) => [newLs, ...prev]);
