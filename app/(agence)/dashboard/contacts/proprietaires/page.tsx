@@ -1,14 +1,11 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
-import { getOwners } from "@/lib/dal/owners";
-import { OwnersDashboard } from "./owners-dashboard";
+import { OwnersDataContainer } from "./owners-data-container";
+import { OwnersSkeleton } from "./owners-skeleton";
 
 export const dynamic = "force-dynamic";
 
-export default async function DashboardOwnersPage(): Promise<React.JSX.Element> {
-  const res = await getOwners();
-  const initialOwners = res.success ? res.owners : [];
-
+export default function DashboardOwnersPage(): React.JSX.Element {
   return (
     <div className="p-md w-full max-w-[1400px] mx-auto flex flex-col gap-lg">
       <section className="border-b border-outline-variant pb-md flex flex-col gap-sm">
@@ -29,7 +26,9 @@ export default async function DashboardOwnersPage(): Promise<React.JSX.Element> 
         </div>
       </section>
 
-      <OwnersDashboard initialOwners={initialOwners} />
+      <Suspense fallback={<OwnersSkeleton />}>
+        <OwnersDataContainer />
+      </Suspense>
     </div>
   );
 }

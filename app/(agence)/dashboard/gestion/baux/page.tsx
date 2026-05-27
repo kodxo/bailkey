@@ -1,23 +1,11 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
-import { getLeases } from "@/lib/dal/leases";
-import { getProperties } from "@/lib/dal/properties";
-import { getTenants } from "@/lib/dal/tenants";
-import { LeasesDashboard } from "./leases-dashboard";
+import { LeasesDataContainer } from "./leases-data-container";
+import { LeasesSkeleton } from "./leases-skeleton";
 
 export const dynamic = "force-dynamic";
 
-export default async function DashboardLeasesPage(): Promise<React.JSX.Element> {
-  const [leasesRes, propsRes, tenantsRes] = await Promise.all([
-    getLeases(),
-    getProperties(),
-    getTenants(),
-  ]);
-
-  const initialLeases = leasesRes.success ? leasesRes.leases : [];
-  const initialProperties = propsRes.success ? propsRes.properties : [];
-  const initialTenants = tenantsRes.success ? tenantsRes.tenants : [];
-
+export default function DashboardLeasesPage(): React.JSX.Element {
   return (
     <div className="p-md w-full max-w-[1400px] mx-auto flex flex-col gap-lg">
       <section className="border-b border-outline-variant pb-md flex flex-col gap-sm">
@@ -38,11 +26,9 @@ export default async function DashboardLeasesPage(): Promise<React.JSX.Element> 
         </div>
       </section>
 
-      <LeasesDashboard
-        initialLeases={initialLeases}
-        initialProperties={initialProperties}
-        initialTenants={initialTenants}
-      />
+      <Suspense fallback={<LeasesSkeleton />}>
+        <LeasesDataContainer />
+      </Suspense>
     </div>
   );
 }

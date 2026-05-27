@@ -1,14 +1,11 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
-import { getTenants } from "@/lib/dal/tenants";
-import { TenantsDashboard } from "./tenants-dashboard";
+import { TenantsDataContainer } from "./tenants-data-container";
+import { TenantsSkeleton } from "./tenants-skeleton";
 
 export const dynamic = "force-dynamic";
 
-export default async function DashboardTenantsPage(): Promise<React.JSX.Element> {
-  const res = await getTenants();
-  const initialTenants = res.success ? res.tenants : [];
-
+export default function DashboardTenantsPage(): React.JSX.Element {
   return (
     <div className="p-md w-full max-w-[1400px] mx-auto flex flex-col gap-lg">
       <section className="border-b border-outline-variant pb-md flex flex-col gap-sm">
@@ -30,7 +27,9 @@ export default async function DashboardTenantsPage(): Promise<React.JSX.Element>
         </div>
       </section>
 
-      <TenantsDashboard initialTenants={initialTenants} />
+      <Suspense fallback={<TenantsSkeleton />}>
+        <TenantsDataContainer />
+      </Suspense>
     </div>
   );
 }
