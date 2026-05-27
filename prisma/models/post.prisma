@@ -36,7 +36,7 @@ model Post {
   metaDescription String? @db.Text
 
   // Auteur (Géré par Clerk)
-  authorId        String
+  authorId String
 
   // Relations Articles Recommandés
   relatedPosts Post[] @relation("RelatedPosts")
@@ -75,7 +75,7 @@ model Media {
   iconColor  String?
 
   // Auteur (Géré par Clerk)
-  authorId   String
+  authorId String
 
   tags Tag[] @relation("MediaTags")
 

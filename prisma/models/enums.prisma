@@ -1,0 +1,36 @@
+// ==========================================
+// 📋 7. ÉNUMÉRATIONS (ENUMS)
+// ==========================================
+
+enum PropertyType {
+  APARTMENT
+  VILLA
+  STUDIO
+  COMMERCIAL_SPACE
+  LAND
+  WAREHOUSE
+}
+
+enum PropertyStatus {
+  AVAILABLE
+  RENTED
+  UNDER_MAINTENANCE
+  UNAVAILABLE
+}
+
+enum CommissionType {
+  FIXED_AMOUNT
+  PERCENTAGE
+}
+
+enum LegalEntityType {
+  INDIVIDUAL
+  COMPANY
+}
+
+enum LeaseStatus {
+  DRAFT // Brouillon / En cours de signature
+  ACTIVE // En cours
+  TERMINATED // Résilié
+  EXPIRED // Arrivé à terme
+}

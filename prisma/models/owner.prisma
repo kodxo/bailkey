@@ -1,0 +1,50 @@
+// ==========================================
+// 👔 3. PROPRIÉTAIRE (OWNER)
+// ==========================================
+
+model Owner {
+  id             String @id @default(cuid())
+  organizationId String
+
+  clerkUserId String?         @unique // Portail propriétaire
+  type        LegalEntityType @default(INDIVIDUAL)
+
+  firstName        String?
+  lastName         String?
+  identityDocument String? // CNI / Passeport
+
+  companyName        String?
+  registrationNumber String? // RCCM
+  taxNumber          String? // NIU / NIF
+
+  email   String?
+  phone   String?
+  address String? @db.Text
+
+  properties PropertyOwner[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+// ==========================================
+// 🤝 4. INDIVISION (TABLE DE LIAISON)
+// ==========================================
+
+model PropertyOwner {
+  id String @id @default(cuid())
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  ownerId String
+  owner   Owner  @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+
+  share Float @default(100.0) // % de possession
+
+  @@unique([propertyId, ownerId])
+  @@index([propertyId])
+  @@index([ownerId])
+}

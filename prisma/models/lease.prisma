@@ -1,0 +1,32 @@
+// ==========================================
+// 📄 6. BAIL / CONTRAT DE LOCATION (LEASE)
+// ==========================================
+
+model Lease {
+  id             String @id @default(cuid())
+  organizationId String
+
+  propertyId        String
+  property          Property  @relation("PropertyLeases", fields: [propertyId], references: [id], onDelete: Restrict)
+  activeForProperty Property? @relation("CurrentLease")
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  // --- 📅 Période ---
+  startDate DateTime  @db.Date
+  endDate   DateTime? @db.Date // Optionnel si contrat à durée indéterminée
+
+  // --- 💰 Termes du contrat ---
+  rentAmount    Decimal  @db.Decimal(10, 2)
+  depositAmount Decimal? @db.Decimal(10, 2) // Caution
+
+  status LeaseStatus @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([propertyId])
+  @@index([tenantId])
+}
