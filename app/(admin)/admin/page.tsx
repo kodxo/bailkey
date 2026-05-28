@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { postService } from "@/lib/services/post.service";
+import { getAdminPosts } from "@/lib/dal/posts";
 import { PostStatus } from "@/lib/generated/prisma/enums";
 
 export const dynamic = "force-dynamic";
@@ -21,7 +21,7 @@ import { SearchPanel, SearchPanelSelect, SearchPanelTabs } from "@/components/ui
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
 
 export default async function AdminArticlesPage(): Promise<React.JSX.Element> {
-  const res = await postService.getPosts();
+  const res = await getAdminPosts();
   const posts = res.posts || [];
 
   const totalPosts = posts.length;
