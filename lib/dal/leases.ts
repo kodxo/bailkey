@@ -2,8 +2,9 @@ import { prisma } from "@/lib/db";
 import { getAuthContext } from "@/lib/clerk/auth-context";
 import { LeaseStatus, LegalEntityType, PaymentFrequency } from "../generated/prisma/enums";
 import type { LeaseDTO } from "@/lib/types/property";
-import { generateRentSchedulesForLease } from "./schedules";
-
+import { generateRentSchedulesForLease, deleteFuturePendingSchedules } from "./schedules";
+import { validateStatusTransition } from "@/lib/schemas/lease.schema";
+import { Prisma } from "../generated/prisma/client";
 
 export function serializeLease(raw: {
   id: string;
@@ -14,6 +15,8 @@ export function serializeLease(raw: {
   endDate: Date | null;
   rentAmount: { toNumber: () => number } | number;
   depositAmount: { toNumber: () => number } | number | null;
+  paymentFrequency?: PaymentFrequency;
+  paymentDay?: number;
   status: LeaseStatus;
   property: {
     designation: string;
@@ -57,6 +60,8 @@ export function serializeLease(raw: {
     endDate: raw.endDate ? raw.endDate.toISOString().split("T")[0] : null,
     rentAmount: rentNum,
     depositAmount: depositNum,
+    paymentFrequency: raw.paymentFrequency || PaymentFrequency.MONTHLY,
+    paymentDay: raw.paymentDay || 5,
     status: raw.status,
     createdAt: raw.createdAt.toISOString(),
     updatedAt: raw.updatedAt.toISOString(),
@@ -85,10 +90,10 @@ export async function getLeases(params?: {
     const statusFilter = params?.status && params.status !== "all" ? params.status : undefined;
 
     // Constuire le filtre `where` de base
-    const whereClause: any = { organizationId: orgId };
+    const whereClause: Prisma.LeaseWhereInput = { organizationId: orgId };
     
     if (statusFilter) {
-      whereClause.status = statusFilter;
+      whereClause.status = statusFilter as LeaseStatus;
     }
     
     if (search) {
@@ -177,7 +182,7 @@ export interface SaveLeaseInputDTO {
 
 export async function createLease(
   input: SaveLeaseInputDTO
-): Promise<{ success: boolean; lease: LeaseDTO | null; error?: string }> {
+): Promise<{ success: boolean; lease: LeaseDTO | null; schedulesGenerated?: number; error?: string }> {
   try {
     const { orgId } = await getAuthContext();
 
@@ -200,6 +205,7 @@ export async function createLease(
       include: { property: true, tenant: true },
     });
 
+    let schedulesGenerated = 0;
     // Also update property status to RENTED and currentLeaseId if ACTIVE
     if (newLease.status === LeaseStatus.ACTIVE) {
       await prisma.property.update({
@@ -211,10 +217,13 @@ export async function createLease(
       });
 
       // Generate rent schedules (échéances) automatically
-      await generateRentSchedulesForLease(newLease.id);
+      const genResult = await generateRentSchedulesForLease(newLease.id);
+      if (genResult.success && genResult.count) {
+        schedulesGenerated = genResult.count;
+      }
     }
 
-    return { success: true, lease: serializeLease(newLease) };
+    return { success: true, lease: serializeLease(newLease), schedulesGenerated };
   } catch (error: unknown) {
     console.error("Erreur createLease:", error);
     return {
@@ -228,12 +237,18 @@ export async function createLease(
 export async function updateLease(
   id: string,
   input: Partial<SaveLeaseInputDTO>
-): Promise<{ success: boolean; lease: LeaseDTO | null; error?: string }> {
+): Promise<{ success: boolean; lease: LeaseDTO | null; schedulesGenerated?: number; schedulesDeleted?: number; error?: string }> {
   try {
     const { orgId } = await getAuthContext();
     const existing = await prisma.lease.findUnique({ where: { id } });
     if (!existing || existing.organizationId !== orgId) {
       return { success: false, lease: null, error: "Contrat de bail non trouvé" };
+    }
+
+    if (input.status && input.status !== existing.status) {
+      if (!validateStatusTransition(existing.status, input.status)) {
+        return { success: false, lease: null, error: `Transition de statut non autorisée de ${existing.status} vers ${input.status}` };
+      }
     }
 
     const { startDate, endDate, ...restInput } = input;
@@ -255,7 +270,10 @@ export async function updateLease(
       include: { property: true, tenant: true },
     });
 
-    if (updated.status === LeaseStatus.ACTIVE) {
+    let schedulesGenerated = 0;
+    let schedulesDeleted = 0;
+
+    if (updated.status === LeaseStatus.ACTIVE && existing.status !== LeaseStatus.ACTIVE) {
       await prisma.property.update({
         where: { id: updated.propertyId },
         data: {
@@ -263,7 +281,13 @@ export async function updateLease(
           currentLeaseId: updated.id,
         },
       });
-    } else if (existing.status === LeaseStatus.ACTIVE) {
+
+      // DRAFT -> ACTIVE: générer échéances
+      const genResult = await generateRentSchedulesForLease(updated.id);
+      if (genResult.success && genResult.count) {
+        schedulesGenerated = genResult.count;
+      }
+    } else if (existing.status === LeaseStatus.ACTIVE && updated.status !== LeaseStatus.ACTIVE) {
       await prisma.property.update({
         where: { id: updated.propertyId },
         data: {
@@ -271,9 +295,15 @@ export async function updateLease(
           currentLeaseId: null,
         },
       });
+
+      // ACTIVE -> TERMINATED/EXPIRED: supprimer échéances futures
+      const delResult = await deleteFuturePendingSchedules(updated.id);
+      if (delResult.success && delResult.count) {
+        schedulesDeleted = delResult.count;
+      }
     }
 
-    return { success: true, lease: serializeLease(updated) };
+    return { success: true, lease: serializeLease(updated), schedulesGenerated, schedulesDeleted };
   } catch (error: unknown) {
     console.error("Erreur updateLease:", error);
     return {

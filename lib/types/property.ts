@@ -4,6 +4,9 @@ import {
   CommissionType,
   LegalEntityType,
   LeaseStatus,
+  PaymentFrequency,
+  ScheduleStatus,
+  PaymentMethod,
 } from "../generated/prisma/enums";
 
 export interface PropertyImageDTO {
@@ -106,9 +109,50 @@ export interface LeaseDTO {
   endDate: string | null;
   rentAmount: number;
   depositAmount: number | null;
+  paymentFrequency: PaymentFrequency;
+  paymentDay: number;
   status: LeaseStatus;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface PaymentDTO {
+  id: string;
+  organizationId: string;
+  scheduleId: string;
+  amount: number;
+  paymentDate: string;
+  paymentMethod: PaymentMethod;
+  reference: string | null;
+  notes: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ScheduleDTO {
+  id: string;
+  organizationId: string;
+  leaseId: string;
+  periodStart: string;
+  periodEnd: string;
+  dueDate: string;
+  amount: number;
+  amountPaid: number;
+  status: ScheduleStatus;
+  isLocked: boolean;
+  createdAt: string;
+  updatedAt: string;
+  payments?: PaymentDTO[];
+  lease?: {
+    tenant: {
+      firstName: string | null;
+      lastName: string | null;
+      companyName: string | null;
+    };
+    property: {
+      designation: string;
+    };
+  };
 }
 
 // Responses DTOs

@@ -3,6 +3,8 @@
  * Used by both the table server and sidebar server components (DRY).
  */
 
+import type { ScheduleDTO } from "@/lib/types/property";
+
 export interface SchedulePaymentDTO {
   id: string;
   amount: number;
@@ -24,48 +26,15 @@ export interface ScheduleDisplayDTO {
   payments: SchedulePaymentDTO[];
 }
 
-interface PrismaPayment {
-  id: string;
-  amount: number | { toNumber: () => number };
-  paymentDate: string | Date;
-  paymentMethod: string;
-  reference?: string;
-}
-
-interface PrismaSchedule {
-  id: string;
-  leaseId: string;
-  amount: number | { toNumber: () => number };
-  amountPaid: number | { toNumber: () => number };
-  dueDate: string | Date;
-  status: "OVERDUE" | "PENDING" | "PARTIAL" | "PAID";
-  isLocked: boolean;
-  payments?: PrismaPayment[];
-  lease?: {
-    tenant?: {
-      lastName?: string | null;
-      firstName?: string | null;
-      companyName?: string | null;
-    } | null;
-    property?: {
-      name?: string | null;
-    } | null;
-  } | null;
-}
-
 const dateFormatter = new Intl.DateTimeFormat("fr-FR", {
   day: "2-digit",
   month: "short",
   year: "numeric",
 });
 
-function toNumber(val: number | { toNumber: () => number }): number {
-  return typeof val === "number" ? val : val.toNumber();
-}
-
-export function serializeSchedule(s: PrismaSchedule): ScheduleDisplayDTO {
-  const amount = toNumber(s.amount);
-  const amountPaid = toNumber(s.amountPaid);
+export function serializeSchedule(s: ScheduleDTO): ScheduleDisplayDTO {
+  const amount = Number(s.amount);
+  const amountPaid = Number(s.amountPaid);
 
   const tenant = s.lease?.tenant;
   const tenantName = tenant
@@ -78,7 +47,7 @@ export function serializeSchedule(s: PrismaSchedule): ScheduleDisplayDTO {
     id: s.id,
     leaseId: s.leaseId,
     tenantName,
-    propertyInfo: s.lease?.property?.name || "Bien Inconnu",
+    propertyInfo: s.lease?.property?.designation || "Bien Inconnu",
     date: dateFormatter.format(new Date(s.dueDate)),
     amount,
     remaining: amount - amountPaid,
@@ -86,10 +55,10 @@ export function serializeSchedule(s: PrismaSchedule): ScheduleDisplayDTO {
     isLocked: s.isLocked,
     payments: (s.payments || []).map((p) => ({
       id: p.id,
-      amount: toNumber(p.amount),
+      amount: Number(p.amount),
       date: dateFormatter.format(new Date(p.paymentDate)),
       method: p.paymentMethod,
-      reference: p.reference,
+      reference: p.reference ?? undefined,
     })),
   };
 }

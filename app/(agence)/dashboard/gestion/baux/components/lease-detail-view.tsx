@@ -34,6 +34,16 @@ export function LeaseDetailView({ lease }: LeaseDetailViewProps): React.JSX.Elem
       </CardHeader>
       <CardContent className="pt-md max-h-[calc(100vh-220px)] overflow-y-auto">
         <div className="flex flex-col gap-md">
+          {lease.status === "DRAFT" && (
+            <div className="p-3 bg-orange-50 border border-orange-200 rounded-md text-orange-800 text-sm flex flex-col gap-1">
+              <div className="flex items-center gap-2 font-semibold">
+                <span className="material-symbols-outlined">warning</span>
+                Bail en brouillon
+              </div>
+              <p>Aucune échéance ne sera générée tant que le bail est en brouillon. Passez le statut à "Actif" pour déclencher la facturation.</p>
+            </div>
+          )}
+
           <div className="flex border-b border-outline-variant/40 mb-2">
             <button
               className={`flex-1 py-2 text-sm font-semibold border-b-2 transition-colors ${

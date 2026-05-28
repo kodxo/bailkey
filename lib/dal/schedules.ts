@@ -1,26 +1,30 @@
 import { prisma } from "@/lib/db";
 import { getAuthContext } from "@/lib/clerk/auth-context";
 import { ScheduleStatus, PaymentFrequency } from "../generated/prisma/enums";
+import { Prisma } from "../generated/prisma/client";
+import type { ScheduleDTO } from "@/lib/types/property";
 
-function serializePrisma(obj: any): any {
-  if (obj === null || obj === undefined) return obj;
-  if (typeof obj !== 'object') return obj;
+function serializePrisma<T>(obj: unknown): T {
+  if (obj === null || obj === undefined) return obj as T;
+  if (typeof obj !== 'object') return obj as T;
   
-  if (obj instanceof Date) return obj;
-  if (typeof obj.toNumber === 'function') return obj.toNumber();
+  if (obj instanceof Date) return obj as T;
+  if ('toNumber' in obj && typeof (obj as { toNumber: () => number }).toNumber === 'function') {
+    return (obj as { toNumber: () => number }).toNumber() as T;
+  }
   
   if (Array.isArray(obj)) {
-    return obj.map(serializePrisma);
+    return obj.map(item => serializePrisma<unknown>(item)) as T;
   }
   
-  const res: any = {};
+  const res: Record<string, unknown> = {};
   for (const key of Object.keys(obj)) {
-    res[key] = serializePrisma(obj[key]);
+    res[key] = serializePrisma<unknown>((obj as Record<string, unknown>)[key]);
   }
-  return res;
+  return res as T;
 }
 
-export async function generateRentSchedulesForLease(leaseId: string, providedOrgId?: string): Promise<{ success: boolean; error?: string }> {
+export async function generateRentSchedulesForLease(leaseId: string, providedOrgId?: string): Promise<{ success: boolean; count?: number; error?: string }> {
   try {
     let orgId = providedOrgId;
     if (!orgId) {
@@ -105,14 +109,14 @@ export async function generateRentSchedulesForLease(leaseId: string, providedOrg
       });
     }
 
-    return { success: true };
+    return { success: true, count: schedulesToCreate.length };
   } catch (error: unknown) {
     console.error("Erreur generateRentSchedulesForLease:", error);
     return { success: false, error: "Erreur lors de la génération de l'échéancier" };
   }
 }
 
-export async function getRentSchedulesByLeaseId(leaseId: string) {
+export async function getRentSchedulesByLeaseId(leaseId: string): Promise<{ success: boolean; schedules?: ScheduleDTO[]; error?: string }> {
   try {
     const { orgId } = await getAuthContext();
     const schedules = await prisma.rentSchedule.findMany({
@@ -129,14 +133,14 @@ export async function getRentSchedulesByLeaseId(leaseId: string) {
       }
     });
 
-    return { success: true, schedules: serializePrisma(schedules) };
+    return { success: true, schedules: serializePrisma<ScheduleDTO[]>(schedules) };
   } catch (error) {
     console.error("Erreur getRentSchedulesByLeaseId:", error);
-    return { success: false, schedules: [], error: "Erreur de récupération" };
+    return { success: false, error: "Erreur de récupération" };
   }
 }
 
-export async function getRentScheduleById(id: string) {
+export async function getRentScheduleById(id: string): Promise<{ success: boolean; schedule?: ScheduleDTO; error?: string }> {
   try {
     const { orgId } = await getAuthContext();
     const schedule = await prisma.rentSchedule.findUnique({
@@ -153,13 +157,13 @@ export async function getRentScheduleById(id: string) {
     });
 
     if (!schedule) {
-      return { success: false, schedule: null, error: "Échéance introuvable" };
+      return { success: false, error: "Échéance introuvable" };
     }
 
-    return { success: true, schedule: serializePrisma(schedule) };
+    return { success: true, schedule: serializePrisma<ScheduleDTO>(schedule) };
   } catch (error) {
     console.error("Erreur getRentScheduleById:", error);
-    return { success: false, schedule: null, error: "Erreur de récupération" };
+    return { success: false, error: "Erreur de récupération" };
   }
 }
 
@@ -169,7 +173,16 @@ export async function getRentSchedules(params?: {
   search?: string;
   status?: string;
   leaseId?: string;
-}) {
+}): Promise<{ 
+  success: boolean; 
+  schedules?: ScheduleDTO[]; 
+  totalCount?: number;
+  overdueCount?: number;
+  pendingCount?: number;
+  totalAmount?: number;
+  totalPaid?: number;
+  error?: string 
+}> {
   try {
     const { orgId } = await getAuthContext();
 
@@ -178,10 +191,10 @@ export async function getRentSchedules(params?: {
     const search = params?.search?.trim() || "";
     const statusFilter = params?.status && params.status !== "all" ? params.status : undefined;
 
-    const whereClause: any = { organizationId: orgId };
+    const whereClause: Prisma.RentScheduleWhereInput = { organizationId: orgId };
 
     if (statusFilter) {
-      whereClause.status = statusFilter;
+      whereClause.status = statusFilter as ScheduleStatus;
     }
 
     if (params?.leaseId) {
@@ -230,7 +243,7 @@ export async function getRentSchedules(params?: {
 
     return { 
       success: true, 
-      schedules: serializePrisma(schedules), 
+      schedules: serializePrisma<ScheduleDTO[]>(schedules), 
       totalCount,
       overdueCount,
       pendingCount,
@@ -241,14 +254,31 @@ export async function getRentSchedules(params?: {
     console.error("Erreur getRentSchedules:", error);
     return { 
       success: false, 
-      schedules: [], 
-      totalCount: 0,
-      overdueCount: 0,
-      pendingCount: 0,
-      totalAmount: 0,
-      totalPaid: 0,
       error: "Erreur de récupération" 
     };
   }
 }
 
+export async function deleteFuturePendingSchedules(leaseId: string): Promise<{ success: boolean; count?: number; error?: string }> {
+  try {
+    const auth = await getAuthContext();
+    const orgId = auth.orgId;
+
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+
+    const result = await prisma.rentSchedule.deleteMany({
+      where: {
+        leaseId,
+        organizationId: orgId,
+        status: ScheduleStatus.PENDING,
+        dueDate: { gt: today },
+      },
+    });
+
+    return { success: true, count: result.count };
+  } catch (error: unknown) {
+    console.error("Erreur deleteFuturePendingSchedules:", error);
+    return { success: false, error: "Erreur lors de la suppression des échéances futures" };
+  }
+}

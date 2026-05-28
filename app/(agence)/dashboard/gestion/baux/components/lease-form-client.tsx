@@ -4,6 +4,7 @@ import React, { useActionState, useEffect } from "react";
 import { LeaseStatus } from "@/lib/generated/prisma/enums";
 import type { LeaseDTO, PropertyDTO, TenantDTO } from "@/lib/types/property";
 import { createLeaseAction, updateLeaseAction, type LeaseActionState } from "@/lib/actions/lease.actions";
+import { VALID_STATUS_TRANSITIONS } from "@/lib/schemas/lease.schema";
 import { toast } from "sonner";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -47,9 +48,12 @@ export function LeaseFormClient({
   useEffect(() => {
     if (state?.success && state.lease) {
       if (mode === "edit") {
-        toast.success("Contrat de location mis à jour.");
+        let msg = "Contrat de location mis à jour.";
+        if (state.schedulesGenerated) msg += ` ${state.schedulesGenerated} échéance(s) générée(s).`;
+        if (state.schedulesDeleted) msg += ` ${state.schedulesDeleted} échéance(s) annulée(s).`;
+        toast.success(msg);
       } else {
-        toast.success("Contrat de location créé avec succès.");
+        toast.success(`Contrat créé avec succès. ${state.schedulesGenerated || 0} échéance(s) générée(s).`);
       }
       const params = new URLSearchParams(searchParams.toString());
       params.delete("mode");
@@ -83,7 +87,31 @@ export function LeaseFormClient({
         </Button>
       </CardHeader>
       <CardContent className="pt-md max-h-[calc(100vh-220px)] overflow-y-auto">
-        <form action={formAction} className="flex flex-col gap-md">
+        {lease?.status === "DRAFT" && (
+          <div className="mb-4 p-3 bg-orange-50 border border-orange-200 rounded-md text-orange-800 text-sm flex items-center gap-2">
+            <span className="material-symbols-outlined">warning</span>
+            Ce bail est en brouillon. Passez-le au statut "Actif" pour générer les échéances automatiquement.
+          </div>
+        )}
+        <form 
+          action={formAction} 
+          className="flex flex-col gap-md"
+          onSubmit={(e) => {
+            const formData = new FormData(e.currentTarget);
+            const newStatus = formData.get("status") as string;
+            const currentStatus = lease?.status;
+
+            if (newStatus === "ACTIVE" && currentStatus !== "ACTIVE") {
+              if (!window.confirm("Vous êtes sur le point d'activer ce bail. Le système va générer automatiquement les échéances jusqu'à la fin de l'année (ou fin du contrat). Voulez-vous continuer ?")) {
+                e.preventDefault();
+              }
+            } else if ((newStatus === "TERMINATED" || newStatus === "EXPIRED") && currentStatus === "ACTIVE") {
+               if (!window.confirm(`Vous allez passer le bail à ${newStatus}. Toutes les échéances futures non payées seront supprimées. Continuer ?`)) {
+                  e.preventDefault();
+               }
+            }
+          }}
+        >
           <div className="flex flex-col gap-xs">
             <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
               Bien Immobilier *
@@ -215,7 +243,7 @@ export function LeaseFormClient({
                 { label: "Actif", value: "ACTIVE" },
                 { label: "Résilié", value: "TERMINATED" },
                 { label: "Expiré", value: "EXPIRED" },
-              ]}
+              ].filter(opt => !lease || lease.status === opt.value || VALID_STATUS_TRANSITIONS[lease.status as LeaseStatus]?.includes(opt.value as LeaseStatus))}
               wrapperClassName="w-full"
             />
             {state?.errors?.status && <p className="text-xs text-error">{state.errors.status[0]}</p>}

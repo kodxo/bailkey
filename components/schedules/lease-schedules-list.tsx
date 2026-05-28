@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { fetchLeaseSchedulesAction } from "@/lib/actions/schedules.actions";
 import { ScheduleStatusBadge } from "./schedule-status-badge";
 import { ScheduleRowActions } from "@/app/(agence)/dashboard/gestion/echeances/schedule-row-actions";
+import type { ScheduleDTO } from "@/lib/types/property";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -16,7 +17,7 @@ const formatCurrency = (amount: number) => {
 };
 
 export function LeaseSchedulesList({ leaseId }: { leaseId: string }) {
-  const [schedules, setSchedules] = useState<any[]>([]);
+  const [schedules, setSchedules] = useState<ScheduleDTO[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

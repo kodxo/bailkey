@@ -2,27 +2,15 @@
 
 import { createLease, updateLease } from "@/lib/dal/leases";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
-import { LeaseStatus, PaymentFrequency } from "../generated/prisma/enums";
+import { LeaseSchema } from "@/lib/schemas/lease.schema";
 import type { LeaseDTO } from "@/lib/types/property";
-
-const LeaseSchema = z.object({
-  propertyId: z.string().min(1, "La propriété est requise"),
-  tenantId: z.string().min(1, "Le locataire est requis"),
-  rentAmount: z.coerce.number().positive("Le loyer doit être supérieur à 0"),
-  depositAmount: z.coerce.number().min(0).optional().nullable(),
-  startDate: z.coerce.date(),
-  endDate: z.string().optional().transform(val => val ? new Date(val) : null),
-  paymentFrequency: z.enum(["MONTHLY", "QUARTERLY", "SEMI_ANNUALLY", "ANNUALLY"]).optional(),
-  paymentDay: z.coerce.number().min(1).max(31).optional(),
-  status: z.enum(["DRAFT", "ACTIVE", "TERMINATED", "EXPIRED"]).optional(),
-});
-
 export type LeaseActionState = {
   success?: boolean;
   error?: string;
   errors?: Record<string, string[]>;
   lease?: LeaseDTO | null;
+  schedulesGenerated?: number;
+  schedulesDeleted?: number;
 };
 
 export async function createLeaseAction(prevState: LeaseActionState | null, formData: FormData): Promise<LeaseActionState> {

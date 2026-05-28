@@ -22,6 +22,7 @@ import { SchedulesSidebarSkeleton } from "./components/schedules-sidebar-skeleto
 import { SchedulesStatusFilter } from "./components/schedules-status-filter";
 import { LeaseFilterBanner } from "./components/lease-filter-banner";
 import { getLeaseById } from "@/lib/dal/leases";
+import type { LeaseDTO } from "@/lib/types/property";
 
 export const dynamic = "force-dynamic";
 
@@ -52,11 +53,12 @@ export default async function RentSchedulesPage({
 
   // For breadcrumb only, we fetch the lease name if leaseId is provided.
   // This is a fast, isolated fetch and doesn't block the main table/metrics
-  let leaseData: any = null;
+  let leaseData: LeaseDTO | null = null;
   if (leaseId) {
     const res = await getLeaseById(leaseId);
     leaseData = res.lease;
   }
+
 
   const breadcrumbItems: { label: string; href?: string }[] = [
     { label: "Tableau de bord", href: "/dashboard" },
