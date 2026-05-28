@@ -33,8 +33,13 @@ export function LeaseSchedulesList({ leaseId }: { leaseId: string }) {
 
   if (loading) {
     return (
-      <div className="py-4 text-center text-sm text-muted-foreground">
-        Chargement de l'échéancier...
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4 bg-surface-container-lowest border border-outline-variant rounded-none">
+        <span className="material-symbols-outlined animate-spin text-primary text-4xl">
+          progress_activity
+        </span>
+        <p className="text-body-md text-on-surface-variant font-medium">
+          Chargement de l'échéancier...
+        </p>
       </div>
     );
   }
