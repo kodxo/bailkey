@@ -15,6 +15,7 @@ import {
   DashboardSidebar,
   DashboardToolbar,
 } from "@/components/layout/dashboard-split-pane";
+import { ActiveFilterBanner } from "@/components/ui/active-filter-banner";
 
 interface SchedulesDashboardProps {
   initialSchedules: any[];
@@ -168,19 +169,10 @@ export function SchedulesDashboard({
       <DashboardSplitGrid>
         <DashboardMain>
           {initialLeaseId && (
-            <div className="bg-primary-container text-on-primary-container px-4 py-3 mb-4 flex items-center justify-between shadow-sm">
-              <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined">filter_list</span>
-                <span className="font-medium text-body-md">Filtré sur un contrat spécifique</span>
-              </div>
-              <button 
-                onClick={clearLeaseFilter}
-                className="text-body-sm flex items-center gap-1 hover:underline font-medium"
-              >
-                <span className="material-symbols-outlined text-[16px]">close</span>
-                Afficher tout
-              </button>
-            </div>
+            <ActiveFilterBanner
+              label="Filtré sur un contrat spécifique"
+              onClear={clearLeaseFilter}
+            />
           )}
           {/* Search Bar */}
           <DashboardToolbar>
