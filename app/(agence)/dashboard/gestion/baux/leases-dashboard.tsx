@@ -145,10 +145,8 @@ export function LeasesDashboard({
   useEffect(() => {
     if (state?.success && state.lease) {
       if (formMode === "edit" && selectedLease) {
-        setLeases((prev) => prev.map((l) => (l.id === state.lease!.id ? state.lease! : l)));
         toast.success("Contrat de location mis à jour.");
       } else {
-        setLeases((prev) => [state.lease!, ...prev]);
         toast.success("Contrat de location créé avec succès.");
       }
       setSelectedLease(state.lease);
