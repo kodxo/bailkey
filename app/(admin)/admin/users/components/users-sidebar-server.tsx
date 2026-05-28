@@ -93,7 +93,7 @@ export async function UsersSidebarServer({
             <span className="text-label-caps uppercase text-on-surface-variant">
               Rôle Actuel
             </span>
-            {selectedUser.role === "admin" ? (
+            {selectedUser.role === "super_admin" ? (
               <Badge variant="default" dot>
                 Administrateur
               </Badge>

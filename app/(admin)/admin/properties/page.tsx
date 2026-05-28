@@ -1,11 +1,16 @@
 import React, { Suspense } from "react";
 import { checkRole } from "@/lib/clerk/check-role";
 import { redirect } from "next/navigation";
-import { DashboardSplitGrid } from "@/components/ui/dashboard-split-grid";
-import { PropertiesFilterBar } from "./components/properties-filter-bar";
-import { PropertiesMetricsServer } from "./components/properties-metrics-server";
-import { PropertiesTableServer } from "./components/properties-table-server";
-import { PropertiesSidebarServer } from "./components/properties-sidebar-server";
+import {
+  DashboardSplitGrid,
+  DashboardMain,
+  DashboardSidebar,
+  DashboardToolbar,
+} from "@/components/layout/dashboard-split-pane";
+import { PropertiesFilterBar } from "@/components/admin/properties/properties-filter-bar";
+import { PropertiesMetricsServer } from "@/components/admin/properties/properties-metrics-server";
+import { PropertiesTableServer } from "@/components/admin/properties/properties-table-server";
+import { PropertiesSidebarServer } from "@/components/admin/properties/properties-sidebar-server";
 
 export const metadata = {
   title: "Bailkey - Gestion des Propriétés",
@@ -41,9 +46,11 @@ export default async function AdminPropertiesPage({
         <PropertiesMetricsServer search={search} status={status} type={type} />
       </Suspense>
 
-      <DashboardSplitGrid
-        toolbar={<PropertiesFilterBar />}
-        main={
+      <DashboardSplitGrid>
+        <DashboardMain>
+          <DashboardToolbar>
+            <PropertiesFilterBar />
+          </DashboardToolbar>
           <Suspense fallback={
             <div className="flex justify-center items-center h-64">
               <span className="material-symbols-outlined animate-spin text-3xl text-primary">
@@ -55,18 +62,18 @@ export default async function AdminPropertiesPage({
               page={page}
               pageSize={10}
               search={search}
-              status={status}
               type={type}
+              status={status}
               selectedId={selectedId}
             />
           </Suspense>
-        }
-        sidebar={
+        </DashboardMain>
+        <DashboardSidebar>
           <Suspense fallback={<div className="h-64 bg-surface-container-low animate-pulse rounded" />}>
             <PropertiesSidebarServer selectedId={selectedId} edit={edit} />
           </Suspense>
-        }
-      />
+        </DashboardSidebar>
+      </DashboardSplitGrid>
     </div>
   );
 }

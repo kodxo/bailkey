@@ -1,12 +1,9 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
-import {
-  PropertyType,
-  PropertyStatus,
-} from "@/lib/generated/prisma/enums";
+import React, { useActionState, useEffect } from "react";
+import { PropertyType, PropertyStatus } from "@/lib/generated/prisma/enums";
 import type { PropertyDTO, OwnerDTO } from "@/lib/types/property";
-import { createPropertyAction, updatePropertyAction } from "@/lib/actions/property.actions";
+import { propertyFormAction } from "@/lib/actions/property.actions";
 import { toast } from "sonner";
 import { Select } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -25,33 +22,7 @@ export function PropertyFormClient({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [isPending, startTransition] = useTransition();
-
-  const [formData, setFormData] = useState<{
-    reference: string;
-    designation: string;
-    description: string;
-    propertyType: PropertyType;
-    address: string;
-    city: string;
-    area: number | "";
-    roomsCount: number | "";
-    baseRent: number | "";
-    status: PropertyStatus;
-    ownerId?: string;
-  }>({
-    reference: property?.reference || `REF-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
-    designation: property?.designation || "",
-    description: property?.description || "",
-    propertyType: property?.propertyType || PropertyType.APARTMENT,
-    address: property?.address || "",
-    city: property?.city || "Douala",
-    area: property?.area ?? "",
-    roomsCount: property?.roomsCount ?? "",
-    baseRent: property?.baseRent ?? "",
-    status: property?.status || PropertyStatus.AVAILABLE,
-    ownerId: property ? (property.owners?.[0]?.id || "") : (initialOwners[0]?.id || ""),
-  });
+  const [state, action, isPending] = useActionState(propertyFormAction, {});
 
   const handleCancel = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -60,50 +31,23 @@ export function PropertyFormClient({
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.designation || !formData.reference || formData.baseRent === "") {
-      toast.error("Veuillez remplir les champs obligatoires.");
-      return;
-    }
-
-    startTransition(async () => {
-      const payload = {
-        reference: formData.reference,
-        designation: formData.designation,
-        description: formData.description || null,
-        propertyType: formData.propertyType,
-        address: formData.address,
-        city: formData.city,
-        area: formData.area === "" ? null : Number(formData.area),
-        roomsCount: formData.roomsCount === "" ? null : Number(formData.roomsCount),
-        baseRent: Number(formData.baseRent),
-        status: formData.status,
-        ...(formData.ownerId && { ownerId: formData.ownerId }),
-      };
-
-      if (property) {
-        const res = await updatePropertyAction(property.id, payload);
-        if (res.success) {
-          toast.success("Propriété mise à jour avec succès.");
-          handleCancel();
-        } else {
-          toast.error(res.error || "Erreur de mise à jour.");
+  useEffect(() => {
+    if (state?.message) {
+      if (state.success) {
+        toast.success(state.message);
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("edit");
+        if (state.data?.id) {
+          params.set("selectedId", state.data.id);
         }
-      } else {
-        const res = await createPropertyAction(payload);
-        if (res.success && res.property) {
-          toast.success("Propriété créée avec succès.");
-          const params = new URLSearchParams(searchParams.toString());
-          params.delete("edit");
-          params.set("selectedId", res.property.id);
-          router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-        } else {
-          toast.error(res.error || "Erreur de création.");
-        }
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      } else if (state.success === false && !state.errors) {
+        toast.error(state.message);
+      } else if (state.success === false && state.errors) {
+        toast.error("Veuillez corriger les erreurs.");
       }
-    });
-  };
+    }
+  }, [state, pathname, router, searchParams]);
 
   return (
     <Card className="border-outline-variant/60 shadow-md">
@@ -111,22 +55,27 @@ export function PropertyFormClient({
         <CardTitle className="text-h3 font-display">
           {property ? "Modifier Propriété" : "Nouvelle Propriété"}
         </CardTitle>
-        <Button variant="ghost" size="sm" onClick={handleCancel}>
+        <Button variant="ghost" size="sm" onClick={handleCancel} type="button">
           Annuler
         </Button>
       </CardHeader>
       <CardContent className="pt-md">
-        <form onSubmit={handleSave} className="flex flex-col gap-md">
+        <form action={action} className="flex flex-col gap-md">
+          {property && <input type="hidden" name="id" value={property.id} />}
+
           <div className="flex flex-col gap-xs">
             <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
               Référence *
             </label>
             <Input
-              required
-              value={formData.reference}
-              disabled={!!property}
-              onChange={(e) => setFormData({ ...formData, reference: e.target.value })}
+              name="reference"
+              defaultValue={property?.reference || `REF-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`}
+              readOnly={!!property}
+              className={state?.errors?.reference ? "border-error" : ""}
             />
+            {state?.errors?.reference && (
+              <span className="text-error text-body-sm">{state.errors.reference[0]}</span>
+            )}
           </div>
 
           <div className="flex flex-col gap-xs">
@@ -134,11 +83,14 @@ export function PropertyFormClient({
               Désignation *
             </label>
             <Input
-              required
+              name="designation"
               placeholder="ex: Bel Appartement F4 Akwa"
-              value={formData.designation}
-              onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
+              defaultValue={property?.designation || ""}
+              className={state?.errors?.designation ? "border-error" : ""}
             />
+            {state?.errors?.designation && (
+              <span className="text-error text-body-sm">{state.errors.designation[0]}</span>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-sm">
@@ -147,8 +99,8 @@ export function PropertyFormClient({
                 Type
               </label>
               <Select
-                value={formData.propertyType}
-                onChange={(e) => setFormData({ ...formData, propertyType: e.target.value as PropertyType })}
+                name="propertyType"
+                defaultValue={property?.propertyType || PropertyType.APARTMENT}
                 options={[
                   { label: "Appartement", value: "APARTMENT" },
                   { label: "Villa", value: "VILLA" },
@@ -157,24 +109,30 @@ export function PropertyFormClient({
                   { label: "Terrain", value: "LAND" },
                   { label: "Entrepôt", value: "WAREHOUSE" },
                 ]}
-                wrapperClassName="border border-outline-variant rounded p-1"
+                wrapperClassName={`border rounded p-1 ${state?.errors?.propertyType ? "border-error" : "border-outline-variant"}`}
               />
+              {state?.errors?.propertyType && (
+                <span className="text-error text-body-sm">{state.errors.propertyType[0]}</span>
+              )}
             </div>
             <div className="flex flex-col gap-xs">
               <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
                 Statut
               </label>
               <Select
-                value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value as PropertyStatus })}
+                name="status"
+                defaultValue={property?.status || PropertyStatus.AVAILABLE}
                 options={[
                   { label: "Disponible", value: "AVAILABLE" },
                   { label: "Loué", value: "RENTED" },
                   { label: "En travaux", value: "UNDER_MAINTENANCE" },
                   { label: "Indisponible", value: "UNAVAILABLE" },
                 ]}
-                wrapperClassName="border border-outline-variant rounded p-1"
+                wrapperClassName={`border rounded p-1 ${state?.errors?.status ? "border-error" : "border-outline-variant"}`}
               />
+              {state?.errors?.status && (
+                <span className="text-error text-body-sm">{state.errors.status[0]}</span>
+              )}
             </div>
           </div>
 
@@ -184,22 +142,28 @@ export function PropertyFormClient({
                 Ville *
               </label>
               <Input
-                required
-                value={formData.city}
-                onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                name="city"
+                defaultValue={property?.city || "Douala"}
+                className={state?.errors?.city ? "border-error" : ""}
               />
+              {state?.errors?.city && (
+                <span className="text-error text-body-sm">{state.errors.city[0]}</span>
+              )}
             </div>
             <div className="flex flex-col gap-xs">
               <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
                 Loyer Mensuel *
               </label>
               <Input
-                required
                 type="number"
+                name="baseRent"
                 placeholder="ex: 250000"
-                value={formData.baseRent}
-                onChange={(e) => setFormData({ ...formData, baseRent: e.target.value === "" ? "" : Number(e.target.value) })}
+                defaultValue={property?.baseRent ?? ""}
+                className={state?.errors?.baseRent ? "border-error" : ""}
               />
+              {state?.errors?.baseRent && (
+                <span className="text-error text-body-sm">{state.errors.baseRent[0]}</span>
+              )}
             </div>
           </div>
 
@@ -208,11 +172,14 @@ export function PropertyFormClient({
               Adresse complète *
             </label>
             <Input
-              required
+              name="address"
               placeholder="ex: Rue Drouot, Akwa"
-              value={formData.address}
-              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+              defaultValue={property?.address || ""}
+              className={state?.errors?.address ? "border-error" : ""}
             />
+            {state?.errors?.address && (
+              <span className="text-error text-body-sm">{state.errors.address[0]}</span>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-sm">
@@ -222,9 +189,13 @@ export function PropertyFormClient({
               </label>
               <Input
                 type="number"
-                value={formData.area}
-                onChange={(e) => setFormData({ ...formData, area: e.target.value === "" ? "" : Number(e.target.value) })}
+                name="area"
+                defaultValue={property?.area ?? ""}
+                className={state?.errors?.area ? "border-error" : ""}
               />
+              {state?.errors?.area && (
+                <span className="text-error text-body-sm">{state.errors.area[0]}</span>
+              )}
             </div>
             <div className="flex flex-col gap-xs">
               <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
@@ -232,9 +203,13 @@ export function PropertyFormClient({
               </label>
               <Input
                 type="number"
-                value={formData.roomsCount}
-                onChange={(e) => setFormData({ ...formData, roomsCount: e.target.value === "" ? "" : Number(e.target.value) })}
+                name="roomsCount"
+                defaultValue={property?.roomsCount ?? ""}
+                className={state?.errors?.roomsCount ? "border-error" : ""}
               />
+              {state?.errors?.roomsCount && (
+                <span className="text-error text-body-sm">{state.errors.roomsCount[0]}</span>
+              )}
             </div>
           </div>
 
@@ -244,8 +219,8 @@ export function PropertyFormClient({
                 Propriétaire Principal
               </label>
               <Select
-                value={formData.ownerId}
-                onChange={(e) => setFormData({ ...formData, ownerId: e.target.value })}
+                name="ownerId"
+                defaultValue={initialOwners[0]?.id || ""}
                 options={initialOwners.map((o) => ({
                   label: `${o.firstName || ""} ${o.lastName || ""} ${o.companyName ? `(${o.companyName})` : ""}`.trim() || o.id,
                   value: o.id,
@@ -260,11 +235,14 @@ export function PropertyFormClient({
               Description
             </label>
             <textarea
+              name="description"
               rows={3}
-              className="w-full bg-surface-container-lowest border border-outline-variant p-2 rounded text-body-md focus:border-primary focus:outline-hidden"
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              defaultValue={property?.description || ""}
+              className={`w-full bg-surface-container-lowest border p-2 rounded text-body-md focus:border-primary focus:outline-hidden ${state?.errors?.description ? "border-error" : "border-outline-variant"}`}
             />
+            {state?.errors?.description && (
+              <span className="text-error text-body-sm">{state.errors.description[0]}</span>
+            )}
           </div>
 
           <Button type="submit" disabled={isPending} className="w-full mt-sm">

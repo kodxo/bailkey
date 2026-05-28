@@ -1,11 +1,16 @@
 import React, { Suspense } from "react";
 import { checkRole } from "@/lib/clerk/check-role";
 import { redirect } from "next/navigation";
-import { DashboardSplitGrid } from "@/components/ui/dashboard-split-grid";
-import { OwnersFilterBar } from "./components/owners-filter-bar";
-import { OwnersMetricsServer } from "./components/owners-metrics-server";
-import { OwnersTableServer } from "./components/owners-table-server";
-import { OwnersSidebarServer } from "./components/owners-sidebar-server";
+import {
+  DashboardSplitGrid,
+  DashboardMain,
+  DashboardSidebar,
+  DashboardToolbar,
+} from "@/components/layout/dashboard-split-pane";
+import { OwnersFilterBar } from "@/components/admin/owners/owners-filter-bar";
+import { OwnersMetricsServer } from "@/components/admin/owners/owners-metrics-server";
+import { OwnersTableServer } from "@/components/admin/owners/owners-table-server";
+import { OwnersSidebarServer } from "@/components/admin/owners/owners-sidebar-server";
 
 export const metadata = {
   title: "Bailkey - Gestion des Propriétaires",
@@ -39,9 +44,11 @@ export default async function AdminOwnersPage({
         <OwnersMetricsServer search={search} type={type} />
       </Suspense>
 
-      <DashboardSplitGrid
-        toolbar={<OwnersFilterBar />}
-        main={
+      <DashboardSplitGrid>
+        <DashboardMain>
+          <DashboardToolbar>
+            <OwnersFilterBar />
+          </DashboardToolbar>
           <Suspense fallback={
             <div className="flex justify-center items-center h-64">
               <span className="material-symbols-outlined animate-spin text-3xl text-primary">
@@ -57,13 +64,13 @@ export default async function AdminOwnersPage({
               selectedId={selectedId}
             />
           </Suspense>
-        }
-        sidebar={
+        </DashboardMain>
+        <DashboardSidebar>
           <Suspense fallback={<div className="h-64 bg-surface-container-low animate-pulse rounded" />}>
             <OwnersSidebarServer selectedId={selectedId} edit={edit} />
           </Suspense>
-        }
-      />
+        </DashboardSidebar>
+      </DashboardSplitGrid>
     </div>
   );
 }

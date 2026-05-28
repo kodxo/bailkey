@@ -27,7 +27,7 @@ export async function UsersMetricsServer({
   let userCount = 0;
   
   if (res.users) {
-    adminCount = res.users.filter((u) => u.role === "admin").length;
+    adminCount = res.users.filter((u) => u.role === "super_admin").length;
     userCount = res.users.filter((u) => u.role === "user").length;
   }
 

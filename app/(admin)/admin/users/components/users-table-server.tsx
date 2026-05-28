@@ -97,7 +97,7 @@ export async function UsersTableServer({
                     }).format(new Date(user.createdAt))}
                   </TableCell>
                   <TableCell>
-                    {user.role === "admin" ? (
+                    {user.role === "super_admin" ? (
                       <Badge variant="default" dot>
                         Admin
                       </Badge>

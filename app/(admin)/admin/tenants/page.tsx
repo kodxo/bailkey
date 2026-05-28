@@ -1,11 +1,16 @@
 import React, { Suspense } from "react";
 import { checkRole } from "@/lib/clerk/check-role";
 import { redirect } from "next/navigation";
-import { DashboardSplitGrid } from "@/components/ui/dashboard-split-grid";
-import { TenantsFilterBar } from "./components/tenants-filter-bar";
-import { TenantsMetricsServer } from "./components/tenants-metrics-server";
-import { TenantsTableServer } from "./components/tenants-table-server";
-import { TenantsSidebarServer } from "./components/tenants-sidebar-server";
+import {
+  DashboardSplitGrid,
+  DashboardMain,
+  DashboardSidebar,
+  DashboardToolbar,
+} from "@/components/layout/dashboard-split-pane";
+import { TenantsFilterBar } from "@/components/admin/tenants/tenants-filter-bar";
+import { TenantsMetricsServer } from "@/components/admin/tenants/tenants-metrics-server";
+import { TenantsTableServer } from "@/components/admin/tenants/tenants-table-server";
+import { TenantsSidebarServer } from "@/components/admin/tenants/tenants-sidebar-server";
 
 export const metadata = {
   title: "Bailkey - Gestion des Locataires",
@@ -39,9 +44,11 @@ export default async function AdminTenantsPage({
         <TenantsMetricsServer search={search} type={type} />
       </Suspense>
 
-      <DashboardSplitGrid
-        toolbar={<TenantsFilterBar />}
-        main={
+      <DashboardSplitGrid>
+        <DashboardMain>
+          <DashboardToolbar>
+            <TenantsFilterBar />
+          </DashboardToolbar>
           <Suspense fallback={
             <div className="flex justify-center items-center h-64">
               <span className="material-symbols-outlined animate-spin text-3xl text-primary">
@@ -57,13 +64,13 @@ export default async function AdminTenantsPage({
               selectedId={selectedId}
             />
           </Suspense>
-        }
-        sidebar={
+        </DashboardMain>
+        <DashboardSidebar>
           <Suspense fallback={<div className="h-64 bg-surface-container-low animate-pulse rounded" />}>
             <TenantsSidebarServer selectedId={selectedId} edit={edit} />
           </Suspense>
-        }
-      />
+        </DashboardSidebar>
+      </DashboardSplitGrid>
     </div>
   );
 }
