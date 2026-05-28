@@ -7,6 +7,7 @@ import {
   DashboardPageHeader,
 } from "@/components/layout/dashboard-page-layout";
 import { getRentSchedules, getRentScheduleById } from "@/lib/dal/schedules";
+import { getLeaseById } from "@/lib/dal/leases";
 
 export const metadata = {
   title: "Échéances et Encaissements | Bailkey",
@@ -26,24 +27,35 @@ export default async function RentSchedulesPage({
   const selectedId = params?.selectedId;
   const leaseId = params?.leaseId;
 
-  const [schedulesData, selectedScheduleData] = await Promise.all([
+  const [schedulesData, selectedScheduleData, leaseData] = await Promise.all([
     getRentSchedules({ page, pageSize, search, status, leaseId }),
-    selectedId ? getRentScheduleById(selectedId) : Promise.resolve({ schedule: null })
+    selectedId ? getRentScheduleById(selectedId) : Promise.resolve({ schedule: null }),
+    leaseId ? getLeaseById(leaseId) : Promise.resolve({ lease: null })
   ]);
 
   const { schedules, totalCount, overdueCount, pendingCount, totalAmount, totalPaid } = schedulesData;
   const initialSelectedSchedule = selectedScheduleData.schedule;
 
+  const breadcrumbItems: { label: string; href?: string }[] = [
+    { label: "Tableau de bord", href: "/dashboard" },
+    { label: "Gestion Immobilière", href: "/dashboard/gestion" },
+  ];
+
+  if (leaseData.lease) {
+    breadcrumbItems.push({ label: "Baux & Contrats", href: "/dashboard/gestion/baux" });
+    breadcrumbItems.push({ 
+      label: `Contrat de ${leaseData.lease.tenantFullName}`, 
+      href: `/dashboard/gestion/baux?selectedLeaseId=${leaseId}` 
+    });
+    breadcrumbItems.push({ label: "Échéances" });
+  } else {
+    breadcrumbItems.push({ label: "Échéances & Encaissements" });
+  }
+
   return (
     <DashboardPageContainer>
       <DashboardPageHeader>
-        <BreadcrumbNav
-          items={[
-            { label: "Tableau de bord", href: "/dashboard" },
-            { label: "Gestion Immobilière", href: "/dashboard/gestion" },
-            { label: "Échéances & Encaissements" },
-          ]}
-        />
+        <BreadcrumbNav items={breadcrumbItems} />
         <div>
           <h1 className="text-h1 text-on-background mb-xs font-bold font-display">
             Échéances et Encaissements
