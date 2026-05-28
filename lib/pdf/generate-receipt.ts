@@ -1,8 +1,8 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import type { MockSchedule } from "@/app/(agence)/dashboard/gestion/echeances/components/schedules-table";
+import type { ScheduleDisplayDTO } from "@/app/(agence)/dashboard/gestion/echeances/components/schedule-serializer";
 
-export function generateReceipt(schedule: MockSchedule) {
+export function generateReceipt(schedule: ScheduleDisplayDTO) {
   const doc = new jsPDF();
   
   // Header

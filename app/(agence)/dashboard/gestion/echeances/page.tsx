@@ -1,13 +1,29 @@
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
-import { SchedulesDashboard } from "./schedules-dashboard";
-import { SchedulesSkeleton } from "./schedules-skeleton";
 import {
   DashboardPageContainer,
   DashboardPageHeader,
 } from "@/components/layout/dashboard-page-layout";
-import { getRentSchedules, getRentScheduleById } from "@/lib/dal/schedules";
+import {
+  DashboardLayout,
+  DashboardSplitGrid,
+  DashboardMain,
+  DashboardSidebar,
+  DashboardToolbar,
+} from "@/components/layout/dashboard-split-pane";
+import { Search } from "@/components/ui/search";
+
+import { SchedulesMetricsServer } from "./components/schedules-metrics-server";
+import { SchedulesTableServer } from "./components/schedules-table-server";
+import { SchedulesSidebarServer } from "./components/schedules-sidebar-server";
+import { SchedulesMetricsSkeleton } from "./components/schedules-metrics-skeleton";
+import { SchedulesTableSkeleton } from "./components/schedules-table-skeleton";
+import { SchedulesSidebarSkeleton } from "./components/schedules-sidebar-skeleton";
+import { SchedulesStatusFilter } from "./components/schedules-status-filter";
+import { LeaseFilterBanner } from "./components/lease-filter-banner";
 import { getLeaseById } from "@/lib/dal/leases";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Échéances et Encaissements | Bailkey",
@@ -17,8 +33,15 @@ export const metadata = {
 export default async function RentSchedulesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; pageSize?: string; search?: string; status?: string; selectedId?: string; leaseId?: string }>;
-}) {
+  searchParams: Promise<{
+    page?: string;
+    pageSize?: string;
+    search?: string;
+    status?: string;
+    selectedId?: string;
+    leaseId?: string;
+  }>;
+}): Promise<React.JSX.Element> {
   const params = await searchParams;
   const page = parseInt(params?.page || "1", 10);
   const pageSize = parseInt(params?.pageSize || "10", 10);
@@ -27,25 +50,24 @@ export default async function RentSchedulesPage({
   const selectedId = params?.selectedId;
   const leaseId = params?.leaseId;
 
-  const [schedulesData, selectedScheduleData, leaseData] = await Promise.all([
-    getRentSchedules({ page, pageSize, search, status, leaseId }),
-    selectedId ? getRentScheduleById(selectedId) : Promise.resolve({ schedule: null }),
-    leaseId ? getLeaseById(leaseId) : Promise.resolve({ lease: null })
-  ]);
-
-  const { schedules, totalCount, overdueCount, pendingCount, totalAmount, totalPaid } = schedulesData;
-  const initialSelectedSchedule = selectedScheduleData.schedule;
+  // For breadcrumb only, we fetch the lease name if leaseId is provided.
+  // This is a fast, isolated fetch and doesn't block the main table/metrics
+  let leaseData: any = null;
+  if (leaseId) {
+    const res = await getLeaseById(leaseId);
+    leaseData = res.lease;
+  }
 
   const breadcrumbItems: { label: string; href?: string }[] = [
     { label: "Tableau de bord", href: "/dashboard" },
     { label: "Gestion Immobilière", href: "/dashboard/gestion" },
   ];
 
-  if (leaseData.lease) {
+  if (leaseData) {
     breadcrumbItems.push({ label: "Baux & Contrats", href: "/dashboard/gestion/baux" });
-    breadcrumbItems.push({ 
-      label: `Contrat de ${leaseData.lease.tenantFullName}`, 
-      href: `/dashboard/gestion/baux?selectedLeaseId=${leaseId}` 
+    breadcrumbItems.push({
+      label: `Contrat de ${leaseData.tenantFullName}`,
+      href: `/dashboard/gestion/baux?selectedLeaseId=${leaseId}`,
     });
     breadcrumbItems.push({ label: "Échéances" });
   } else {
@@ -67,22 +89,52 @@ export default async function RentSchedulesPage({
         </div>
       </DashboardPageHeader>
 
-      <Suspense fallback={<SchedulesSkeleton />}>
-        <SchedulesDashboard 
-          initialSchedules={schedules as any} 
-          initialSelectedSchedule={initialSelectedSchedule as any}
-          totalCount={totalCount || 0}
-          overdueCount={overdueCount || 0}
-          pendingCount={pendingCount || 0}
-          totalAmount={totalAmount || 0}
-          totalPaid={totalPaid || 0}
-          currentPage={page}
-          pageSize={pageSize}
-          initialSearch={search}
-          initialStatus={status}
-          initialLeaseId={leaseId}
-        />
-      </Suspense>
+      <DashboardLayout>
+        {/* Metrics - independent Suspense */}
+        <Suspense fallback={<SchedulesMetricsSkeleton />}>
+          <SchedulesMetricsServer leaseId={leaseId} />
+        </Suspense>
+
+        <DashboardSplitGrid>
+          <DashboardMain>
+            <LeaseFilterBanner />
+            
+            {/* Toolbar stays interactive */}
+            <DashboardToolbar>
+              <div className="flex-1 min-w-[200px] flex items-center border-b sm:border-b-0 sm:border-r border-outline-variant">
+                <Search placeholder="Rechercher locataire, bien, paiement..." />
+              </div>
+              <div className="flex items-center px-sm py-xs">
+                <SchedulesStatusFilter />
+              </div>
+            </DashboardToolbar>
+
+            {/* Table - Suspense triggered on param change */}
+            <Suspense
+              key={`table-${page}-${pageSize}-${search}-${status}-${leaseId || ""}`}
+              fallback={<SchedulesTableSkeleton />}
+            >
+              <SchedulesTableServer
+                page={page}
+                pageSize={pageSize}
+                search={search}
+                status={status}
+                leaseId={leaseId}
+              />
+            </Suspense>
+          </DashboardMain>
+
+          <DashboardSidebar>
+            {/* Sidebar - Suspense triggered when selection changes */}
+            <Suspense
+              key={`sidebar-${selectedId || "none"}`}
+              fallback={<SchedulesSidebarSkeleton />}
+            >
+              <SchedulesSidebarServer selectedId={selectedId} />
+            </Suspense>
+          </DashboardSidebar>
+        </DashboardSplitGrid>
+      </DashboardLayout>
     </DashboardPageContainer>
   );
 }

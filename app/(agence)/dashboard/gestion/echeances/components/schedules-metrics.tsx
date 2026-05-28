@@ -2,7 +2,6 @@ import React from "react";
 import { MetricCard } from "@/components/ui/metric-card";
 import { Button } from "@/components/ui/button";
 import { DashboardMetrics } from "@/components/layout/dashboard-split-pane";
-import type { MockSchedule } from "./schedules-table";
 
 interface SchedulesMetricsProps {
   totalAmount: number;

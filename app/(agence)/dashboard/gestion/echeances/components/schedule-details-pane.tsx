@@ -3,35 +3,42 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import type { MockSchedule } from "./schedules-table";
+import type { ScheduleDisplayDTO } from "./schedule-serializer";
 import { recordPaymentAction } from "@/lib/actions/payments";
 import { toast } from "sonner";
 import { generateReceipt } from "@/lib/pdf/generate-receipt";
 import Link from "next/link";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 interface ScheduleDetailsPaneProps {
-  selectedSchedule: MockSchedule | null;
-  onCancel: () => void;
+  selectedSchedule: ScheduleDisplayDTO | null;
 }
 
 export function ScheduleDetailsPane({
   selectedSchedule,
-  onCancel,
 }: ScheduleDetailsPaneProps): React.JSX.Element {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const handleClose = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("selectedId");
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
   const [state, formAction, isPending] = useActionState(recordPaymentAction, null);
 
   useEffect(() => {
     if (state?.success) {
       toast.success("Paiement enregistré avec succès.");
-      onCancel();
+      handleClose();
       router.refresh();
     } else if (state?.error) {
       toast.error(state.error);
     }
-  }, [state, onCancel, router]);
+  }, [state, router]);
 
   const defaultDate = new Date().toISOString().split("T")[0];
 
@@ -69,7 +76,7 @@ export function ScheduleDetailsPane({
         <Button
           variant="ghost"
           size="sm"
-          onClick={onCancel}
+          onClick={handleClose}
           className="h-8 w-8 p-0 rounded-full text-on-surface-variant hover:bg-surface-variant"
         >
           <span
@@ -236,7 +243,7 @@ export function ScheduleDetailsPane({
                 size="lg"
                 variant="outline"
                 className="w-full"
-                onClick={onCancel}
+                onClick={handleClose}
                 disabled={isPending}
               >
                 Annuler

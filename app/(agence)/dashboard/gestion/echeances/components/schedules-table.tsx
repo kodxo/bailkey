@@ -8,7 +8,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import type { ScheduleDisplayDTO } from "./schedule-serializer";
 
 export interface MockSchedule {
   id: string;
@@ -30,7 +30,7 @@ export interface MockSchedule {
 }
 
 interface SchedulesTableProps {
-  schedules: MockSchedule[];
+  schedules: ScheduleDisplayDTO[];
   selectedId: string | null;
   onSelect: (id: string) => void;
 }
