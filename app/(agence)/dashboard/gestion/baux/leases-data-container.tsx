@@ -1,5 +1,6 @@
 import { getLeases, getLeaseById } from "@/lib/dal/leases";
 import { getProperties } from "@/lib/dal/properties";
+import { PropertyStatus } from "@/lib/generated/prisma/enums";
 import { getTenants } from "@/lib/dal/tenants";
 import { LeasesDashboard } from "./leases-dashboard";
 
@@ -14,12 +15,16 @@ export async function LeasesDataContainer({
   const status = searchParams?.status || "all";
   const selectedLeaseId = searchParams?.selectedLeaseId;
 
-  const [leasesRes, propsRes, tenantsRes, selectedLeaseRes] = await Promise.all([
+  const [leasesRes, tenantsRes, selectedLeaseRes] = await Promise.all([
     getLeases({ page, pageSize, search, status }),
-    getProperties(),
     getTenants(),
     selectedLeaseId ? getLeaseById(selectedLeaseId) : Promise.resolve({ lease: null }),
   ]);
+
+  const propsRes = await getProperties({
+    status: PropertyStatus.AVAILABLE,
+    includeIds: selectedLeaseRes.lease?.propertyId ? [selectedLeaseRes.lease.propertyId] : undefined,
+  });
 
   const initialLeases = leasesRes.success && leasesRes.leases ? leasesRes.leases : [];
   const initialProperties = propsRes.success && propsRes.properties ? propsRes.properties : [];

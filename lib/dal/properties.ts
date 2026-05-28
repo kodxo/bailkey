@@ -129,7 +129,10 @@ export function serializeProperty(raw: {
 }
 
 // DAL Methods
-export async function getProperties(): Promise<{
+export async function getProperties(params?: {
+  status?: PropertyStatus;
+  includeIds?: string[];
+}): Promise<{
   success: boolean;
   properties: PropertyDTO[];
   totalCount: number;
@@ -137,8 +140,20 @@ export async function getProperties(): Promise<{
 }> {
   try {
     const { orgId } = await getAuthContext();
+
+    const whereClause: any = { organizationId: orgId };
+    if (params?.status || (params?.includeIds && params.includeIds.length > 0)) {
+      whereClause.OR = [];
+      if (params.status) {
+        whereClause.OR.push({ status: params.status });
+      }
+      if (params.includeIds && params.includeIds.length > 0) {
+        whereClause.OR.push({ id: { in: params.includeIds } });
+      }
+    }
+
     const properties = await prisma.property.findMany({
-      where: { organizationId: orgId },
+      where: whereClause,
       include: {
         images: { orderBy: { sortOrder: "asc" } },
         owners: { include: { owner: true } },
