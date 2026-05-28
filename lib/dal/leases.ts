@@ -119,7 +119,10 @@ export async function getLeases(params?: {
       prisma.lease.count({ where: whereClause }),
       prisma.lease.count({ where: { organizationId: orgId, status: LeaseStatus.ACTIVE } }),
       prisma.lease.count({ where: { organizationId: orgId, status: LeaseStatus.DRAFT } }),
-    ]);
+    ], {
+      maxWait: 10000,
+      timeout: 20000
+    });
 
     return {
       success: true,
