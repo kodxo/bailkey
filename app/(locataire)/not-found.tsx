@@ -19,7 +19,7 @@ export default function LocataireNotFound(): React.JSX.Element {
           <h1 className="text-5xl md:text-6xl font-extrabold font-display text-on-surface tracking-tight">
             Page introuvable
           </h1>
-          <p className="text-lg text-on-surface-variant font-body-md max-w-lg mx-auto leading-relaxed">
+          <p className="text-lg text-on-surface-variant font-body-md  mx-auto leading-relaxed">
             La page ou la quittance que vous recherchez n&apos;existe pas ou a
             été déplacée.
           </p>
@@ -32,7 +32,9 @@ export default function LocataireNotFound(): React.JSX.Element {
             className="group p-6 bg-surface border border-outline-variant/30 hover:border-primary transition-all shadow-sm hover:shadow-md flex flex-col items-center text-center cursor-pointer"
           >
             <div className="w-12 h-12 bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <span className="material-symbols-outlined text-[28px]">home</span>
+              <span className="material-symbols-outlined text-[28px]">
+                home
+              </span>
             </div>
             <h3 className="text-lg font-bold font-display text-on-surface group-hover:text-primary transition-colors">
               Tableau de bord

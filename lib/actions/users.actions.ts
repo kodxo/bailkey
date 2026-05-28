@@ -66,7 +66,7 @@ export async function updateUserRoleAction(
   userId: string,
   newRole: Roles
 ): Promise<UpdateRoleResponse> {
-  if (!(await checkRole("admin"))) {
+  if (!(await checkRole("super_admin"))) {
     return {
       success: false,
       error: "Accès refusé. Droits administrateur requis.",
@@ -106,7 +106,7 @@ export interface FetchUsersResult {
 export async function fetchUsersAction(
   params: FetchUsersParams
 ): Promise<FetchUsersResult> {
-  if (!(await checkRole("admin"))) {
+  if (!(await checkRole("super_admin"))) {
     return {
       success: false,
       users: [],

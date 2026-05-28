@@ -4,7 +4,7 @@ import React, { useTransition } from "react";
 import { Select } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Roles } from "@/types/globals";
-import { updateUserRoleAction } from "../_actions";
+import { updateUserRoleAction } from "@/lib/actions/users.actions";
 import { useRouter } from "next/navigation";
 
 export function UserRoleSelect({

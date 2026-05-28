@@ -32,7 +32,7 @@ export default async function AdminUsersPage({
     selectedId?: string;
   }>;
 }): Promise<React.JSX.Element> {
-  if (!(await checkRole("admin"))) {
+  if (!(await checkRole("super_admin"))) {
     redirect("/");
   }
 

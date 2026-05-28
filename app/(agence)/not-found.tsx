@@ -19,7 +19,7 @@ export default function DashboardNotFound(): React.JSX.Element {
           <h1 className="text-5xl md:text-6xl font-extrabold font-display text-on-surface tracking-tight">
             Ressource introuvable
           </h1>
-          <p className="text-lg text-on-surface-variant font-body-md max-w-lg mx-auto leading-relaxed">
+          <p className="text-lg text-on-surface-variant font-body-md  mx-auto leading-relaxed">
             Le bien, le lot ou la transaction que vous essayez de consulter
             n&apos;existe pas dans votre organisation.
           </p>

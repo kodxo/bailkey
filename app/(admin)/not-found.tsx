@@ -10,7 +10,9 @@ export default function AdminNotFound(): React.JSX.Element {
       <div className="relative z-10 max-w-2xl mx-auto space-y-8">
         {/* Badge 404 */}
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-error/10 border border-error/20 text-error rounded text-xs font-bold uppercase tracking-wider">
-          <span className="material-symbols-outlined text-[16px]">admin_panel_settings</span>
+          <span className="material-symbols-outlined text-[16px]">
+            admin_panel_settings
+          </span>
           Erreur 404 - Administration SaaS
         </div>
 
@@ -19,7 +21,7 @@ export default function AdminNotFound(): React.JSX.Element {
           <h1 className="text-5xl md:text-6xl font-extrabold font-display text-on-surface tracking-tight">
             Section introuvable
           </h1>
-          <p className="text-lg text-on-surface-variant font-body-md max-w-lg mx-auto leading-relaxed">
+          <p className="text-lg text-on-surface-variant font-body-md  mx-auto leading-relaxed">
             Le panneau d&apos;administration ou le tenant demandé n&apos;existe
             pas ou l&apos;URL est incorrecte.
           </p>

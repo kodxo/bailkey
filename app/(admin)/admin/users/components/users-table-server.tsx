@@ -1,5 +1,5 @@
 import React from "react";
-import { fetchUsersAction } from "../_actions";
+import { fetchUsersAction } from "@/lib/actions/users.actions";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {

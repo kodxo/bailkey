@@ -75,6 +75,24 @@ export function AdminNav(): React.JSX.Element {
           isActive: isUsersActive,
         },
         {
+          label: "Propriétaires",
+          href: "/admin/owners",
+          icon: "person_4",
+          isActive: pathname.startsWith("/admin/owners"),
+        },
+        {
+          label: "Propriétés",
+          href: "/admin/properties",
+          icon: "domain",
+          isActive: pathname.startsWith("/admin/properties"),
+        },
+        {
+          label: "Locataires",
+          href: "/admin/tenants",
+          icon: "group",
+          isActive: pathname.startsWith("/admin/tenants"),
+        },
+        {
           label: "Sécurité",
           href: "/admin",
           icon: "security",

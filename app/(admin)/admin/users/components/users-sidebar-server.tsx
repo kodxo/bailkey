@@ -1,5 +1,5 @@
 import React from "react";
-import { fetchUsersAction } from "../_actions";
+import { fetchUsersAction } from "@/lib/actions/users.actions";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -36,7 +36,7 @@ export async function UsersSidebarServer({
   // Let's create an action or use clerk locally if we don't want to export a new action.
   // Let's use `clerkClient` directly here.
   const { clerkClient } = await import("@clerk/nextjs/server");
-  const { formatUserItems } = await import("../_actions");
+  const { formatUserItems } = await import("@/lib/actions/users.actions");
   
   const client = await clerkClient();
   let selectedUser = null;

@@ -1,5 +1,5 @@
 import React from "react";
-import { fetchUsersAction } from "../_actions";
+import { fetchUsersAction } from "@/lib/actions/users.actions";
 import { MetricCard } from "@/components/ui/metric-card";
 
 export async function UsersMetricsServer({
