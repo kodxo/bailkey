@@ -45,6 +45,12 @@ export function DashboardNav(): React.JSX.Element {
       },
       subItems: [
         {
+          label: "Propriétés",
+          href: "/dashboard/gestion/proprietes",
+          icon: "apartment",
+          isActive: pathname.startsWith("/dashboard/gestion/proprietes"),
+        },
+        {
           label: "Baux & Contrats",
           href: "",
           icon: "history_edu",
@@ -89,12 +95,6 @@ export function DashboardNav(): React.JSX.Element {
               ),
             },
           ],
-        },
-        {
-          label: "Propriétés",
-          href: "/dashboard/gestion/proprietes",
-          icon: "apartment",
-          isActive: pathname.startsWith("/dashboard/gestion/proprietes"),
         },
         {
           label: "Travaux",
