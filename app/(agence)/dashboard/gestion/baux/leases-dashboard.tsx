@@ -19,6 +19,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Search } from "@/components/ui/search";
 import { Select } from "@/components/ui/select";
 import { TablePagination } from "@/components/ui/pagination";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -86,40 +87,34 @@ export function LeasesDashboard({
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  const [searchTerm, setSearchTerm] = useState<string>(initialSearch);
-
-  React.useEffect(() => {
-    const handler = setTimeout(() => {
-      if (searchTerm !== initialSearch) {
-        const params = new URLSearchParams(searchParams.toString());
-        if (searchTerm) params.set("search", searchTerm);
-        else params.delete("search");
-        params.set("page", "1");
-        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-      }
-    }, 300);
-    return () => clearTimeout(handler);
-  }, [searchTerm, initialSearch, pathname, router, searchParams]);
+  const [isTransitionPending, startTransition] = React.useTransition();
+  const [isSearchPending, setIsSearchPending] = useState(false);
 
   const handleStatusChange = (val: string) => {
     const params = new URLSearchParams(searchParams.toString());
     if (val && val !== "all") params.set("status", val);
     else params.delete("status");
     params.set("page", "1");
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    });
   };
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", newPage.toString());
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    });
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("pageSize", newPageSize.toString());
     params.set("page", "1");
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    });
   };
 
   const totalPages = Math.ceil(totalCount / pageSize);
@@ -127,7 +122,7 @@ export function LeasesDashboard({
   const [formMode, setFormMode] = useState<"create" | "edit" | null>(null);
   const [activeTab, setActiveTab] = useState<"details" | "schedules">("details");
 
-  const [state, formAction, isPending] = useActionState(
+  const [state, formAction, isFormPending] = useActionState(
     async (prevState: LeaseActionState | null, formData: FormData) => {
       if (formMode === "edit" && selectedLease) {
         return updateLeaseAction(selectedLease.id, prevState, formData);
@@ -233,7 +228,7 @@ export function LeasesDashboard({
           valueClassName="text-tertiary font-bold"
         />
         <div className="ml-auto flex items-center">
-          <Button onClick={handleStartCreate} disabled={isPending || formMode !== null} size="lg">
+          <Button onClick={handleStartCreate} disabled={isFormPending || formMode !== null} size="lg">
             <span className="material-symbols-outlined mr-2 select-none" data-icon="add">add</span>
             Nouveau Bail
           </Button>
@@ -244,12 +239,9 @@ export function LeasesDashboard({
         <DashboardMain>
           <DashboardToolbar>
             <div className="flex-1 min-w-[200px] flex items-center border-b sm:border-b-0 sm:border-r border-outline-variant">
-              <Input
-                iconName="search"
+              <Search
                 placeholder="Rechercher par propriété, référence ou locataire..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                wrapperClassName="border-none w-full bg-transparent px-sm py-sm"
+                onPendingChange={setIsSearchPending}
               />
             </div>
             <div className="flex items-center px-sm py-xs">
@@ -346,7 +338,7 @@ export function LeasesDashboard({
                           <Button
                             variant="outline"
                             size="sm"
-                            disabled={isPending || formMode !== null}
+                            disabled={isFormPending || formMode !== null}
                             onClick={() => handleStartEdit(ls)}
                           >
                             <span className="material-symbols-outlined text-sm mr-1 select-none" data-icon="edit">edit</span>
@@ -364,8 +356,8 @@ export function LeasesDashboard({
               total={totalCount}
               start={(currentPage - 1) * pageSize + 1}
               end={Math.min(currentPage * pageSize, totalCount)}
-              disabledPrev={currentPage <= 1 || isPending}
-              disabledNext={currentPage >= totalPages || totalPages <= 1 || isPending}
+              disabledPrev={currentPage <= 1 || isTransitionPending || isSearchPending}
+              disabledNext={currentPage >= totalPages || totalPages <= 1 || isTransitionPending || isSearchPending}
               onPrev={() => handlePageChange(Math.max(currentPage - 1, 1))}
               onNext={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
               pageSize={pageSize}
@@ -374,7 +366,7 @@ export function LeasesDashboard({
               totalPages={totalPages}
               onPageChange={handlePageChange}
             />
-          {isPending && (
+          { (isTransitionPending || isSearchPending) && (
             <div className="absolute inset-0 bg-surface/50 backdrop-blur-xs z-20 flex items-center justify-center">
               <span className="material-symbols-outlined animate-spin text-primary text-3xl">
                 progress_activity
@@ -535,8 +527,8 @@ export function LeasesDashboard({
                     {state?.errors?.status && <p className="text-xs text-error">{state.errors.status[0]}</p>}
                   </div>
 
-                  <Button type="submit" disabled={isPending} className="w-full mt-sm">
-                    {isPending ? "Enregistrement..." : "Enregistrer le contrat"}
+                  <Button type="submit" disabled={isFormPending} className="w-full mt-sm">
+                    {isFormPending ? "Enregistrement..." : "Enregistrer le contrat"}
                   </Button>
                 </form>
               ) : selectedLease ? (

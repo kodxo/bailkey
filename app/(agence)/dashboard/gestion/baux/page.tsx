@@ -36,7 +36,7 @@ export default async function DashboardLeasesPage({
         </div>
       </DashboardPageHeader>
 
-      <Suspense fallback={<LeasesSkeleton />} key={JSON.stringify(params)}>
+      <Suspense fallback={<LeasesSkeleton />}>
         <LeasesDataContainer searchParams={params} />
       </Suspense>
     </DashboardPageContainer>

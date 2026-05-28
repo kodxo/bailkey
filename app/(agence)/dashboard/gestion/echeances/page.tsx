@@ -67,7 +67,7 @@ export default async function RentSchedulesPage({
         </div>
       </DashboardPageHeader>
 
-      <Suspense fallback={<SchedulesSkeleton />} key={JSON.stringify(params)}>
+      <Suspense fallback={<SchedulesSkeleton />}>
         <SchedulesDashboard 
           initialSchedules={schedules as any} 
           initialSelectedSchedule={initialSelectedSchedule as any}

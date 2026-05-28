@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { SchedulesMetrics } from "./components/schedules-metrics";
 import { SchedulesTable, type MockSchedule } from "./components/schedules-table";
 import { ScheduleDetailsPane } from "./components/schedule-details-pane";
-import { Input } from "@/components/ui/input";
+import { Search } from "@/components/ui/search";
 import { Select } from "@/components/ui/select";
 import { TablePagination } from "@/components/ui/pagination";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
@@ -62,47 +62,43 @@ export function SchedulesDashboard({
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  const [searchTerm, setSearchTerm] = useState<string>(initialSearch);
-
-  React.useEffect(() => {
-    const handler = setTimeout(() => {
-      if (searchTerm !== initialSearch) {
-        const params = new URLSearchParams(searchParams.toString());
-        if (searchTerm) params.set("search", searchTerm);
-        else params.delete("search");
-        params.set("page", "1");
-        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-      }
-    }, 300);
-    return () => clearTimeout(handler);
-  }, [searchTerm, initialSearch, pathname, router, searchParams]);
+  const [isTransitionPending, startTransition] = React.useTransition();
+  const [isSearchPending, setIsSearchPending] = useState(false);
 
   const handleStatusChange = (val: string) => {
     const params = new URLSearchParams(searchParams.toString());
     if (val && val !== "all") params.set("status", val);
     else params.delete("status");
     params.set("page", "1");
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    });
   };
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", newPage.toString());
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    });
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("pageSize", newPageSize.toString());
     params.set("page", "1");
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    });
   };
 
   const clearLeaseFilter = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("leaseId");
     params.set("page", "1");
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    });
   };
 
   const totalPages = Math.ceil(totalCount / pageSize);
@@ -179,12 +175,9 @@ export function SchedulesDashboard({
           {/* Search Bar */}
           <DashboardToolbar>
             <div className="flex-1 min-w-[200px] flex items-center border-b sm:border-b-0 sm:border-r border-outline-variant">
-              <Input
-                iconName="search"
+              <Search
                 placeholder="Rechercher locataire, bien, paiement..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                wrapperClassName="border-none w-full bg-transparent px-sm py-sm"
+                onPendingChange={setIsSearchPending}
               />
             </div>
             <div className="flex items-center px-sm py-xs">
@@ -205,17 +198,26 @@ export function SchedulesDashboard({
           </DashboardToolbar>
           
           {/* Table */}
-          <SchedulesTable 
-            schedules={displaySchedules}
-            selectedId={selectedId}
-            onSelect={setSelectedId}
-          />
+          <div className="relative">
+            <SchedulesTable 
+              schedules={displaySchedules}
+              selectedId={selectedId}
+              onSelect={setSelectedId}
+            />
+            { (isTransitionPending || isSearchPending) && (
+              <div className="absolute inset-0 bg-surface/50 backdrop-blur-xs z-20 flex items-center justify-center">
+                <span className="material-symbols-outlined animate-spin text-primary text-3xl">
+                  progress_activity
+                </span>
+              </div>
+            )}
+          </div>
           <TablePagination
             total={totalCount}
             start={(currentPage - 1) * pageSize + 1}
             end={Math.min(currentPage * pageSize, totalCount)}
-            disabledPrev={currentPage <= 1}
-            disabledNext={currentPage >= totalPages || totalPages <= 1}
+            disabledPrev={currentPage <= 1 || isTransitionPending || isSearchPending}
+            disabledNext={currentPage >= totalPages || totalPages <= 1 || isTransitionPending || isSearchPending}
             onPrev={() => handlePageChange(Math.max(currentPage - 1, 1))}
             onNext={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
             pageSize={pageSize}
