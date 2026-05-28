@@ -9,9 +9,11 @@ interface SearchProps {
   placeholder?: string;
   className?: string;
   onPendingChange?: (isPending: boolean) => void;
+  onChange?: (value: string) => void;
+  defaultValue?: string;
 }
 
-export function Search({ placeholder = "Rechercher...", className, onPendingChange }: SearchProps) {
+export function Search({ placeholder = "Rechercher...", className, onPendingChange, onChange, defaultValue }: SearchProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -24,6 +26,11 @@ export function Search({ placeholder = "Rechercher...", className, onPendingChan
   }, [isPending, onPendingChange]);
 
   const handleSearch = useDebouncedCallback((term: string) => {
+    if (onChange) {
+      onChange(term);
+      return;
+    }
+
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", "1");
     if (term) {
@@ -41,7 +48,7 @@ export function Search({ placeholder = "Rechercher...", className, onPendingChan
     <Input
       iconName="search"
       placeholder={placeholder}
-      defaultValue={searchParams.get("search")?.toString() || ""}
+      defaultValue={defaultValue !== undefined ? defaultValue : (searchParams.get("search")?.toString() || "")}
       onChange={(e) => handleSearch(e.target.value)}
       wrapperClassName={className || "border-none w-full bg-transparent px-sm py-sm"}
     />

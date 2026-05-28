@@ -15,9 +15,9 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Search } from "@/components/ui/search";
 import { Select } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { TablePagination } from "@/components/ui/pagination";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { MetricCard } from "@/components/ui/metric-card";
@@ -222,15 +222,13 @@ export function TenantsDashboard({
         <div className="lg:col-span-2 flex flex-col gap-md">
           <div className="bg-surface-container-lowest border border-outline-variant flex flex-col sm:flex-row items-stretch sm:items-center justify-between shadow-xs overflow-hidden">
             <div className="flex-1 min-w-[200px] flex items-center border-b sm:border-b-0 sm:border-r border-outline-variant">
-              <Input
-                iconName="search"
+              <Search
                 placeholder="Rechercher par nom, email ou téléphone..."
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
+                defaultValue={searchTerm}
+                onChange={(val) => {
+                  setSearchTerm(val);
                   setCurrentPage(1);
                 }}
-                wrapperClassName="border-none w-full bg-transparent px-sm py-sm"
               />
             </div>
             <div className="flex items-center px-sm py-xs">

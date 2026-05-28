@@ -4,8 +4,6 @@ import React, { useState, useEffect, useTransition, useRef } from "react";
 import { Roles } from "@/types/globals";
 import { updateUserRoleAction, fetchUsersAction } from "./_actions";
 import { toast } from "sonner";
-import { useDebounce } from "use-debounce";
-
 import {
   Table,
   TableHeader,
@@ -16,7 +14,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
+import { Search } from "@/components/ui/search";
 import { Select } from "@/components/ui/select";
 import { TablePagination } from "@/components/ui/pagination";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -57,8 +55,6 @@ export function UsersDashboard({
   );
 
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [debouncedSearch] = useDebounce(searchTerm, 400);
-
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isPending, startTransition] = useTransition();
@@ -78,7 +74,7 @@ export function UsersDashboard({
       const res = await fetchUsersAction({
         page: currentPage,
         pageSize: pageSize,
-        query: debouncedSearch || undefined,
+        query: searchTerm || undefined,
       });
 
       if (res.success) {
@@ -101,7 +97,7 @@ export function UsersDashboard({
         toast.error(res.error || "Erreur de chargement des utilisateurs.");
       }
     });
-  }, [debouncedSearch, currentPage, roleFilter]);
+  }, [searchTerm, currentPage, roleFilter]);
 
   // Si on change la recherche ou le filtre, on réinitialise à la page 1
   const handleSearchChange = (val: string) => {
@@ -163,12 +159,10 @@ export function UsersDashboard({
           {/* Filters Bar */}
           <div className="bg-surface-container-lowest border border-outline-variant flex flex-col sm:flex-row items-stretch sm:items-center justify-between shadow-xs overflow-hidden">
             <div className="flex-1 min-w-[200px] flex items-center border-b sm:border-b-0 sm:border-r border-outline-variant">
-              <Input
-                iconName="search"
+              <Search
                 placeholder="Rechercher par nom ou email (serveur)..."
-                value={searchTerm}
-                onChange={(e) => handleSearchChange(e.target.value)}
-                wrapperClassName="border-none w-full bg-transparent px-sm py-sm"
+                defaultValue={searchTerm}
+                onChange={handleSearchChange}
               />
             </div>
             <div className="flex items-center px-sm py-xs">

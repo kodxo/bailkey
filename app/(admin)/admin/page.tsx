@@ -17,7 +17,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { TablePagination } from "@/components/ui/pagination";
-import { Input } from "@/components/ui/input";
+import { Search } from "@/components/ui/search";
 import { Select } from "@/components/ui/select";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
 
@@ -84,11 +84,8 @@ export default async function AdminArticlesPage(): Promise<React.JSX.Element> {
       {/* Filters Bar */}
       <section className="bg-surface-container-lowest border border-outline-variant flex flex-col md:flex-row md:flex-wrap items-stretch md:items-center gap-0 z-30 transition-all duration-300 ease-in-out shadow-sm overflow-hidden">
         <div className="flex-1 min-w-[200px] flex items-center border-b md:border-b-0 md:border-r border-outline-variant">
-          <Input
-            iconName="search"
+          <Search
             placeholder="Rechercher..."
-            type="text"
-            wrapperClassName="border-none w-full bg-transparent px-sm py-sm"
           />
         </div>
         <div className="flex items-center border-b md:border-b-0 md:border-r border-outline-variant bg-surface-container-lowest justify-between md:justify-start">
