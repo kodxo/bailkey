@@ -21,15 +21,14 @@ export async function LeasesSidebarServer({
       ? await getLeaseById(selectedLeaseId)
       : { lease: null };
 
-    const [propsRes, tenantsRes] = await Promise.all([
-      getProperties({
-        status: PropertyStatus.AVAILABLE,
-        includeIds: selectedLeaseRes.lease?.propertyId
-          ? [selectedLeaseRes.lease.propertyId]
-          : undefined,
-      }),
-      getTenants(),
-    ]);
+    const propsRes = await getProperties({
+      status: PropertyStatus.AVAILABLE,
+      includeIds: selectedLeaseRes.lease?.propertyId
+        ? [selectedLeaseRes.lease.propertyId]
+        : undefined,
+    });
+    
+    const tenantsRes = await getTenants();
 
     const properties = propsRes.success && propsRes.properties ? propsRes.properties : [];
     const tenants = tenantsRes.success && tenantsRes.tenants ? tenantsRes.tenants : [];

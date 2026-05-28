@@ -119,14 +119,13 @@ export async function getPublishedPosts(
     ...(category ? { category } : {}),
   };
 
-  const [posts, total] = await Promise.all([
-    prisma.post.findMany({
-      where,
-      include: POST_SUMMARY_INCLUDE,
-      orderBy: { publishedAt: "desc" },
-    }),
-    prisma.post.count({ where }),
-  ]);
+  const posts = await prisma.post.findMany({
+    where,
+    include: POST_SUMMARY_INCLUDE,
+    orderBy: { publishedAt: "desc" },
+  });
+  
+  const total = await prisma.post.count({ where });
 
   const authorIds = posts.map((p) => p.authorId);
   const authorsMap = await getClerkAuthorsMap(authorIds);

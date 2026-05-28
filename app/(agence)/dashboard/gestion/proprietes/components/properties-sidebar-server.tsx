@@ -12,10 +12,8 @@ export async function PropertiesSidebarServer({
   selectedId,
   mode,
 }: PropertiesSidebarServerProps): Promise<React.JSX.Element> {
-  const [propertyRes, ownersRes] = await Promise.all([
-    selectedId ? getPropertyById(selectedId) : Promise.resolve({ property: null }),
-    getOwners(),
-  ]);
+  const propertyRes = selectedId ? await getPropertyById(selectedId) : { property: null };
+  const ownersRes = await getOwners();
 
   const selectedProperty = propertyRes.property || null;
   const allOwners = ownersRes.owners || [];

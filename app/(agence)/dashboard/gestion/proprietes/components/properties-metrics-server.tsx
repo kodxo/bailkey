@@ -7,15 +7,13 @@ import { PropertyStatus } from "@/lib/generated/prisma/enums";
 export async function PropertiesMetricsServer(): Promise<React.JSX.Element> {
   const { orgId } = await getAuthContext();
 
-  const [totalCount, availableCount, rentedCount] = await Promise.all([
-    prisma.property.count({ where: { organizationId: orgId } }),
-    prisma.property.count({
-      where: { organizationId: orgId, status: PropertyStatus.AVAILABLE },
-    }),
-    prisma.property.count({
-      where: { organizationId: orgId, status: PropertyStatus.RENTED },
-    }),
-  ]);
+  const totalCount = await prisma.property.count({ where: { organizationId: orgId } });
+  const availableCount = await prisma.property.count({
+    where: { organizationId: orgId, status: PropertyStatus.AVAILABLE },
+  });
+  const rentedCount = await prisma.property.count({
+    where: { organizationId: orgId, status: PropertyStatus.RENTED },
+  });
 
   return (
     <PropertiesMetrics
