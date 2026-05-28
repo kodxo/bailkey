@@ -114,6 +114,7 @@ export function SchedulesDashboard({
     
     return {
       id: s.id,
+      leaseId: s.leaseId,
       tenantName: s.lease?.tenant ? `${s.lease.tenant.lastName || ""} ${s.lease.tenant.firstName || ""}`.trim() || s.lease.tenant.companyName || "Locataire Inconnu" : "Locataire Inconnu",
       propertyInfo: s.lease?.property ? s.lease.property.name : "Bien Inconnu",
       date: new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(s.dueDate)),
@@ -139,6 +140,7 @@ export function SchedulesDashboard({
     
     selectedSchedule = {
       id: s.id,
+      leaseId: s.leaseId,
       tenantName: s.lease?.tenant ? `${s.lease.tenant.lastName || ""} ${s.lease.tenant.firstName || ""}`.trim() || s.lease.tenant.companyName || "Locataire Inconnu" : "Locataire Inconnu",
       propertyInfo: s.lease?.property ? s.lease.property.name : "Bien Inconnu",
       date: new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(s.dueDate)),

@@ -7,6 +7,7 @@ import type { MockSchedule } from "./schedules-table";
 import { recordPaymentAction } from "@/lib/actions/payments";
 import { toast } from "sonner";
 import { generateReceipt } from "@/lib/pdf/generate-receipt";
+import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 
@@ -94,6 +95,14 @@ export function ScheduleDetailsPane({
             <span className="font-bold text-h3 text-primary">
               {selectedSchedule.remaining} €
             </span>
+          </div>
+          <div className="mt-3 pt-3 border-t border-outline-variant/30 flex justify-end">
+             <Link href={`/dashboard/gestion/baux?selectedLeaseId=${selectedSchedule.leaseId}`}>
+               <Button variant="outline" size="sm" className="w-full flex items-center justify-center gap-2">
+                 <span className="material-symbols-outlined text-[16px]">description</span>
+                 Ouvrir le contrat de bail
+               </Button>
+             </Link>
           </div>
         </div>
 

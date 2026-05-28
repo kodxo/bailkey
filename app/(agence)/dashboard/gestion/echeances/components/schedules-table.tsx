@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 
 export interface MockSchedule {
   id: string;
+  leaseId: string;
   tenantName: string;
   propertyInfo: string;
   date: string;
