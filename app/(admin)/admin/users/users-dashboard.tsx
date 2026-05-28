@@ -14,8 +14,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
-import { SearchPanel, SearchPanelInput, SearchPanelFilters } from "@/components/ui/search-panel";
-import { Select } from "@/components/ui/select";
+import { SearchPanel, SearchPanelSelect } from "@/components/ui/search-panel";
 import { TablePagination } from "@/components/ui/pagination";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { MetricCard } from "@/components/ui/metric-card";
@@ -157,25 +156,21 @@ export function UsersDashboard({
         {/* Left Panel: Table & Filters */}
         <div className="lg:col-span-2 flex flex-col gap-md">
           {/* Filters Bar */}
-          <SearchPanel>
-            <SearchPanelInput
-              placeholder="Rechercher par nom ou email (serveur)..."
-              defaultValue={searchTerm}
-              onChange={handleSearchChange}
+          <SearchPanel
+            searchPlaceholder="Rechercher par nom ou email (serveur)..."
+            searchDefaultValue={searchTerm}
+            onSearchChange={handleSearchChange}
+          >
+            <SearchPanelSelect
+              label="Rôle:"
+              value={roleFilter}
+              onChange={(e) => handleRoleFilterChange(e.target.value)}
+              options={[
+                { label: "Tous", value: "all" },
+                { label: "Administrateurs", value: "admin" },
+                { label: "Membres", value: "user" },
+              ]}
             />
-            <SearchPanelFilters>
-              <Select
-                label="Rôle:"
-                value={roleFilter}
-                onChange={(e) => handleRoleFilterChange(e.target.value)}
-                options={[
-                  { label: "Tous", value: "all" },
-                  { label: "Administrateurs", value: "admin" },
-                  { label: "Membres", value: "user" },
-                ]}
-                wrapperClassName="border-none py-sm"
-              />
-            </SearchPanelFilters>
           </SearchPanel>
 
           {/* Users Table */}

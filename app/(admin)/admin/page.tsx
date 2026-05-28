@@ -17,8 +17,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { TablePagination } from "@/components/ui/pagination";
-import { SearchPanel, SearchPanelInput, SearchPanelFilters } from "@/components/ui/search-panel";
-import { Select } from "@/components/ui/select";
+import { SearchPanel, SearchPanelSelect, SearchPanelTabs } from "@/components/ui/search-panel";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
 
 export default async function AdminArticlesPage(): Promise<React.JSX.Element> {
@@ -81,55 +80,31 @@ export default async function AdminArticlesPage(): Promise<React.JSX.Element> {
         </div>
       </section>
 
-      {/* Filters Bar */}
-      <SearchPanel className="z-30 transition-all duration-300 ease-in-out md:flex-wrap">
-        <SearchPanelInput placeholder="Rechercher..." />
-        <SearchPanelFilters className="justify-between md:justify-start w-full sm:w-auto">
-          <Select
-            label="Catégorie:"
-            options={[
-              { label: "Toutes", value: "all" },
-              { label: "Guide", value: "Guide" },
-              { label: "Analyse", value: "Analyse" },
-              { label: "Cas Client", value: "Cas Client" },
-              { label: "Actualité", value: "Actualité" },
-            ]}
-            wrapperClassName="border-none py-sm"
-          />
-          
-          {/* Custom Status filter */}
-          <div className="flex items-center gap-xs ml-auto sm:ml-sm">
-            <span className="text-label-caps font-label-caps text-on-surface-variant uppercase mr-xs shrink-0 select-none hidden sm:inline">
-              Statut:
-            </span>
-            <div className="flex border border-outline-variant overflow-hidden shrink-0 rounded-xs">
-              <button
-                type="button"
-                className="px-sm py-[4px] bg-primary text-on-primary text-label-caps font-label-caps border-r border-outline-variant transition-colors uppercase cursor-pointer"
-              >
-                Tous
-              </button>
-              <button
-                type="button"
-                className="px-sm py-[4px] bg-transparent text-on-surface text-label-caps font-label-caps border-r border-outline-variant hover:bg-surface-variant transition-colors uppercase cursor-pointer"
-              >
-                Publié
-              </button>
-              <button
-                type="button"
-                className="px-sm py-[4px] bg-transparent text-on-surface text-label-caps font-label-caps border-r border-outline-variant hover:bg-surface-variant transition-colors uppercase cursor-pointer"
-              >
-                Brouillon
-              </button>
-              <button
-                type="button"
-                className="px-sm py-[4px] bg-transparent text-on-surface text-label-caps font-label-caps hover:bg-surface-variant transition-colors uppercase cursor-pointer"
-              >
-                Archivé
-              </button>
-            </div>
-          </div>
-        </SearchPanelFilters>
+      <SearchPanel
+        searchPlaceholder="Rechercher..."
+        className="z-30 transition-all duration-300 ease-in-out md:flex-wrap"
+      >
+        <SearchPanelSelect
+          label="Catégorie:"
+          options={[
+            { label: "Toutes", value: "all" },
+            { label: "Guide", value: "Guide" },
+            { label: "Analyse", value: "Analyse" },
+            { label: "Cas Client", value: "Cas Client" },
+            { label: "Actualité", value: "Actualité" },
+          ]}
+        />
+        
+        <SearchPanelTabs
+          label="Statut:"
+          value="all"
+          options={[
+            { label: "Tous", value: "all" },
+            { label: "Publié", value: "PUBLISHED" },
+            { label: "Brouillon", value: "DRAFT" },
+            { label: "Archivé", value: "ARCHIVED" },
+          ]}
+        />
       </SearchPanel>
 
       {/* Data Table */}

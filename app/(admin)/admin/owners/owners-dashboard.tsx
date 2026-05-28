@@ -15,8 +15,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { SearchPanel, SearchPanelInput, SearchPanelFilters } from "@/components/ui/search-panel";
-import { Select } from "@/components/ui/select";
+import { SearchPanel, SearchPanelSelect } from "@/components/ui/search-panel";
 import { Button } from "@/components/ui/button";
 import { TablePagination } from "@/components/ui/pagination";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -217,31 +216,27 @@ export function OwnersDashboard({
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-md items-start">
         <div className="lg:col-span-2 flex flex-col gap-md">
-          <SearchPanel>
-            <SearchPanelInput
-              placeholder="Rechercher par nom, email ou téléphone..."
-              defaultValue={searchTerm}
-              onChange={(val) => {
-                setSearchTerm(val);
+          <SearchPanel
+            searchPlaceholder="Rechercher par nom, email ou téléphone..."
+            searchDefaultValue={searchTerm}
+            onSearchChange={(val) => {
+              setSearchTerm(val);
+              setCurrentPage(1);
+            }}
+          >
+            <SearchPanelSelect
+              label="Type:"
+              value={typeFilter}
+              onChange={(e) => {
+                setTypeFilter(e.target.value);
                 setCurrentPage(1);
               }}
+              options={[
+                { label: "Tous", value: "all" },
+                { label: "Particuliers", value: "INDIVIDUAL" },
+                { label: "Sociétés", value: "COMPANY" },
+              ]}
             />
-            <SearchPanelFilters>
-              <Select
-                label="Type:"
-                value={typeFilter}
-                onChange={(e) => {
-                  setTypeFilter(e.target.value);
-                  setCurrentPage(1);
-                }}
-                options={[
-                  { label: "Tous", value: "all" },
-                  { label: "Particuliers", value: "INDIVIDUAL" },
-                  { label: "Sociétés", value: "COMPANY" },
-                ]}
-                wrapperClassName="border-none py-sm"
-              />
-            </SearchPanelFilters>
           </SearchPanel>
 
           <div className="relative flex flex-col transition-all">

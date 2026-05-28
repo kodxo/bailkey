@@ -20,8 +20,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { SearchPanel, SearchPanelInput, SearchPanelFilters } from "@/components/ui/search-panel";
-import { Select } from "@/components/ui/select";
+import { SearchPanel, SearchPanelSelect } from "@/components/ui/search-panel";
 import { TablePagination } from "@/components/ui/pagination";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { MetricCard } from "@/components/ui/metric-card";
@@ -238,51 +237,46 @@ export function PropertiesDashboard({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-md items-start">
         {/* Left Panel: Table */}
         <div className="lg:col-span-2 flex flex-col gap-md">
-          <SearchPanel>
-            <SearchPanelInput
-              placeholder="Rechercher par désignation, réf ou ville..."
-              defaultValue={searchTerm}
-              onChange={(val) => {
-                setSearchTerm(val);
+          <SearchPanel
+            searchPlaceholder="Rechercher par désignation, réf ou ville..."
+            searchDefaultValue={searchTerm}
+            onSearchChange={(val) => {
+              setSearchTerm(val);
+              setCurrentPage(1);
+            }}
+          >
+            <SearchPanelSelect
+              label="Statut:"
+              value={statusFilter}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
                 setCurrentPage(1);
               }}
+              options={[
+                { label: "Tous", value: "all" },
+                { label: "Disponible", value: "AVAILABLE" },
+                { label: "Loué", value: "RENTED" },
+                { label: "En travaux", value: "UNDER_MAINTENANCE" },
+                { label: "Indisponible", value: "UNAVAILABLE" },
+              ]}
             />
-            <SearchPanelFilters>
-              <Select
-                label="Statut:"
-                value={statusFilter}
-                onChange={(e) => {
-                  setStatusFilter(e.target.value);
-                  setCurrentPage(1);
-                }}
-                options={[
-                  { label: "Tous", value: "all" },
-                  { label: "Disponible", value: "AVAILABLE" },
-                  { label: "Loué", value: "RENTED" },
-                  { label: "En travaux", value: "UNDER_MAINTENANCE" },
-                  { label: "Indisponible", value: "UNAVAILABLE" },
-                ]}
-                wrapperClassName="border-none py-sm"
-              />
-              <Select
-                label="Type:"
-                value={typeFilter}
-                onChange={(e) => {
-                  setTypeFilter(e.target.value);
-                  setCurrentPage(1);
-                }}
-                options={[
-                  { label: "Tous", value: "all" },
-                  { label: "Appartement", value: "APARTMENT" },
-                  { label: "Villa", value: "VILLA" },
-                  { label: "Studio", value: "STUDIO" },
-                  { label: "Local Commercial", value: "COMMERCIAL_SPACE" },
-                  { label: "Terrain", value: "LAND" },
-                  { label: "Entrepôt", value: "WAREHOUSE" },
-                ]}
-                wrapperClassName="border-none py-sm"
-              />
-            </SearchPanelFilters>
+            <SearchPanelSelect
+              label="Type:"
+              value={typeFilter}
+              onChange={(e) => {
+                setTypeFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+              options={[
+                { label: "Tous", value: "all" },
+                { label: "Appartement", value: "APARTMENT" },
+                { label: "Villa", value: "VILLA" },
+                { label: "Studio", value: "STUDIO" },
+                { label: "Local Commercial", value: "COMMERCIAL_SPACE" },
+                { label: "Terrain", value: "LAND" },
+                { label: "Entrepôt", value: "WAREHOUSE" },
+              ]}
+            />
           </SearchPanel>
 
           <div className="relative flex flex-col transition-all">
