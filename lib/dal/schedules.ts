@@ -239,7 +239,10 @@ export async function getRentSchedules(params?: {
         where: whereClause,
         _sum: { amount: true, amountPaid: true }
       })
-    ]);
+    ], {
+      maxWait: 10000,
+      timeout: 20000
+    });
 
     return { 
       success: true, 
