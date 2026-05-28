@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { fetchLeaseSchedulesAction } from "@/lib/actions/schedules.actions";
 import { ScheduleStatusBadge } from "./schedule-status-badge";
 import { ScheduleRowActions } from "@/app/(agence)/dashboard/gestion/echeances/schedule-row-actions";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat("fr-FR", {
@@ -84,7 +86,14 @@ export function LeaseSchedulesList({ leaseId }: { leaseId: string }) {
                   Échéance au {new Date(sch.dueDate).toLocaleDateString('fr-FR')}
                 </p>
               </div>
-              <ScheduleStatusBadge status={sch.status} />
+              <div className="flex items-center gap-2">
+                <ScheduleStatusBadge status={sch.status} />
+                <Link href={`/dashboard/gestion/echeances?leaseId=${leaseId}&selectedId=${sch.id}`}>
+                  <Button variant="ghost" size="sm" className="h-8 px-2 text-primary" title="Ouvrir dans le dashboard des échéances">
+                    <span className="material-symbols-outlined text-[18px]">open_in_new</span>
+                  </Button>
+                </Link>
+              </div>
             </div>
             
             {/* Corps: Montants avec barres de progression */}
@@ -113,6 +122,16 @@ export function LeaseSchedulesList({ leaseId }: { leaseId: string }) {
           </div>
         );
       })}
+      
+      {/* Footer Navigation Action */}
+      <div className="mt-2 flex justify-center">
+        <Link href={`/dashboard/gestion/echeances?leaseId=${leaseId}`}>
+          <Button variant="outline" className="w-full sm:w-auto">
+            <span className="material-symbols-outlined mr-2 text-[18px]">list_alt</span>
+            Gérer toutes les échéances de ce bail
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }

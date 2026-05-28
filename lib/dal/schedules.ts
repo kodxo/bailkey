@@ -168,6 +168,7 @@ export async function getRentSchedules(params?: {
   pageSize?: number;
   search?: string;
   status?: string;
+  leaseId?: string;
 }) {
   try {
     const { orgId } = await getAuthContext();
@@ -181,6 +182,10 @@ export async function getRentSchedules(params?: {
 
     if (statusFilter) {
       whereClause.status = statusFilter;
+    }
+
+    if (params?.leaseId) {
+      whereClause.leaseId = params.leaseId;
     }
 
     if (search) {

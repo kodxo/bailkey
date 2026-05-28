@@ -28,6 +28,7 @@ interface SchedulesDashboardProps {
   pageSize?: number;
   initialSearch?: string;
   initialStatus?: string;
+  initialLeaseId?: string;
 }
 
 export function SchedulesDashboard({ 
@@ -42,6 +43,7 @@ export function SchedulesDashboard({
   pageSize = 10,
   initialSearch = "",
   initialStatus = "all",
+  initialLeaseId,
 }: SchedulesDashboardProps): React.JSX.Element {
   const router = useRouter();
   const pathname = usePathname();
@@ -91,6 +93,13 @@ export function SchedulesDashboard({
   const handlePageSizeChange = (newPageSize: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("pageSize", newPageSize.toString());
+    params.set("page", "1");
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const clearLeaseFilter = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("leaseId");
     params.set("page", "1");
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
@@ -158,6 +167,21 @@ export function SchedulesDashboard({
       
       <DashboardSplitGrid>
         <DashboardMain>
+          {initialLeaseId && (
+            <div className="bg-primary-container text-on-primary-container px-4 py-3 mb-4 flex items-center justify-between shadow-sm">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined">filter_list</span>
+                <span className="font-medium text-body-md">Filtré sur un contrat spécifique</span>
+              </div>
+              <button 
+                onClick={clearLeaseFilter}
+                className="text-body-sm flex items-center gap-1 hover:underline font-medium"
+              >
+                <span className="material-symbols-outlined text-[16px]">close</span>
+                Afficher tout
+              </button>
+            </div>
+          )}
           {/* Search Bar */}
           <DashboardToolbar>
             <div className="flex-1 min-w-[200px] flex items-center border-b sm:border-b-0 sm:border-r border-outline-variant">

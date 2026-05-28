@@ -16,7 +16,7 @@ export const metadata = {
 export default async function RentSchedulesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; pageSize?: string; search?: string; status?: string; selectedId?: string }>;
+  searchParams: Promise<{ page?: string; pageSize?: string; search?: string; status?: string; selectedId?: string; leaseId?: string }>;
 }) {
   const params = await searchParams;
   const page = parseInt(params?.page || "1", 10);
@@ -24,9 +24,10 @@ export default async function RentSchedulesPage({
   const search = params?.search || "";
   const status = params?.status || "all";
   const selectedId = params?.selectedId;
+  const leaseId = params?.leaseId;
 
   const [schedulesData, selectedScheduleData] = await Promise.all([
-    getRentSchedules({ page, pageSize, search, status }),
+    getRentSchedules({ page, pageSize, search, status, leaseId }),
     selectedId ? getRentScheduleById(selectedId) : Promise.resolve({ schedule: null })
   ]);
 
@@ -67,6 +68,7 @@ export default async function RentSchedulesPage({
           pageSize={pageSize}
           initialSearch={search}
           initialStatus={status}
+          initialLeaseId={leaseId}
         />
       </Suspense>
     </DashboardPageContainer>
