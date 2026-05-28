@@ -1,47 +1,57 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { redirect } from "next/navigation";
-import { clerkClient } from "@clerk/nextjs/server";
 import { checkRole } from "@/lib/clerk/check-role";
-import { Roles } from "@/types/globals";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
-import { UsersDashboard, UserItem } from "./users-dashboard";
+import {
+  DashboardPageContainer,
+  DashboardPageHeader,
+} from "@/components/layout/dashboard-page-layout";
+import {
+  DashboardLayout,
+  DashboardSplitGrid,
+  DashboardMain,
+  DashboardSidebar,
+  DashboardToolbar,
+} from "@/components/layout/dashboard-split-pane";
+
+import { UsersTableServer } from "./components/users-table-server";
+import { UsersSidebarServer } from "./components/users-sidebar-server";
+import { UsersMetricsServer } from "./components/users-metrics-server";
+import { UsersFilterBar } from "./components/users-filter-bar";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminUsersPage(): Promise<React.JSX.Element> {
+export default async function AdminUsersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    page?: string;
+    pageSize?: string;
+    search?: string;
+    role?: string;
+    selectedId?: string;
+  }>;
+}): Promise<React.JSX.Element> {
   if (!(await checkRole("admin"))) {
     redirect("/");
   }
 
-  const client = await clerkClient();
-  const res = await client.users.getUserList();
+  const params = await searchParams;
+  const page = parseInt(params?.page || "1", 10);
+  const pageSize = parseInt(params?.pageSize || "10", 10);
+  const search = params?.search || "";
+  const role = params?.role || "all";
+  const selectedId = params?.selectedId;
 
-  const rawUsers = Array.isArray(res) ? res : res.data || [];
-  const totalCount =
-    !Array.isArray(res) && typeof res.totalCount === "number"
-      ? res.totalCount
-      : rawUsers.length;
-
-  const initialUsers: UserItem[] = rawUsers.map((u) => ({
-    id: u.id,
-    email: u.emailAddresses[0]?.emailAddress || "Aucun email",
-    firstName: u.firstName || "",
-    lastName: u.lastName || "",
-    imageUrl: u.imageUrl || "",
-    role: (u.publicMetadata?.role as Roles) || "user",
-    createdAt: u.createdAt,
-    lastSignInAt: u.lastSignInAt || null,
-  }));
+  const breadcrumbItems = [
+    { label: "Administration", href: "/admin" },
+    { label: "Utilisateurs" },
+  ];
 
   return (
-    <div className="p-md w-full max-w-[1400px] mx-auto flex flex-col gap-lg">
-      <section className="border-b border-outline-variant pb-md flex flex-col gap-sm">
-        <BreadcrumbNav
-          items={[
-            { label: "Administration", href: "/admin" },
-            { label: "Utilisateurs" },
-          ]}
-        />
+    <DashboardPageContainer>
+      <DashboardPageHeader>
+        <BreadcrumbNav items={breadcrumbItems} />
         <div>
           <h1 className="text-h1 text-on-background mb-xs font-bold font-display">
             Gestion des Utilisateurs
@@ -51,13 +61,43 @@ export default async function AdminUsersPage(): Promise<React.JSX.Element> {
             les détails des membres.
           </p>
         </div>
-      </section>
+      </DashboardPageHeader>
 
-      <UsersDashboard
-        initialUsers={initialUsers}
-        initialTotalCount={totalCount}
-      />
-    </div>
+      <DashboardLayout>
+        <Suspense fallback={<div className="h-24 bg-surface-variant animate-pulse rounded-md" />}>
+          <UsersMetricsServer search={search} role={role} />
+        </Suspense>
+
+        <DashboardSplitGrid>
+          <DashboardMain>
+            <DashboardToolbar>
+              <UsersFilterBar />
+            </DashboardToolbar>
+
+            <Suspense
+              key={`table-${page}-${pageSize}-${search}-${role}`}
+              fallback={<div className="h-64 bg-surface-variant animate-pulse rounded-md" />}
+            >
+              <UsersTableServer
+                page={page}
+                pageSize={pageSize}
+                search={search}
+                role={role}
+                selectedId={selectedId}
+              />
+            </Suspense>
+          </DashboardMain>
+
+          <DashboardSidebar>
+            <Suspense
+              key={`sidebar-${selectedId || "none"}`}
+              fallback={<div className="h-full min-h-[300px] bg-surface-variant animate-pulse rounded-md" />}
+            >
+              <UsersSidebarServer selectedId={selectedId} />
+            </Suspense>
+          </DashboardSidebar>
+        </DashboardSplitGrid>
+      </DashboardLayout>
+    </DashboardPageContainer>
   );
 }
-

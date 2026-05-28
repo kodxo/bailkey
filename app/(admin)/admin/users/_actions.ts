@@ -3,7 +3,24 @@
 import { clerkClient, type User } from "@clerk/nextjs/server";
 import { checkRole } from "@/lib/clerk/check-role";
 import { Roles } from "@/types/globals";
-import { UserItem, OrganizationBrief } from "./users-dashboard";
+export interface OrganizationBrief {
+  id: string;
+  name: string;
+  slug: string;
+  imageUrl: string | null;
+}
+
+export interface UserItem {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  imageUrl: string;
+  role: Roles;
+  createdAt: number;
+  lastSignInAt: number | null;
+  organizations?: OrganizationBrief[];
+}
 
 export interface UpdateRoleResponse {
   success: boolean;
