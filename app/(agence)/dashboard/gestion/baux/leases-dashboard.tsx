@@ -124,12 +124,12 @@ export function LeasesDashboard({
 
   const totalPages = Math.ceil(totalCount / pageSize);
 
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [formMode, setFormMode] = useState<"create" | "edit" | null>(null);
   const [activeTab, setActiveTab] = useState<"details" | "schedules">("details");
 
   const [state, formAction, isPending] = useActionState(
     async (prevState: LeaseActionState | null, formData: FormData) => {
-      if (selectedLease) {
+      if (formMode === "edit" && selectedLease) {
         return updateLeaseAction(selectedLease.id, prevState, formData);
       }
       return createLeaseAction(prevState, formData);
@@ -137,9 +137,14 @@ export function LeasesDashboard({
     null
   );
 
+  const availableProperties = initialProperties.filter((p) => {
+    if (formMode === "edit" && selectedLease && p.id === selectedLease.propertyId) return true;
+    return p.status === "AVAILABLE";
+  });
+
   useEffect(() => {
     if (state?.success && state.lease) {
-      if (selectedLease) {
+      if (formMode === "edit" && selectedLease) {
         setLeases((prev) => prev.map((l) => (l.id === state.lease!.id ? state.lease! : l)));
         toast.success("Contrat de location mis à jour.");
       } else {
@@ -147,7 +152,7 @@ export function LeasesDashboard({
         toast.success("Contrat de location créé avec succès.");
       }
       setSelectedLease(state.lease);
-      setIsEditing(false);
+      setFormMode(null);
     } else if (state?.error) {
       toast.error(state.error);
     }
@@ -178,7 +183,7 @@ export function LeasesDashboard({
   const handleStartCreate = () => {
     setSelectedLease(null);
     setFormData({
-      propertyId: initialProperties[0]?.id || "",
+      propertyId: availableProperties[0]?.id || "",
       tenantId: initialTenants[0]?.id || "",
       rentAmount: "",
       depositAmount: "",
@@ -188,7 +193,7 @@ export function LeasesDashboard({
       paymentDay: 5,
       status: LeaseStatus.ACTIVE,
     });
-    setIsEditing(true);
+    setFormMode("create");
     setActiveTab("details");
   };
 
@@ -205,11 +210,11 @@ export function LeasesDashboard({
       paymentDay: 5,
       status: ls.status,
     });
-    setIsEditing(true);
+    setFormMode("edit");
   };
 
   const handleCancelEdit = () => {
-    setIsEditing(false);
+    setFormMode(null);
     if (leases.length > 0 && !selectedLeaseId) {
       setSelectedLease(leases[0]);
     }
@@ -230,7 +235,7 @@ export function LeasesDashboard({
           valueClassName="text-tertiary font-bold"
         />
         <div className="ml-auto flex items-center">
-          <Button onClick={handleStartCreate} disabled={isPending || isEditing} size="lg">
+          <Button onClick={handleStartCreate} disabled={isPending || formMode !== null} size="lg">
             <span className="material-symbols-outlined mr-2 select-none" data-icon="add">add</span>
             Nouveau Bail
           </Button>
@@ -292,7 +297,7 @@ export function LeasesDashboard({
                         key={ls.id}
                         onClick={() => {
                           setSelectedLease(ls);
-                          setIsEditing(false);
+                          setFormMode(null);
                         }}
                         className={`cursor-pointer transition-colors relative ${
                           isSelected 
@@ -343,7 +348,7 @@ export function LeasesDashboard({
                           <Button
                             variant="outline"
                             size="sm"
-                            disabled={isPending || isEditing}
+                            disabled={isPending || formMode !== null}
                             onClick={() => handleStartEdit(ls)}
                           >
                             <span className="material-symbols-outlined text-sm mr-1 select-none" data-icon="edit">edit</span>
@@ -384,16 +389,16 @@ export function LeasesDashboard({
           <Card className="border-outline-variant/60 shadow-md rounded-xl overflow-hidden">
             <CardHeader className="bg-surface-container-low border-b border-outline-variant/40 pb-md flex flex-row items-center justify-between">
               <CardTitle className="text-h3 font-display">
-                {isEditing ? (selectedLease ? "Modifier le Contrat" : "Nouveau Contrat") : "Détails du Contrat"}
+                {formMode === "create" ? "Nouveau Contrat" : formMode === "edit" ? "Modifier le Contrat" : "Détails du Contrat"}
               </CardTitle>
-              {isEditing && (
+              {formMode !== null && (
                 <Button variant="ghost" size="sm" onClick={handleCancelEdit}>
                   Annuler
                 </Button>
               )}
             </CardHeader>
             <CardContent className="pt-md max-h-[calc(100vh-220px)] overflow-y-auto">
-              {isEditing ? (
+              {formMode !== null ? (
                 <form action={formAction} className="flex flex-col gap-md">
                   <div className="flex flex-col gap-xs">
                     <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
@@ -402,7 +407,7 @@ export function LeasesDashboard({
                     <Select
                       name="propertyId"
                       defaultValue={formData.propertyId}
-                      options={initialProperties.map((p) => ({
+                      options={availableProperties.map((p) => ({
                         label: `${p.designation} (${p.reference})`,
                         value: p.id,
                       }))}
