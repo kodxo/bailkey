@@ -10,24 +10,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import type { ScheduleDisplayDTO } from "./schedule-serializer";
 
-export interface MockSchedule {
-  id: string;
-  leaseId: string;
-  tenantName: string;
-  propertyInfo: string;
-  date: string;
-  amount: number;
-  remaining: number;
-  status: "OVERDUE" | "PENDING" | "PARTIAL" | "PAID";
-  isLocked: boolean;
-  payments?: {
-    id: string;
-    amount: number;
-    date: string;
-    method: string;
-    reference?: string;
-  }[];
-}
 
 interface SchedulesTableProps {
   schedules: ScheduleDisplayDTO[];
