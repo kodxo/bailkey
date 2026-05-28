@@ -12,7 +12,7 @@ export default function AuthLayout({
       <div
         className="hidden md:flex md:w-5/12 lg:w-1/2 relative bg-surface-variant flex-col justify-between p-12 overflow-hidden bg-cover bg-center"
         style={{
-          backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuB10Y0dBHGK6X0fYGGWGEFOTwl5Jk2CIgnDl5wAowcuE9klCxX8e6ReLWghfeFYbbO9Id_bey0z-SVWZZlPLgCIfPTdPWSzhbevL7tepY1L7YACn86PFkwSwHise5UfCclZZB4J4m0DdiA0GMm1YgKoq3xFYXYJ013U0W_EEoScta7RHww4rWYFoNNJG8IGcW0xOlAFD50xR_LILBHzHZPznuMypJBBXg9GMUDqJw7FSwl0fZxQRzoFXSXQglSmQcHDA3vyyEBJJKU')`,
+          backgroundImage: `url('/images/auth/login-image.png')`,
         }}
       >
         {/* Dark overlay for readability */}
@@ -24,7 +24,7 @@ export default function AuthLayout({
             <img
               alt="BailKey Logo"
               className="h-10 w-auto brightness-0 invert drop-shadow"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDM6CuHRyZUts-cW3kTdPVBCl5iAL6SMZ2A77kGtHDbl1YQnmcWHTEACm04Cq7oYV-ED7hGCqDbVeVe4ZRR9o4gTjZD58V6b8k_mOFvUvw24l0FOauhJdHfK3l0B2mix7s0z3XyAHe-K9E6J9TzN6e4MtD4vnpZndzezZ01xCMswnlWOII9ezCRR1cJmcSurNuuyBnkfmhnihOeE5ny07NKdCdoBk0hW9wv488v015805rvd8m3gkI0MDVg8Ka0mP-gMN_zc4llBIA"
+              src="/logo.png"
             />
           </Link>
         </div>
@@ -33,8 +33,8 @@ export default function AuthLayout({
         <div className="relative z-10 mt-auto animate-in fade-in slide-in-from-bottom-6 duration-700">
           <div className="backdrop-blur-xl bg-white/10 border border-white/20 p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.4)]">
             <p className="text-xl md:text-2xl font-semibold text-white mb-6 leading-relaxed font-display">
-              &quot;BailKey a transformé notre rigueur opérationnelle. La précision
-              des états des lieux et la fluidité de la plateforme nous
+              &quot;BailKey a transformé notre rigueur opérationnelle. La
+              précision des états des lieux et la fluidité de la plateforme nous
               permettent de gérer notre parc avec une confiance absolue.&quot;
             </p>
             <div className="flex items-center gap-4">

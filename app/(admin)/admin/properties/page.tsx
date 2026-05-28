@@ -3,10 +3,16 @@ import { checkRole } from "@/lib/clerk/check-role";
 import { redirect } from "next/navigation";
 import {
   DashboardSplitGrid,
+  DashboardLayout,
   DashboardMain,
   DashboardSidebar,
   DashboardToolbar,
 } from "@/components/layout/dashboard-split-pane";
+import {
+  DashboardPageContainer,
+  DashboardPageHeader,
+} from "@/components/layout/dashboard-page-layout";
+import { BreadcrumbNav } from "@/components/ui/breadcrumb";
 import { PropertiesFilterBar } from "@/components/admin/properties/properties-filter-bar";
 import { PropertiesMetricsServer } from "@/components/admin/properties/properties-metrics-server";
 import { PropertiesTableServer } from "@/components/admin/properties/properties-table-server";
@@ -40,40 +46,59 @@ export default async function AdminPropertiesPage({
   const edit = params?.edit || "false";
   const selectedId = params?.selectedId;
 
-  return (
-    <div className="flex flex-col gap-lg h-full">
-      <Suspense fallback={<div className="h-24 bg-surface-container-low animate-pulse rounded" />}>
-        <PropertiesMetricsServer search={search} status={status} type={type} />
-      </Suspense>
+  const breadcrumbItems = [
+    { label: "Administration", href: "/admin" },
+    { label: "Propriétés" },
+  ];
 
-      <DashboardSplitGrid>
-        <DashboardMain>
-          <DashboardToolbar>
-            <PropertiesFilterBar />
-          </DashboardToolbar>
-          <Suspense fallback={
-            <div className="flex justify-center items-center h-64">
-              <span className="material-symbols-outlined animate-spin text-3xl text-primary">
-                progress_activity
-              </span>
-            </div>
-          }>
-            <PropertiesTableServer
-              page={page}
-              pageSize={10}
-              search={search}
-              type={type}
-              status={status}
-              selectedId={selectedId}
-            />
-          </Suspense>
-        </DashboardMain>
-        <DashboardSidebar>
-          <Suspense fallback={<div className="h-64 bg-surface-container-low animate-pulse rounded" />}>
-            <PropertiesSidebarServer selectedId={selectedId} edit={edit} />
-          </Suspense>
-        </DashboardSidebar>
-      </DashboardSplitGrid>
-    </div>
+  return (
+    <DashboardPageContainer>
+      <DashboardPageHeader>
+        <BreadcrumbNav items={breadcrumbItems} />
+        <div>
+          <h1 className="text-h1 text-on-background mb-xs font-bold font-display">
+            Gestion des Propriétés
+          </h1>
+          <p className="text-body-lg font-body-lg text-on-surface-variant">
+            Gérez votre parc immobilier, suivez le statut des biens et affectez les propriétaires.
+          </p>
+        </div>
+      </DashboardPageHeader>
+
+      <DashboardLayout>
+        <Suspense fallback={<div className="h-24 bg-surface-container-low animate-pulse rounded" />}>
+          <PropertiesMetricsServer search={search} status={status} type={type} />
+        </Suspense>
+
+        <DashboardSplitGrid>
+          <DashboardMain>
+            <DashboardToolbar>
+              <PropertiesFilterBar />
+            </DashboardToolbar>
+            <Suspense fallback={
+              <div className="flex justify-center items-center h-64">
+                <span className="material-symbols-outlined animate-spin text-3xl text-primary">
+                  progress_activity
+                </span>
+              </div>
+            }>
+              <PropertiesTableServer
+                page={page}
+                pageSize={10}
+                search={search}
+                type={type}
+                status={status}
+                selectedId={selectedId}
+              />
+            </Suspense>
+          </DashboardMain>
+          <DashboardSidebar>
+            <Suspense fallback={<div className="h-64 bg-surface-container-low animate-pulse rounded" />}>
+              <PropertiesSidebarServer selectedId={selectedId} edit={edit} />
+            </Suspense>
+          </DashboardSidebar>
+        </DashboardSplitGrid>
+      </DashboardLayout>
+    </DashboardPageContainer>
   );
 }
