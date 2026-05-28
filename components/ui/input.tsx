@@ -9,7 +9,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, iconName, wrapperClassName, ...props }, ref) => {
     const wrapperStyle = cn(
-      "group flex items-center bg-surface-container-lowest border border-outline-variant/60 hover:border-primary/60 focus-within:border-primary focus-within:ring-3 focus-within:ring-primary/15 rounded-xl transition-all shadow-2xs overflow-hidden px-3 h-10 w-full",
+      "group flex items-center bg-surface border border-outline-variant hover:border-primary/60 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-colors overflow-hidden px-4 h-14 w-full",
       wrapperClassName
     );
 
