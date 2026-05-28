@@ -17,7 +17,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { TablePagination } from "@/components/ui/pagination";
-import { Search } from "@/components/ui/search";
+import { SearchPanel, SearchPanelInput, SearchPanelFilters } from "@/components/ui/search-panel";
 import { Select } from "@/components/ui/select";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
 
@@ -82,13 +82,9 @@ export default async function AdminArticlesPage(): Promise<React.JSX.Element> {
       </section>
 
       {/* Filters Bar */}
-      <section className="bg-surface-container-lowest border border-outline-variant flex flex-col md:flex-row md:flex-wrap items-stretch md:items-center gap-0 z-30 transition-all duration-300 ease-in-out shadow-sm overflow-hidden">
-        <div className="flex-1 min-w-[200px] flex items-center border-b md:border-b-0 md:border-r border-outline-variant">
-          <Search
-            placeholder="Rechercher..."
-          />
-        </div>
-        <div className="flex items-center border-b md:border-b-0 md:border-r border-outline-variant bg-surface-container-lowest justify-between md:justify-start">
+      <SearchPanel className="z-30 transition-all duration-300 ease-in-out md:flex-wrap">
+        <SearchPanelInput placeholder="Rechercher..." />
+        <SearchPanelFilters className="justify-between md:justify-start w-full sm:w-auto">
           <Select
             label="Catégorie:"
             options={[
@@ -100,39 +96,41 @@ export default async function AdminArticlesPage(): Promise<React.JSX.Element> {
             ]}
             wrapperClassName="border-none py-sm"
           />
-        </div>
-        <div className="flex items-center px-sm py-sm bg-surface-container-lowest gap-xs overflow-x-auto">
-          <span className="text-label-caps font-label-caps text-on-surface-variant uppercase mr-xs shrink-0 select-none">
-            Statut:
-          </span>
-          <div className="flex border border-outline-variant overflow-hidden shrink-0 rounded-xs">
-            <button
-              type="button"
-              className="px-sm py-[4px] bg-primary text-on-primary text-label-caps font-label-caps border-r border-outline-variant transition-colors uppercase cursor-pointer"
-            >
-              Tous
-            </button>
-            <button
-              type="button"
-              className="px-sm py-[4px] bg-transparent text-on-surface text-label-caps font-label-caps border-r border-outline-variant hover:bg-surface-variant transition-colors uppercase cursor-pointer"
-            >
-              Publié
-            </button>
-            <button
-              type="button"
-              className="px-sm py-[4px] bg-transparent text-on-surface text-label-caps font-label-caps border-r border-outline-variant hover:bg-surface-variant transition-colors uppercase cursor-pointer"
-            >
-              Brouillon
-            </button>
-            <button
-              type="button"
-              className="px-sm py-[4px] bg-transparent text-on-surface text-label-caps font-label-caps hover:bg-surface-variant transition-colors uppercase cursor-pointer"
-            >
-              Archivé
-            </button>
+          
+          {/* Custom Status filter */}
+          <div className="flex items-center gap-xs ml-auto sm:ml-sm">
+            <span className="text-label-caps font-label-caps text-on-surface-variant uppercase mr-xs shrink-0 select-none hidden sm:inline">
+              Statut:
+            </span>
+            <div className="flex border border-outline-variant overflow-hidden shrink-0 rounded-xs">
+              <button
+                type="button"
+                className="px-sm py-[4px] bg-primary text-on-primary text-label-caps font-label-caps border-r border-outline-variant transition-colors uppercase cursor-pointer"
+              >
+                Tous
+              </button>
+              <button
+                type="button"
+                className="px-sm py-[4px] bg-transparent text-on-surface text-label-caps font-label-caps border-r border-outline-variant hover:bg-surface-variant transition-colors uppercase cursor-pointer"
+              >
+                Publié
+              </button>
+              <button
+                type="button"
+                className="px-sm py-[4px] bg-transparent text-on-surface text-label-caps font-label-caps border-r border-outline-variant hover:bg-surface-variant transition-colors uppercase cursor-pointer"
+              >
+                Brouillon
+              </button>
+              <button
+                type="button"
+                className="px-sm py-[4px] bg-transparent text-on-surface text-label-caps font-label-caps hover:bg-surface-variant transition-colors uppercase cursor-pointer"
+              >
+                Archivé
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </SearchPanelFilters>
+      </SearchPanel>
 
       {/* Data Table */}
       <section className="transition-all duration-300 ease-in-out">

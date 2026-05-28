@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
-import { Search } from "@/components/ui/search";
+import { SearchPanel, SearchPanelInput, SearchPanelFilters } from "@/components/ui/search-panel";
 import { Select } from "@/components/ui/select";
 import { TablePagination } from "@/components/ui/pagination";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -157,15 +157,13 @@ export function UsersDashboard({
         {/* Left Panel: Table & Filters */}
         <div className="lg:col-span-2 flex flex-col gap-md">
           {/* Filters Bar */}
-          <div className="bg-surface-container-lowest border border-outline-variant flex flex-col sm:flex-row items-stretch sm:items-center justify-between shadow-xs overflow-hidden">
-            <div className="flex-1 min-w-[200px] flex items-center border-b sm:border-b-0 sm:border-r border-outline-variant">
-              <Search
-                placeholder="Rechercher par nom ou email (serveur)..."
-                defaultValue={searchTerm}
-                onChange={handleSearchChange}
-              />
-            </div>
-            <div className="flex items-center px-sm py-xs">
+          <SearchPanel>
+            <SearchPanelInput
+              placeholder="Rechercher par nom ou email (serveur)..."
+              defaultValue={searchTerm}
+              onChange={handleSearchChange}
+            />
+            <SearchPanelFilters>
               <Select
                 label="Rôle:"
                 value={roleFilter}
@@ -177,8 +175,8 @@ export function UsersDashboard({
                 ]}
                 wrapperClassName="border-none py-sm"
               />
-            </div>
-          </div>
+            </SearchPanelFilters>
+          </SearchPanel>
 
           {/* Users Table */}
           <div className="relative flex flex-col transition-all">

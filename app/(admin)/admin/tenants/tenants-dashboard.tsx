@@ -15,7 +15,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Search } from "@/components/ui/search";
+import { SearchPanel, SearchPanelInput, SearchPanelFilters } from "@/components/ui/search-panel";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { TablePagination } from "@/components/ui/pagination";
@@ -220,18 +220,16 @@ export function TenantsDashboard({
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-md items-start">
         <div className="lg:col-span-2 flex flex-col gap-md">
-          <div className="bg-surface-container-lowest border border-outline-variant flex flex-col sm:flex-row items-stretch sm:items-center justify-between shadow-xs overflow-hidden">
-            <div className="flex-1 min-w-[200px] flex items-center border-b sm:border-b-0 sm:border-r border-outline-variant">
-              <Search
-                placeholder="Rechercher par nom, email ou téléphone..."
-                defaultValue={searchTerm}
-                onChange={(val) => {
-                  setSearchTerm(val);
-                  setCurrentPage(1);
-                }}
-              />
-            </div>
-            <div className="flex items-center px-sm py-xs">
+          <SearchPanel>
+            <SearchPanelInput
+              placeholder="Rechercher par nom, email ou téléphone..."
+              defaultValue={searchTerm}
+              onChange={(val) => {
+                setSearchTerm(val);
+                setCurrentPage(1);
+              }}
+            />
+            <SearchPanelFilters>
               <Select
                 label="Type:"
                 value={typeFilter}
@@ -246,8 +244,8 @@ export function TenantsDashboard({
                 ]}
                 wrapperClassName="border-none py-sm"
               />
-            </div>
-          </div>
+            </SearchPanelFilters>
+          </SearchPanel>
 
           <div className="relative flex flex-col transition-all">
             {isPending && (
