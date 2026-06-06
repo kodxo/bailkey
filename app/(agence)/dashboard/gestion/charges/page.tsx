@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
 import {
   DashboardPageContainer,
@@ -9,12 +9,28 @@ import {
   DashboardSplitGrid,
   DashboardMain,
 } from "@/components/layout/dashboard-split-pane";
+import { LeaseChargesTableServer } from "./components/lease-charges-table-server";
 
 export const metadata = {
   title: "Lignes de Charges | Bailkey",
 };
 
-export default function LeaseChargesPage() {
+interface PageProps {
+  searchParams: {
+    page?: string;
+    pageSize?: string;
+    search?: string;
+    propertyId?: string;
+    tenantId?: string;
+    chargeTypeId?: string;
+  };
+}
+
+export default function LeaseChargesPage({ searchParams }: PageProps) {
+  const page = Number(searchParams.page) || 1;
+  const pageSize = Number(searchParams.pageSize) || 10;
+  const { search, propertyId, tenantId, chargeTypeId } = searchParams;
+
   return (
     <DashboardPageContainer>
       <DashboardPageHeader>
@@ -38,15 +54,19 @@ export default function LeaseChargesPage() {
       <DashboardLayout>
         <DashboardSplitGrid>
           <DashboardMain>
-            <div className="bg-surface border border-outline-variant/30 rounded-xl shadow-sm p-12 text-center">
-              <span className="material-symbols-outlined text-[48px] text-primary/30 mb-4">
-                construction
-              </span>
-              <h2 className="text-xl font-bold text-on-surface mb-2">Page en construction</h2>
-              <p className="text-on-surface-variant">
-                Le suivi des lignes de charges de baux sera disponible très prochainement.
-              </p>
-            </div>
+            <Suspense
+              key={`table-${page}-${pageSize}-${search || "none"}-${propertyId || "all"}-${tenantId || "all"}-${chargeTypeId || "all"}`}
+              fallback={<div className="h-64 flex items-center justify-center"><span className="material-symbols-outlined animate-spin text-primary">progress_activity</span></div>}
+            >
+              <LeaseChargesTableServer
+                page={page}
+                pageSize={pageSize}
+                search={search}
+                propertyId={propertyId}
+                tenantId={tenantId}
+                chargeTypeId={chargeTypeId}
+              />
+            </Suspense>
           </DashboardMain>
         </DashboardSplitGrid>
       </DashboardLayout>
