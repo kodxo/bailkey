@@ -7,7 +7,11 @@ import { AdvancedFilterDialog } from "@/components/ui/advanced-filter-dialog";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-export function PropertiesFilters(): React.JSX.Element {
+interface PropertiesFiltersProps {
+  owners?: { id: string; name: string }[];
+}
+
+export function PropertiesFilters({ owners = [] }: PropertiesFiltersProps): React.JSX.Element {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -17,6 +21,7 @@ export function PropertiesFilters(): React.JSX.Element {
   const minRent = searchParams.get("minRent") || "";
   const maxRent = searchParams.get("maxRent") || "";
   const roomsCount = searchParams.get("roomsCount") || "all";
+  const currentOwnerId = searchParams.get("ownerId") || "all";
 
   const updateFilters = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -32,6 +37,7 @@ export function PropertiesFilters(): React.JSX.Element {
     params.delete("minRent");
     params.delete("maxRent");
     params.delete("roomsCount");
+    params.delete("ownerId");
     params.set("page", "1");
     router.push(`${pathname}?${params.toString()}`);
   };
@@ -40,7 +46,8 @@ export function PropertiesFilters(): React.JSX.Element {
     (currentType !== "all" ? 1 : 0) + 
     (minRent ? 1 : 0) + 
     (maxRent ? 1 : 0) + 
-    (roomsCount !== "all" ? 1 : 0);
+    (roomsCount !== "all" ? 1 : 0) +
+    (currentOwnerId !== "all" ? 1 : 0);
 
   return (
     <SearchPanel searchPlaceholder="Rechercher par désignation, réf ou ville...">
@@ -112,6 +119,17 @@ export function PropertiesFilters(): React.JSX.Element {
                 { label: "3 pièces", value: "3" },
                 { label: "4 pièces", value: "4" },
                 { label: "5+ pièces", value: "5" },
+              ]}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-bold text-on-surface-variant">Propriétaire</label>
+            <Select
+              value={currentOwnerId}
+              onChange={(e) => updateFilters("ownerId", e.target.value)}
+              options={[
+                { label: "Tous les propriétaires", value: "all" },
+                ...owners.map((o) => ({ label: o.name, value: o.id })),
               ]}
             />
           </div>

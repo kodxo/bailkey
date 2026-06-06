@@ -10,6 +10,9 @@ interface PropertiesTableServerProps {
   status: string;
   type: string;
   ownerId?: string;
+  minRent?: string;
+  maxRent?: string;
+  roomsCount?: string;
 }
 
 export async function PropertiesTableServer({
@@ -19,6 +22,9 @@ export async function PropertiesTableServer({
   status,
   type,
   ownerId,
+  minRent,
+  maxRent,
+  roomsCount,
 }: PropertiesTableServerProps): Promise<React.JSX.Element> {
   const { properties, totalCount } = await getProperties({
     status: status !== "all" ? (status as PropertyStatus) : undefined,
@@ -32,8 +38,20 @@ export async function PropertiesTableServer({
       (p) => p.propertyType === type,
     );
   }
-  if (ownerId) {
+  if (ownerId && ownerId !== "all") {
     displayProperties = displayProperties.filter((p) => p.owners?.some(o => o.id === ownerId));
+  }
+  if (minRent) {
+    displayProperties = displayProperties.filter(p => (p.baseRent || 0) >= parseFloat(minRent));
+  }
+  if (maxRent) {
+    displayProperties = displayProperties.filter(p => (p.baseRent || 0) <= parseFloat(maxRent));
+  }
+  if (roomsCount && roomsCount !== "all") {
+    const rc = parseInt(roomsCount, 10);
+    displayProperties = displayProperties.filter(p => 
+      rc >= 5 ? (p.roomsCount || 0) >= 5 : p.roomsCount === rc
+    );
   }
   if (search) {
     const s = search.toLowerCase();

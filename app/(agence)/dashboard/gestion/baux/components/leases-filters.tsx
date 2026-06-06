@@ -6,7 +6,12 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { AdvancedFilterDialog } from "@/components/ui/advanced-filter-dialog";
 import { Select } from "@/components/ui/select";
 
-export function LeasesFilters(): React.JSX.Element {
+interface LeasesFiltersProps {
+  properties?: { id: string; name: string }[];
+  tenants?: { id: string; name: string }[];
+}
+
+export function LeasesFilters({ properties = [], tenants = [] }: LeasesFiltersProps): React.JSX.Element {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -16,6 +21,8 @@ export function LeasesFilters(): React.JSX.Element {
   const minRent = searchParams.get("minRent") || "";
   const maxRent = searchParams.get("maxRent") || "";
   const hasDeposit = searchParams.get("hasDeposit") || "all";
+  const propertyId = searchParams.get("propertyId") || "all";
+  const tenantId = searchParams.get("tenantId") || "all";
 
   const updateFilters = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -31,6 +38,8 @@ export function LeasesFilters(): React.JSX.Element {
     params.delete("minRent");
     params.delete("maxRent");
     params.delete("hasDeposit");
+    params.delete("propertyId");
+    params.delete("tenantId");
     params.set("page", "1");
     router.push(`${pathname}?${params.toString()}`);
   };
@@ -39,7 +48,9 @@ export function LeasesFilters(): React.JSX.Element {
     (currentFrequency !== "all" ? 1 : 0) + 
     (minRent ? 1 : 0) + 
     (maxRent ? 1 : 0) + 
-    (hasDeposit !== "all" ? 1 : 0);
+    (hasDeposit !== "all" ? 1 : 0) +
+    (propertyId !== "all" ? 1 : 0) +
+    (tenantId !== "all" ? 1 : 0);
 
   return (
     <SearchPanel searchPlaceholder="Rechercher par propriété, référence ou locataire...">
@@ -106,6 +117,29 @@ export function LeasesFilters(): React.JSX.Element {
                 { label: "Tous", value: "all" },
                 { label: "Avec dépôt", value: "yes" },
                 { label: "Sans dépôt", value: "no" },
+              ]}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-bold text-on-surface-variant">Propriété concernée</label>
+            <Select
+              value={propertyId}
+              onChange={(e) => updateFilters("propertyId", e.target.value)}
+              options={[
+                { label: "Toutes", value: "all" },
+                ...properties.map(p => ({ label: p.name, value: p.id }))
+              ]}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-bold text-on-surface-variant">Locataire</label>
+            <Select
+              value={tenantId}
+              onChange={(e) => updateFilters("tenantId", e.target.value)}
+              options={[
+                { label: "Tous", value: "all" },
+                ...tenants.map(t => ({ label: t.name, value: t.id }))
               ]}
             />
           </div>

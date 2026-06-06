@@ -20,6 +20,8 @@ import { MetricsSkeleton } from "./components/metrics-skeleton";
 import { TableSkeleton } from "./components/table-skeleton";
 import { SidebarSkeleton } from "./components/sidebar-skeleton";
 import { LeasesFilters } from "./components/leases-filters";
+import { getProperties } from "@/lib/dal/properties";
+import { getTenants } from "@/lib/dal/tenants";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +36,11 @@ export default async function DashboardLeasesPage({
     frequency?: string;
     selectedLeaseId?: string;
     mode?: string;
+    propertyId?: string;
+    tenantId?: string;
+    minRent?: string;
+    maxRent?: string;
+    hasDeposit?: string;
   }>;
 }): Promise<React.JSX.Element> {
   const params = await searchParams;
@@ -44,6 +51,25 @@ export default async function DashboardLeasesPage({
   const frequency = params?.frequency || "all";
   const selectedLeaseId = params?.selectedLeaseId;
   const mode = params?.mode;
+  
+  const propertyId = params?.propertyId || "all";
+  const tenantId = params?.tenantId || "all";
+  const minRent = params?.minRent;
+  const maxRent = params?.maxRent;
+  const hasDeposit = params?.hasDeposit;
+
+  const [{ properties }, { tenants }] = await Promise.all([
+    getProperties(),
+    getTenants(),
+  ]);
+
+  const formattedProperties = (properties || []).map(p => ({
+    id: p.id, name: p.designation
+  }));
+
+  const formattedTenants = (tenants || []).map(t => ({
+    id: t.id, name: `${t.firstName || ""} ${t.lastName || ""} ${t.companyName || ""}`.trim() || t.id
+  }));
 
   return (
     <DashboardPageContainer>
@@ -60,14 +86,13 @@ export default async function DashboardLeasesPage({
             Contrats de Location (Baux)
           </h1>
           <p className="text-body-lg font-body-lg text-on-surface-variant">
-            Gérez vos contrats de location, le montant des cautions et les dates
-            d&apos;échéance.
+            Gérez vos locations, signez de nouveaux baux et suivez les échéances.
           </p>
         </div>
       </DashboardPageHeader>
 
       <DashboardLayout>
-        {/* Metrics - re-renders independently */}
+        {/* Metrics - independent Suspense */}
         <Suspense fallback={<MetricsSkeleton />}>
           <LeasesMetricsServer />
         </Suspense>
@@ -75,12 +100,12 @@ export default async function DashboardLeasesPage({
         <DashboardSplitGrid>
           <DashboardMain>
             <div className="mb-md">
-              <LeasesFilters />
+              <LeasesFilters properties={formattedProperties} tenants={formattedTenants} />
             </div>
 
-            {/* Table - key triggers Suspense on search/filter/page changes */}
+            {/* Table - Suspense triggered on param change */}
             <Suspense
-              key={`table-${page}-${pageSize}-${search}-${status}-${frequency}`}
+              key={`table-${page}-${pageSize}-${search}-${status}-${frequency}-${propertyId}-${tenantId}-${minRent}-${maxRent}-${hasDeposit}`}
               fallback={<TableSkeleton />}
             >
               <LeasesTableServer
@@ -89,6 +114,11 @@ export default async function DashboardLeasesPage({
                 search={search}
                 status={status}
                 frequency={frequency}
+                propertyId={propertyId}
+                tenantId={tenantId}
+                minRent={minRent}
+                maxRent={maxRent}
+                hasDeposit={hasDeposit}
               />
             </Suspense>
           </DashboardMain>

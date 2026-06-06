@@ -19,6 +19,8 @@ import { PropertiesTableSkeleton } from "./components/properties-table-skeleton"
 import { PropertiesSidebarServer } from "./components/properties-sidebar-server";
 import { PropertiesSidebarSkeleton } from "./components/properties-sidebar-skeleton";
 
+import { getOwners } from "@/lib/dal/owners";
+
 export const dynamic = "force-dynamic";
 
 export const metadata = {
@@ -38,6 +40,9 @@ export default async function DashboardPropertiesPage({
     selectedId?: string;
     mode?: string;
     ownerId?: string;
+    minRent?: string;
+    maxRent?: string;
+    roomsCount?: string;
   }>;
 }): Promise<React.JSX.Element> {
   const params = await searchParams;
@@ -46,9 +51,19 @@ export default async function DashboardPropertiesPage({
   const search = params?.search || "";
   const status = params?.status || "all";
   const type = params?.type || "all";
+  const ownerId = params?.ownerId || "all";
+  const minRent = params?.minRent;
+  const maxRent = params?.maxRent;
+  const roomsCount = params?.roomsCount;
   const selectedId = params?.selectedId;
   const mode = params?.mode;
-  const ownerId = params?.ownerId;
+
+  const { owners } = await getOwners();
+
+  const formattedOwners = (owners || []).map(o => ({
+    id: o.id,
+    name: o.type === "INDIVIDUAL" ? `${o.firstName} ${o.lastName}` : (o.companyName || o.id)
+  }));
 
   return (
     <DashboardPageContainer>
@@ -62,10 +77,10 @@ export default async function DashboardPropertiesPage({
         />
         <div>
           <h1 className="text-h1 text-on-background mb-xs font-bold font-display">
-            Gestion des Propriétés
+            Mes Propriétés
           </h1>
           <p className="text-body-lg font-body-lg text-on-surface-variant">
-            Gérez votre catalogue immobilier, ajoutez de nouveaux biens et suivez leur statut locatif.
+            Consultez et gérez vos biens immobiliers.
           </p>
         </div>
       </DashboardPageHeader>
@@ -80,12 +95,12 @@ export default async function DashboardPropertiesPage({
           <DashboardMain>
             {/* Search and Filters */}
             <div className="mb-md">
-              <PropertiesFilters />
+              <PropertiesFilters owners={formattedOwners} />
             </div>
 
             {/* Table - Suspense triggered on param change */}
             <Suspense
-              key={`table-${page}-${pageSize}-${search}-${status}-${type}`}
+              key={`table-${page}-${pageSize}-${search}-${status}-${type}-${ownerId}-${minRent}-${maxRent}-${roomsCount}`}
               fallback={<PropertiesTableSkeleton />}
             >
               <PropertiesTableServer
@@ -95,6 +110,9 @@ export default async function DashboardPropertiesPage({
                 status={status}
                 type={type}
                 ownerId={ownerId}
+                minRent={minRent}
+                maxRent={maxRent}
+                roomsCount={roomsCount}
               />
             </Suspense>
           </DashboardMain>

@@ -10,6 +10,8 @@ interface SchedulesTableServerProps {
   status: string;
   month?: string;
   leaseId?: string;
+  paymentMethod?: string;
+  hasPartial?: string;
 }
 
 export async function SchedulesTableServer({
@@ -19,10 +21,21 @@ export async function SchedulesTableServer({
   status,
   month,
   leaseId,
+  paymentMethod,
+  hasPartial,
 }: SchedulesTableServerProps): Promise<React.JSX.Element> {
   const { schedules, totalCount } = await getRentSchedules({ page, pageSize, search, status, month, leaseId });
 
-  const displaySchedules = (schedules || []).map(serializeSchedule);
+  let displaySchedules = (schedules || []).map(serializeSchedule);
+
+  if (hasPartial && hasPartial !== "all") {
+    displaySchedules = displaySchedules.filter(s => 
+      hasPartial === "yes" ? (s.remaining > 0 && s.remaining < s.amount) : s.remaining === 0
+    );
+  }
+
+  // Not implemented in DAL, could do locally or just pass empty for now.
+  // if (paymentMethod && paymentMethod !== "all") { ... }
 
   return (
     <SchedulesTableClient

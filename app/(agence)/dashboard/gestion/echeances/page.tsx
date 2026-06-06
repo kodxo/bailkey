@@ -21,7 +21,7 @@ import { SchedulesTableSkeleton } from "./components/schedules-table-skeleton";
 import { SchedulesSidebarSkeleton } from "./components/schedules-sidebar-skeleton";
 import { SchedulesFilters } from "./components/schedules-filters";
 import { LeaseFilterBanner } from "./components/lease-filter-banner";
-import { getLeaseById } from "@/lib/dal/leases";
+import { getLeaseById, getLeases } from "@/lib/dal/leases";
 import type { LeaseDTO } from "@/lib/types/property";
 
 export const dynamic = "force-dynamic";
@@ -42,6 +42,8 @@ export default async function RentSchedulesPage({
     month?: string;
     selectedId?: string;
     leaseId?: string;
+    paymentMethod?: string;
+    hasPartial?: string;
   }>;
 }): Promise<React.JSX.Element> {
   const params = await searchParams;
@@ -51,16 +53,17 @@ export default async function RentSchedulesPage({
   const status = params?.status || "all";
   const month = params?.month || "all";
   const selectedId = params?.selectedId;
-  const leaseId = params?.leaseId;
+  const leaseId = params?.leaseId || "all";
+  const paymentMethod = params?.paymentMethod || "all";
+  const hasPartial = params?.hasPartial || "all";
 
   // For breadcrumb only, we fetch the lease name if leaseId is provided.
   // This is a fast, isolated fetch and doesn't block the main table/metrics
   let leaseData: LeaseDTO | null = null;
-  if (leaseId) {
+  if (leaseId && leaseId !== "all") {
     const res = await getLeaseById(leaseId);
     leaseData = res.lease;
   }
-
 
   const breadcrumbItems: { label: string; href?: string }[] = [
     { label: "Tableau de bord", href: "/dashboard" },
@@ -77,6 +80,11 @@ export default async function RentSchedulesPage({
   } else {
     breadcrumbItems.push({ label: "Échéances & Encaissements" });
   }
+
+  const { leases } = await getLeases({ pageSize: 50 });
+  const formattedLeases = (leases || []).map(l => ({
+    id: l.id, name: `${l.propertyReference} - ${l.tenantFullName}`
+  }));
 
   return (
     <DashboardPageContainer>
@@ -96,7 +104,7 @@ export default async function RentSchedulesPage({
       <DashboardLayout>
         {/* Metrics - independent Suspense */}
         <Suspense fallback={<SchedulesMetricsSkeleton />}>
-          <SchedulesMetricsServer leaseId={leaseId} />
+          <SchedulesMetricsServer leaseId={leaseId !== "all" ? leaseId : undefined} />
         </Suspense>
 
         <DashboardSplitGrid>
@@ -104,12 +112,12 @@ export default async function RentSchedulesPage({
             <LeaseFilterBanner />
             
             <div className="mb-md">
-              <SchedulesFilters />
+              <SchedulesFilters leases={formattedLeases} />
             </div>
 
             {/* Table - Suspense triggered on param change */}
             <Suspense
-              key={`table-${page}-${pageSize}-${search}-${status}-${leaseId || ""}`}
+              key={`table-${page}-${pageSize}-${search}-${status}-${leaseId || ""}-${month}-${paymentMethod}-${hasPartial}`}
               fallback={<SchedulesTableSkeleton />}
             >
               <SchedulesTableServer
@@ -118,7 +126,9 @@ export default async function RentSchedulesPage({
                 search={search}
                 status={status}
                 month={month}
-                leaseId={leaseId}
+                leaseId={leaseId !== "all" ? leaseId : undefined}
+                paymentMethod={paymentMethod}
+                hasPartial={hasPartial}
               />
             </Suspense>
           </DashboardMain>

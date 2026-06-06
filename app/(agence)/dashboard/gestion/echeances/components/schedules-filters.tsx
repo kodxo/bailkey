@@ -6,7 +6,11 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { AdvancedFilterDialog } from "@/components/ui/advanced-filter-dialog";
 import { Select } from "@/components/ui/select";
 
-export function SchedulesFilters(): React.JSX.Element {
+interface SchedulesFiltersProps {
+  leases?: { id: string; name: string }[];
+}
+
+export function SchedulesFilters({ leases = [] }: SchedulesFiltersProps): React.JSX.Element {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -15,6 +19,7 @@ export function SchedulesFilters(): React.JSX.Element {
   const currentMonth = searchParams.get("month") || "all";
   const paymentMethod = searchParams.get("paymentMethod") || "all";
   const hasPartial = searchParams.get("hasPartial") || "all";
+  const currentLeaseId = searchParams.get("leaseId") || "all";
 
   const updateFilters = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -29,6 +34,7 @@ export function SchedulesFilters(): React.JSX.Element {
     params.delete("month");
     params.delete("paymentMethod");
     params.delete("hasPartial");
+    params.delete("leaseId");
     params.set("page", "1");
     router.push(`${pathname}?${params.toString()}`);
   };
@@ -36,7 +42,8 @@ export function SchedulesFilters(): React.JSX.Element {
   const activeFiltersCount = 
     (currentMonth !== "all" ? 1 : 0) + 
     (paymentMethod !== "all" ? 1 : 0) + 
-    (hasPartial !== "all" ? 1 : 0);
+    (hasPartial !== "all" ? 1 : 0) +
+    (currentLeaseId !== "all" ? 1 : 0);
 
   return (
     <SearchPanel searchPlaceholder="Rechercher locataire, bien, paiement...">
@@ -68,6 +75,18 @@ export function SchedulesFilters(): React.JSX.Element {
                 { label: "Ce mois", value: "current" },
                 { label: "Mois dernier", value: "last" },
                 { label: "Le mois prochain", value: "next" },
+              ]}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-bold text-on-surface-variant">Bail / Contrat</label>
+            <Select
+              value={currentLeaseId}
+              onChange={(e) => updateFilters("leaseId", e.target.value)}
+              options={[
+                { label: "Tous les contrats", value: "all" },
+                ...leases.map((l) => ({ label: l.name, value: l.id })),
               ]}
             />
           </div>
