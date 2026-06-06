@@ -111,6 +111,31 @@ export function LeaseDetailView({ lease }: LeaseDetailViewProps): React.JSX.Elem
                   </span>
                 </div>
 
+                {lease.charges && lease.charges.length > 0 && (
+                  <div className="bg-surface-container-lowest p-3 rounded-lg border border-outline-variant/40">
+                    <span className="text-label-caps uppercase text-on-surface-variant mb-2 block">Charges Additionnelles</span>
+                    <div className="space-y-2">
+                      {lease.charges.map((charge: any, idx: number) => (
+                        <div key={idx} className="flex justify-between items-center text-sm">
+                          <span className="text-on-surface flex items-center gap-2">
+                            <span className="material-symbols-outlined text-[16px] text-primary" data-icon={charge.accountingMode === 'CREDIT' ? 'add_circle' : 'remove_circle'}>
+                              {charge.accountingMode === 'CREDIT' ? 'add_circle' : 'remove_circle'}
+                            </span>
+                            {charge.name}
+                          </span>
+                          <span className="font-mono font-medium">
+                            {new Intl.NumberFormat("fr-FR", {
+                              style: "currency",
+                              currency: "XAF",
+                              maximumFractionDigits: 0,
+                            }).format(charge.amount)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
                   <span className="text-label-caps uppercase text-on-surface-variant">Statut</span>
                   <span>

@@ -34,6 +34,7 @@ export async function generateRentSchedulesForLease(leaseId: string, providedOrg
 
     const lease = await prisma.lease.findUnique({
       where: { id: leaseId },
+      include: { charges: { include: { chargeType: true } } },
     });
 
     if (!lease || lease.organizationId !== orgId) {
@@ -54,6 +55,16 @@ export async function generateRentSchedulesForLease(leaseId: string, providedOrg
     if (lease.paymentFrequency === PaymentFrequency.ANNUALLY) monthStep = 12;
 
     const rentAmount = typeof lease.rentAmount === 'number' ? lease.rentAmount : lease.rentAmount.toNumber();
+
+    // Calculer les charges fixes (CREDIT) qui s'ajoutent à l'échéance du locataire
+    let totalFixedCharges = 0;
+    if (lease.charges && lease.charges.length > 0) {
+      for (const charge of lease.charges) {
+        if (charge.chargeType.accountingMode === "CREDIT") {
+          totalFixedCharges += typeof charge.defaultAmount === 'number' ? charge.defaultAmount : Number(charge.defaultAmount);
+        }
+      }
+    }
 
     while (currentPeriodStart <= generationEnd) {
       const year = currentPeriodStart.getUTCFullYear();
@@ -94,8 +105,8 @@ export async function generateRentSchedulesForLease(leaseId: string, providedOrg
         periodEnd: periodEnd,
         dueDate: dueDate,
         rentAmount: amount,
-        chargesAmount: 0,
-        totalAmount: amount,
+        chargesAmount: totalFixedCharges,
+        totalAmount: amount + totalFixedCharges,
         amountPaid: 0,
         status: ScheduleStatus.PENDING,
         isLocked: false,

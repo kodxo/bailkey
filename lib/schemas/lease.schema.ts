@@ -23,4 +23,12 @@ export const LeaseSchema = z.object({
   paymentFrequency: z.enum(["MONTHLY", "QUARTERLY", "SEMI_ANNUALLY", "ANNUALLY"]).optional(),
   paymentDay: z.coerce.number().min(1).max(31).optional(),
   status: z.enum(["DRAFT", "ACTIVE", "TERMINATED", "EXPIRED"]).optional(),
+  charges: z.string().optional().transform((val) => {
+    if (!val) return [];
+    try {
+      return JSON.parse(val) as { chargeTypeId: string; amount: number }[];
+    } catch {
+      return [];
+    }
+  }),
 });

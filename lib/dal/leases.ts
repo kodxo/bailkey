@@ -28,6 +28,7 @@ export function serializeLease(raw: {
     lastName: string | null;
     companyName: string | null;
   };
+  charges?: any[];
   createdAt: Date;
   updatedAt: Date;
 }): LeaseDTO {
@@ -63,6 +64,12 @@ export function serializeLease(raw: {
     paymentFrequency: raw.paymentFrequency || PaymentFrequency.MONTHLY,
     paymentDay: raw.paymentDay || 5,
     status: raw.status,
+    charges: raw.charges?.map((c: any) => ({
+      chargeTypeId: c.chargeTypeId,
+      name: c.chargeType?.name || "",
+      amount: typeof c.defaultAmount === "number" ? c.defaultAmount : Number(c.defaultAmount),
+      accountingMode: c.chargeType?.accountingMode || "CREDIT",
+    })),
     createdAt: raw.createdAt.toISOString(),
     updatedAt: raw.updatedAt.toISOString(),
   };
@@ -181,6 +188,7 @@ export interface SaveLeaseInputDTO {
   paymentFrequency?: PaymentFrequency;
   paymentDay?: number;
   status?: LeaseStatus;
+  charges?: { chargeTypeId: string; amount: number }[];
 }
 
 export async function createLease(
@@ -189,23 +197,29 @@ export async function createLease(
   try {
     const { orgId } = await getAuthContext();
 
-    const parsedStartDate = new Date(input.startDate);
-    const parsedEndDate = input.endDate ? new Date(input.endDate) : undefined;
-
     const newLease = await prisma.lease.create({
       data: {
         organizationId: orgId,
         propertyId: input.propertyId,
         tenantId: input.tenantId,
-        startDate: parsedStartDate,
-        ...(parsedEndDate && { endDate: parsedEndDate }),
+        startDate: new Date(input.startDate),
+        ...(input.endDate && { endDate: new Date(input.endDate) }),
         rentAmount: input.rentAmount,
         depositAmount: input.depositAmount,
         paymentFrequency: input.paymentFrequency || PaymentFrequency.MONTHLY,
         paymentDay: input.paymentDay || 5,
         status: input.status || LeaseStatus.ACTIVE,
+        ...(input.charges && input.charges.length > 0 && {
+          charges: {
+            create: input.charges.map(c => ({
+              organizationId: orgId,
+              chargeTypeId: c.chargeTypeId,
+              defaultAmount: c.amount,
+            }))
+          }
+        }),
       },
-      include: { property: true, tenant: true },
+      include: { property: true, tenant: true, charges: { include: { chargeType: true } } },
     });
 
     let schedulesGenerated = 0;
@@ -254,7 +268,7 @@ export async function updateLease(
       }
     }
 
-    const { startDate, endDate, ...restInput } = input;
+    const { startDate, endDate, charges, ...restInput } = input;
     const parsedStartDate = startDate ? new Date(startDate) : undefined;
     const parsedEndDate =
       endDate === null
@@ -270,8 +284,23 @@ export async function updateLease(
         ...(parsedStartDate !== undefined && { startDate: parsedStartDate }),
         ...(parsedEndDate !== undefined && { endDate: parsedEndDate }),
       },
-      include: { property: true, tenant: true },
+      include: { property: true, tenant: true, charges: { include: { chargeType: true } } },
     });
+
+    if (charges) {
+      // On supprime et on recrée les charges
+      await prisma.leaseCharge.deleteMany({ where: { leaseId: id } });
+      if (charges.length > 0) {
+        await prisma.leaseCharge.createMany({
+          data: charges.map(c => ({
+            organizationId: orgId,
+            leaseId: id,
+            chargeTypeId: c.chargeTypeId,
+            defaultAmount: c.amount,
+          }))
+        });
+      }
+    }
 
     let schedulesGenerated = 0;
     let schedulesDeleted = 0;

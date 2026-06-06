@@ -6,6 +6,8 @@ import { getTenants } from "@/lib/dal/tenants";
 import { LeaseDetailView } from "./lease-detail-view";
 import { LeaseFormClient } from "./lease-form-client";
 
+import { getChargeTypes } from "@/lib/dal/charges";
+
 interface LeasesSidebarServerProps {
   selectedLeaseId?: string;
   mode?: string;
@@ -15,7 +17,7 @@ export async function LeasesSidebarServer({
   selectedLeaseId,
   mode,
 }: LeasesSidebarServerProps): Promise<React.JSX.Element> {
-  // Mode create or edit: fetch properties + tenants
+  // Mode create or edit: fetch properties + tenants + charges
   if (mode === "create" || mode === "edit") {
     const selectedLeaseRes = selectedLeaseId
       ? await getLeaseById(selectedLeaseId)
@@ -29,9 +31,11 @@ export async function LeasesSidebarServer({
     });
     
     const tenantsRes = await getTenants();
+    const chargeTypesRes = await getChargeTypes();
 
     const properties = propsRes.success && propsRes.properties ? propsRes.properties : [];
     const tenants = tenantsRes.success && tenantsRes.tenants ? tenantsRes.tenants : [];
+    const chargeTypes = chargeTypesRes.success && chargeTypesRes.data ? chargeTypesRes.data : [];
 
     return (
       <LeaseFormClient
@@ -39,6 +43,7 @@ export async function LeasesSidebarServer({
         lease={selectedLeaseRes.lease ?? undefined}
         properties={properties}
         tenants={tenants}
+        chargeTypes={chargeTypes}
       />
     );
   }

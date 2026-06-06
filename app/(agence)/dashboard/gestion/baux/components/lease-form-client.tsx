@@ -3,6 +3,7 @@
 import React, { useActionState, useEffect } from "react";
 import { LeaseStatus } from "@/lib/generated/prisma/enums";
 import type { LeaseDTO, PropertyDTO, TenantDTO } from "@/lib/types/property";
+import type { ChargeTypeDTO } from "@/lib/dal/charges";
 import { createLeaseAction, updateLeaseAction, type LeaseActionState } from "@/lib/actions/lease.actions";
 import { VALID_STATUS_TRANSITIONS } from "@/lib/schemas/lease.schema";
 import { toast } from "sonner";
@@ -18,6 +19,7 @@ interface LeaseFormClientProps {
   lease?: LeaseDTO;
   properties: PropertyDTO[];
   tenants: TenantDTO[];
+  chargeTypes?: ChargeTypeDTO[];
 }
 
 export function LeaseFormClient({
@@ -25,6 +27,7 @@ export function LeaseFormClient({
   lease,
   properties,
   tenants,
+  chargeTypes = [],
 }: LeaseFormClientProps): React.JSX.Element {
   const router = useRouter();
   const pathname = usePathname();
@@ -79,6 +82,22 @@ export function LeaseFormClient({
 
   const [selectedPropertyId, setSelectedPropertyId] = React.useState<string>(defaultPropertyId);
   const [selectedTenantId, setSelectedTenantId] = React.useState<string>(defaultTenantId);
+  const [selectedCharges, setSelectedCharges] = React.useState<{chargeTypeId: string, amount: number}[]>(
+    lease?.charges?.map((c: any) => ({ chargeTypeId: c.chargeTypeId, amount: c.amount })) || []
+  );
+
+  useEffect(() => {
+    // If the lease has default charges, set them up on initial load
+    if (mode === "create" && chargeTypes.length > 0 && selectedCharges.length === 0) {
+      const defaultCharges = chargeTypes.filter((c) => c.isDefault).map((c) => ({
+        chargeTypeId: c.id,
+        amount: 0,
+      }));
+      if (defaultCharges.length > 0) {
+        setSelectedCharges(defaultCharges);
+      }
+    }
+  }, [mode, chargeTypes, selectedCharges.length]);
 
   return (
     <Card className="border-outline-variant/60 shadow-md rounded-xl overflow-hidden">
@@ -239,6 +258,79 @@ export function LeaseFormClient({
               />
               {state?.errors?.paymentDay && <p className="text-xs text-error">{state.errors.paymentDay[0]}</p>}
             </div>
+          </div>
+
+          <div className="flex flex-col gap-xs pt-4 border-t border-outline-variant/30">
+            <div className="flex justify-between items-center mb-2">
+              <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
+                Charges Additionnelles
+              </label>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const available = chargeTypes.filter(ct => !selectedCharges.some(sc => sc.chargeTypeId === ct.id));
+                  if (available.length > 0) {
+                    setSelectedCharges([...selectedCharges, { chargeTypeId: available[0].id, amount: 0 }]);
+                  }
+                }}
+                disabled={selectedCharges.length >= chargeTypes.length}
+              >
+                <span className="material-symbols-outlined text-[18px] mr-1">add</span>
+                Ajouter une charge
+              </Button>
+            </div>
+            
+            {selectedCharges.length === 0 ? (
+              <p className="text-sm text-on-surface-variant italic">Aucune charge ajoutée.</p>
+            ) : (
+              <div className="space-y-3">
+                {selectedCharges.map((charge, idx) => (
+                  <div key={idx} className="flex gap-2 items-center">
+                    <div className="flex-1">
+                      <Select
+                        name={`chargeTypeId_${idx}`}
+                        value={charge.chargeTypeId}
+                        onChange={(e) => {
+                          const newCharges = [...selectedCharges];
+                          newCharges[idx].chargeTypeId = e.target.value;
+                          setSelectedCharges(newCharges);
+                        }}
+                        options={chargeTypes.map(ct => ({ label: ct.name, value: ct.id }))}
+                        wrapperClassName="w-full"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <Input
+                        type="number"
+                        placeholder="Montant (FCFA)"
+                        value={charge.amount}
+                        onChange={(e) => {
+                          const newCharges = [...selectedCharges];
+                          newCharges[idx].amount = Number(e.target.value);
+                          setSelectedCharges(newCharges);
+                        }}
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        const newCharges = [...selectedCharges];
+                        newCharges.splice(idx, 1);
+                        setSelectedCharges(newCharges);
+                      }}
+                      className="text-error"
+                    >
+                      <span className="material-symbols-outlined text-[20px]">delete</span>
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <input type="hidden" name="charges" value={JSON.stringify(selectedCharges)} />
           </div>
 
           <div className="flex flex-col gap-xs">

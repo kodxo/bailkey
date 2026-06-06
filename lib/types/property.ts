@@ -112,6 +112,7 @@ export interface LeaseDTO {
   paymentFrequency: PaymentFrequency;
   paymentDay: number;
   status: LeaseStatus;
+  charges?: { chargeTypeId: string; name: string; amount: number; accountingMode: string }[];
   createdAt: string;
   updatedAt: string;
 }
