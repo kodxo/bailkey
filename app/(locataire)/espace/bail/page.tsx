@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 export const metadata = {
@@ -72,12 +73,12 @@ export default function LocataireBailPage(): React.JSX.Element {
               </p>
             </div>
           </div>
-          <button className="hidden md:flex items-center gap-2 bg-secondary-container text-on-secondary-container px-6 py-3 text-xs font-semibold uppercase tracking-wider hover:bg-secondary-fixed transition-colors shadow-sm cursor-pointer">
+          <Button variant="secondary" className="hidden md:flex">
             <span className="material-symbols-outlined text-[18px]">
               edit_document
             </span>
             Signaler un changement
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -236,14 +237,16 @@ export default function LocataireBailPage(): React.JSX.Element {
                       {doc.type} • {doc.size}
                     </p>
                   </div>
-                  <button
-                    className="text-on-surface-variant group-hover:text-primary transition-colors p-1"
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-on-surface-variant group-hover:text-primary transition-colors p-1 h-10 w-10"
                     title="Télécharger"
                   >
                     <span className="material-symbols-outlined text-[24px]">
                       download
                     </span>
-                  </button>
+                  </Button>
                 </div>
               ),
             )}

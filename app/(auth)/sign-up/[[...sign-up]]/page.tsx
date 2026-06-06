@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LegalEntityType } from "@/lib/generated/prisma/enums";
+import { Button } from "@/components/ui/button";
 
 export default function SignUpPage(): React.JSX.Element {
   const router = useRouter();
@@ -28,12 +29,13 @@ export default function SignUpPage(): React.JSX.Element {
       </div>
 
       {/* Social Login */}
-      <button
+      <Button
+        variant="outline"
         type="button"
         onClick={() => router.push("/onboarding")}
-        className="w-full flex items-center justify-center gap-3 h-12 bg-white hover:bg-surface-container-low text-on-surface font-semibold text-xs tracking-wider uppercase transition-colors border border-outline-variant mb-6 cursor-pointer"
+        className="w-full bg-white hover:bg-surface-container-low text-on-surface border-outline-variant mb-6"
       >
-        <svg height="20" viewBox="0 0 48 48" width="20" xmlns="http://www.w3.org/2000/svg">
+        <svg height="20" viewBox="0 0 48 48" width="20" xmlns="http://www.w3.org/2000/svg" className="mr-2">
           <path
             d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
             fill="#FFC107"
@@ -52,7 +54,7 @@ export default function SignUpPage(): React.JSX.Element {
           ></path>
         </svg>
         S&apos;inscrire avec Google
-      </button>
+      </Button>
 
       {/* Divider */}
       <div className="flex items-center gap-4 mb-8">
@@ -134,15 +136,17 @@ export default function SignUpPage(): React.JSX.Element {
               placeholder="Créez un mot de passe"
               className="w-full h-12 border border-outline-variant bg-surface-bright text-on-surface px-4 pr-12 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors font-body-md"
             />
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+              className="absolute right-2 top-1 text-on-surface-variant hover:text-on-surface hover:bg-transparent"
             >
               <span className="material-symbols-outlined text-[20px]">
                 {showPassword ? "visibility" : "visibility_off"}
               </span>
-            </button>
+            </Button>
           </div>
 
           {/* Password Strength Indicator */}
@@ -181,12 +185,12 @@ export default function SignUpPage(): React.JSX.Element {
         </label>
 
         {/* Submit Button */}
-        <button
+        <Button
           type="submit"
-          className="h-12 w-full bg-[#2EB1B2] hover:bg-[#269798] text-white font-semibold text-xs tracking-wider uppercase mt-4 shadow-sm hover:shadow-md transition-all cursor-pointer"
+          className="w-full bg-[#2EB1B2] hover:bg-[#269798] text-white mt-4"
         >
           Créer mon compte professionnel
-        </button>
+        </Button>
       </form>
 
       {/* Login Link */}

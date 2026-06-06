@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/Logo";
 import { UserButton } from "@clerk/nextjs";
 import { LocataireNav } from "./locataire-nav";
@@ -29,11 +30,11 @@ export default function LocataireLayout({
             </Link>
           </div>
           <div className="flex items-center gap-sm">
-            <button className="text-primary hover:bg-primary-container/10 transition-colors p-xs cursor-pointer">
+            <Button variant="ghost" size="icon" className="text-primary hover:bg-primary-container/10">
               <span className="material-symbols-outlined" data-icon="search">
                 search
               </span>
-            </button>
+            </Button>
             <UserButton />
           </div>
         </header>

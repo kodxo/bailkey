@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export const metadata = {
   title: "Maintenance et Requêtes - Espace Locataire | BailKey",
@@ -155,9 +156,9 @@ export default function LocataireIncidentsPage(): React.JSX.Element {
               </span>
               Historique
             </h2>
-            <button className="text-primary hover:underline text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer">
+            <Button variant="ghost" className="text-primary hover:bg-primary/5 hover:text-primary text-xs font-bold uppercase tracking-wider transition-colors">
               Tout voir
-            </button>
+            </Button>
           </div>
 
           <div className="bg-surface-container-low border border-outline-variant/20 flex flex-col overflow-hidden shadow-sm divide-y divide-outline-variant/20">

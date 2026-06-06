@@ -1,4 +1,6 @@
 import React from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export const metadata = {
   title: "Tableau de bord | BailKey",
@@ -241,12 +243,12 @@ export default function DashboardPage(): React.JSX.Element {
             </ul>
           </div>
           <div className="p-3 border-t border-outline-variant/30 text-center bg-surface-container-low/30">
-            <button
-              type="button"
-              className="text-sm font-medium text-primary hover:text-primary-fixed-dim transition-colors cursor-pointer"
+            <Button
+              variant="ghost"
+              className="text-sm font-medium text-primary hover:text-primary-fixed-dim hover:bg-transparent transition-colors"
             >
               Voir tout l&apos;historique
-            </button>
+            </Button>
           </div>
         </div>
       </div>

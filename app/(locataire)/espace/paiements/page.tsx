@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export interface TransactionRecord {
   id: string;
@@ -105,12 +106,12 @@ export default function LocatairePaiementsPage(): React.JSX.Element {
           </div>
         </div>
         <div className="relative z-10 w-full md:w-auto">
-          <button className="w-full md:w-auto bg-primary text-on-primary font-semibold text-sm px-8 py-4 hover:opacity-90 transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+          <Button className="w-full md:w-auto px-8 h-14">
             <span className="material-symbols-outlined text-[20px]">
               payments
             </span>
             Effectuer un paiement
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -129,17 +130,18 @@ export default function LocatairePaiementsPage(): React.JSX.Element {
             <div className="flex items-center gap-1 bg-surface-container-low p-1.5 border border-outline-variant/30 overflow-x-auto w-full sm:w-auto">
               {(["Tous", "Payés", "En attente", "En retard"] as const).map(
                 (tab): React.JSX.Element => (
-                  <button
+                  <Button
+                    variant="ghost"
                     key={tab}
                     onClick={() => setFilter(tab)}
-                    className={`px-4 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
+                    className={`px-4 h-8 text-xs font-semibold uppercase tracking-wider transition-all whitespace-nowrap ${
                       filter === tab
                         ? "bg-surface text-on-surface shadow-sm font-bold"
-                        : "text-on-surface-variant hover:text-on-surface"
+                        : "text-on-surface-variant hover:text-on-surface hover:bg-transparent"
                     }`}
                   >
                     {tab}
-                  </button>
+                  </Button>
                 ),
               )}
             </div>
@@ -225,24 +227,28 @@ export default function LocatairePaiementsPage(): React.JSX.Element {
                     </td>
                     <td className="px-6 py-5 text-center">
                       {tx.downloadable ? (
-                        <button
-                          className="text-on-surface-variant hover:text-primary transition-colors p-2 cursor-pointer"
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-on-surface-variant hover:text-primary transition-colors p-2"
                           title="Télécharger la quittance"
                         >
                           <span className="material-symbols-outlined text-[22px]">
                             download
                           </span>
-                        </button>
+                        </Button>
                       ) : (
-                        <button
-                          className="text-outline-variant cursor-not-allowed p-2"
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-outline-variant p-2"
                           title="Non disponible"
                           disabled
                         >
                           <span className="material-symbols-outlined text-[22px]">
                             download
                           </span>
-                        </button>
+                        </Button>
                       )}
                     </td>
                   </tr>
@@ -258,22 +264,26 @@ export default function LocatairePaiementsPage(): React.JSX.Element {
             Affichage de {filteredTransactions.length} sur {transactions.length}
           </span>
           <div className="flex items-center gap-2">
-            <button
-              className="p-1.5 text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors cursor-pointer"
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
               title="Page précédente"
             >
               <span className="material-symbols-outlined text-[20px]">
                 chevron_left
               </span>
-            </button>
-            <button
-              className="p-1.5 text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors cursor-pointer"
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
               title="Page suivante"
             >
               <span className="material-symbols-outlined text-[20px]">
                 chevron_right
               </span>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
