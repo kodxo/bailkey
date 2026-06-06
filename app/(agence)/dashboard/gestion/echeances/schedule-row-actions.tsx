@@ -18,7 +18,7 @@ export function ScheduleRowActions({
   paidAmount: number;
 }) {
   const handleDownload = () => {
-    const amount = typeof schedule.amount === 'number' ? schedule.amount : Number(schedule.amount);
+    const amount = typeof schedule.totalAmount === 'number' ? schedule.totalAmount : Number(schedule.totalAmount);
     const mockSch = {
       id: schedule.id,
       tenantName: schedule.lease?.tenant ? `${schedule.lease.tenant.lastName} ${schedule.lease.tenant.firstName}` : "Locataire Inconnu",

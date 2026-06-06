@@ -59,9 +59,9 @@ export async function recordPaymentAction(
     }
 
     const expectedAmount =
-      typeof schedule.amount === "number"
-        ? schedule.amount
-        : schedule.amount.toNumber();
+      typeof schedule.totalAmount === "number"
+        ? schedule.totalAmount
+        : schedule.totalAmount.toNumber();
     const currentPaid =
       typeof schedule.amountPaid === "number"
         ? schedule.amountPaid

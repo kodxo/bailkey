@@ -232,9 +232,9 @@ export default function LocataireDashboardPage(): React.JSX.Element {
                 </div>
                 <div className="text-right flex flex-col items-end">
                   {item.amount && (
-                    <p className="text-base font-bold font-display text-on-surface">
+                    <div className="font-medium text-right">
                       {item.amount}
-                    </p>
+                    </div>
                   )}
                   <span
                     className={`inline-block px-2.5 py-1 text-xs font-semibold mt-1 ${

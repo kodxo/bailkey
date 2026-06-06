@@ -35,7 +35,7 @@ const dateFormatter = new Intl.DateTimeFormat("fr-FR", {
 });
 
 export function serializeSchedule(s: ScheduleDTO): ScheduleDisplayDTO {
-  const amount = Number(s.amount);
+  const amount = Number(s.totalAmount);
   const amountPaid = Number(s.amountPaid);
 
   const tenant = s.lease?.tenant;

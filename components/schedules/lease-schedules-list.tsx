@@ -60,7 +60,7 @@ export function LeaseSchedulesList({ leaseId }: { leaseId: string }) {
   return (
     <div className="flex flex-col gap-4">
       {schedules.map(sch => {
-        const amt = Number(sch.amount);
+        const amt = Number(sch.totalAmount);
         const paid = Number(sch.amountPaid);
         const remaining = amt - paid;
 

@@ -1,0 +1,63 @@
+// ==========================================
+// 🧾 8. CHARGES (CHARGES ADDITIONNELLES)
+// ==========================================
+
+model ChargeType {
+  id             String @id @default(cuid())
+  organizationId String
+
+  name           String
+  accountingMode AccountingMode @default(CREDIT) // CREDIT (Encaissement pour le proprio) ou DEBIT (Dépense)
+  
+  isDefault      Boolean @default(false) // Si true, ajout automatique aux nouveaux baux
+  isUtility      Boolean @default(false) // Ex: Eau, Électricité
+
+  // --- 🔗 Relations ---
+  leaseCharges    LeaseCharge[]
+  scheduleCharges ScheduleCharge[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+model LeaseCharge {
+  id             String @id @default(cuid())
+  organizationId String
+
+  leaseId String
+  lease   Lease  @relation(fields: [leaseId], references: [id], onDelete: Cascade)
+
+  chargeTypeId String
+  chargeType   ChargeType @relation(fields: [chargeTypeId], references: [id], onDelete: Restrict)
+
+  defaultAmount Decimal @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([leaseId])
+  @@index([chargeTypeId])
+}
+
+model ScheduleCharge {
+  id             String @id @default(cuid())
+  organizationId String
+
+  scheduleId String
+  schedule   RentSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  chargeTypeId String
+  chargeType   ChargeType @relation(fields: [chargeTypeId], references: [id], onDelete: Restrict)
+
+  amount Decimal @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([scheduleId])
+  @@index([chargeTypeId])
+}

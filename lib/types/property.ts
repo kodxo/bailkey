@@ -136,7 +136,9 @@ export interface ScheduleDTO {
   periodStart: string;
   periodEnd: string;
   dueDate: string;
-  amount: number;
+  rentAmount: number;
+  chargesAmount: number;
+  totalAmount: number;
   amountPaid: number;
   status: ScheduleStatus;
   isLocked: boolean;

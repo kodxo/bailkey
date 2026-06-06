@@ -29,6 +29,7 @@ model Lease {
 
   // --- 🔗 Relations ---
   schedules RentSchedule[] // Échéancier généré pour ce bail
+  charges   LeaseCharge[]  // Charges associées à ce bail
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

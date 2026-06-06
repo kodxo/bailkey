@@ -93,7 +93,9 @@ export async function generateRentSchedulesForLease(leaseId: string, providedOrg
         periodStart: currentPeriodStart,
         periodEnd: periodEnd,
         dueDate: dueDate,
-        amount: amount,
+        rentAmount: amount,
+        chargesAmount: 0,
+        totalAmount: amount,
         amountPaid: 0,
         status: ScheduleStatus.PENDING,
         isLocked: false,
@@ -237,7 +239,7 @@ export async function getRentSchedules(params?: {
       prisma.rentSchedule.count({ where: { ...whereClause, status: ScheduleStatus.PENDING } }),
       prisma.rentSchedule.aggregate({
         where: whereClause,
-        _sum: { amount: true, amountPaid: true }
+        _sum: { totalAmount: true, amountPaid: true }
       })
     ], {
       maxWait: 10000,
@@ -250,7 +252,7 @@ export async function getRentSchedules(params?: {
       totalCount,
       overdueCount,
       pendingCount,
-      totalAmount: typeof aggregates._sum.amount === 'number' ? aggregates._sum.amount : aggregates._sum.amount?.toNumber() || 0,
+      totalAmount: typeof aggregates._sum.totalAmount === 'number' ? aggregates._sum.totalAmount : aggregates._sum.totalAmount?.toNumber() || 0,
       totalPaid: typeof aggregates._sum.amountPaid === 'number' ? aggregates._sum.amountPaid : aggregates._sum.amountPaid?.toNumber() || 0
     };
   } catch (error) {

@@ -4,7 +4,7 @@ import { LegalEntityType } from "@/lib/generated/prisma/enums";
 export const tenantSchema = z
   .object({
     id: z.string().optional(),
-    type: z.nativeEnum(LegalEntityType),
+    type: z.enum([LegalEntityType.INDIVIDUAL, LegalEntityType.COMPANY]),
     firstName: z.string().optional().nullable(),
     lastName: z.string().optional().nullable(),
     companyName: z.string().optional().nullable(),

@@ -55,3 +55,8 @@ enum PaymentMethod {
   MOBILE_MONEY
   CHEQUE
 }
+
+enum AccountingMode {
+  CREDIT
+  DEBIT
+}

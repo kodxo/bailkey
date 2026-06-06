@@ -15,8 +15,10 @@ model RentSchedule {
   dueDate     DateTime @db.Date // Date limite de paiement (ex: 05/10/2026)
 
   // --- 💵 Montants ---
-  amount     Decimal @db.Decimal(10, 2) // Loyer attendu
-  amountPaid Decimal @default(0.00) @db.Decimal(10, 2) // Total encaissé à ce jour
+  rentAmount    Decimal @default(0.00) @db.Decimal(10, 2) // Loyer de base (proratisé ou non)
+  chargesAmount Decimal @default(0.00) @db.Decimal(10, 2) // Somme des charges (ScheduleCharge)
+  totalAmount   Decimal @default(0.00) @db.Decimal(10, 2) // rentAmount + chargesAmount (Loyer total attendu)
+  amountPaid    Decimal @default(0.00) @db.Decimal(10, 2) // Total encaissé à ce jour
 
   // --- 📊 Statut ---
   status   ScheduleStatus @default(PENDING)
@@ -24,6 +26,7 @@ model RentSchedule {
 
   // --- 🔗 Relations ---
   payments Payment[] // Liste des paiements liés à cette échéance
+  charges  ScheduleCharge[] // Charges facturées pour ce mois précis
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
