@@ -19,7 +19,7 @@ import { LeasesSidebarServer } from "./components/leases-sidebar-server";
 import { MetricsSkeleton } from "./components/metrics-skeleton";
 import { TableSkeleton } from "./components/table-skeleton";
 import { SidebarSkeleton } from "./components/sidebar-skeleton";
-import { StatusFilter } from "./components/status-filter";
+import { LeasesFilters } from "./components/leases-filters";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +31,7 @@ export default async function DashboardLeasesPage({
     pageSize?: string;
     search?: string;  
     status?: string;
+    frequency?: string;
     selectedLeaseId?: string;
     mode?: string;
   }>;
@@ -40,6 +41,7 @@ export default async function DashboardLeasesPage({
   const pageSize = parseInt(params?.pageSize || "10", 10);
   const search = params?.search || "";
   const status = params?.status || "all";
+  const frequency = params?.frequency || "all";
   const selectedLeaseId = params?.selectedLeaseId;
   const mode = params?.mode;
 
@@ -72,19 +74,13 @@ export default async function DashboardLeasesPage({
 
         <DashboardSplitGrid>
           <DashboardMain>
-            {/* Toolbar stays interactive, never suspends */}
-            <DashboardToolbar>
-              <div className="flex-1 min-w-[200px] flex items-center border-b sm:border-b-0 sm:border-r border-outline-variant">
-                <Search placeholder="Rechercher par propriété, référence ou locataire..." />
-              </div>
-              <div className="flex items-center px-sm py-xs">
-                <StatusFilter />
-              </div>
-            </DashboardToolbar>
+            <div className="mb-md">
+              <LeasesFilters />
+            </div>
 
             {/* Table - key triggers Suspense on search/filter/page changes */}
             <Suspense
-              key={`table-${page}-${pageSize}-${search}-${status}`}
+              key={`table-${page}-${pageSize}-${search}-${status}-${frequency}`}
               fallback={<TableSkeleton />}
             >
               <LeasesTableServer
@@ -92,6 +88,7 @@ export default async function DashboardLeasesPage({
                 pageSize={pageSize}
                 search={search}
                 status={status}
+                frequency={frequency}
               />
             </Suspense>
           </DashboardMain>

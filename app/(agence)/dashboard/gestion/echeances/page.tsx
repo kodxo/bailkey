@@ -19,7 +19,7 @@ import { SchedulesSidebarServer } from "./components/schedules-sidebar-server";
 import { SchedulesMetricsSkeleton } from "./components/schedules-metrics-skeleton";
 import { SchedulesTableSkeleton } from "./components/schedules-table-skeleton";
 import { SchedulesSidebarSkeleton } from "./components/schedules-sidebar-skeleton";
-import { SchedulesStatusFilter } from "./components/schedules-status-filter";
+import { SchedulesFilters } from "./components/schedules-filters";
 import { LeaseFilterBanner } from "./components/lease-filter-banner";
 import { getLeaseById } from "@/lib/dal/leases";
 import type { LeaseDTO } from "@/lib/types/property";
@@ -39,6 +39,7 @@ export default async function RentSchedulesPage({
     pageSize?: string;
     search?: string;
     status?: string;
+    month?: string;
     selectedId?: string;
     leaseId?: string;
   }>;
@@ -48,6 +49,7 @@ export default async function RentSchedulesPage({
   const pageSize = parseInt(params?.pageSize || "10", 10);
   const search = params?.search || "";
   const status = params?.status || "all";
+  const month = params?.month || "all";
   const selectedId = params?.selectedId;
   const leaseId = params?.leaseId;
 
@@ -101,15 +103,9 @@ export default async function RentSchedulesPage({
           <DashboardMain>
             <LeaseFilterBanner />
             
-            {/* Toolbar stays interactive */}
-            <DashboardToolbar>
-              <div className="flex-1 min-w-[200px] flex items-center border-b sm:border-b-0 sm:border-r border-outline-variant">
-                <Search placeholder="Rechercher locataire, bien, paiement..." />
-              </div>
-              <div className="flex items-center px-sm py-xs">
-                <SchedulesStatusFilter />
-              </div>
-            </DashboardToolbar>
+            <div className="mb-md">
+              <SchedulesFilters />
+            </div>
 
             {/* Table - Suspense triggered on param change */}
             <Suspense
@@ -121,6 +117,7 @@ export default async function RentSchedulesPage({
                 pageSize={pageSize}
                 search={search}
                 status={status}
+                month={month}
                 leaseId={leaseId}
               />
             </Suspense>

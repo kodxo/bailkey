@@ -7,6 +7,7 @@ interface LeasesTableServerProps {
   pageSize: number;
   search: string;
   status: string;
+  frequency?: string;
 }
 
 export async function LeasesTableServer({
@@ -14,8 +15,15 @@ export async function LeasesTableServer({
   pageSize,
   search,
   status,
+  frequency,
 }: LeasesTableServerProps): Promise<React.JSX.Element> {
-  const { leases, totalCount } = await getLeases({ page, pageSize, search, status });
+  const { leases, totalCount } = await getLeases({ 
+    page, 
+    pageSize, 
+    search, 
+    status,
+    paymentFrequency: frequency && frequency !== "all" ? frequency as any : undefined
+  });
 
   return (
     <LeasesTableClient

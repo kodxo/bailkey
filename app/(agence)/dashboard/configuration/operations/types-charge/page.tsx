@@ -12,6 +12,7 @@ import {
   DashboardToolbar,
 } from "@/components/layout/dashboard-split-pane";
 import { Search } from "@/components/ui/search";
+import { ChargeTypesFilters } from "./components/charge-types-filters";
 import { getChargeTypesPaginated, getChargeTypeById } from "@/lib/dal/charges";
 import { ChargeTypesTableServer } from "./components/charge-types-table-server";
 import { ChargeTypesSidebarServer } from "./components/charge-types-sidebar-server";
@@ -32,6 +33,8 @@ export default async function ChargeTypesPage({
     page?: string;
     pageSize?: string;
     search?: string;
+    accountingMode?: string;
+    isDefault?: string;
     selectedId?: string;
     mode?: string;
   }>;
@@ -40,11 +43,13 @@ export default async function ChargeTypesPage({
   const page = parseInt(params?.page || "1", 10);
   const pageSize = parseInt(params?.pageSize || "10", 10);
   const search = params?.search || "";
+  const accountingMode = params?.accountingMode || "all";
+  const isDefault = params?.isDefault || "all";
   const selectedId = params?.selectedId;
   const mode = params?.mode;
 
   const [listRes, selectedRes] = await Promise.all([
-    getChargeTypesPaginated({ page, pageSize, search }),
+    getChargeTypesPaginated({ page, pageSize, search, accountingMode, isDefault }),
     selectedId ? getChargeTypeById(selectedId) : Promise.resolve({ data: undefined }),
   ]);
 
@@ -80,9 +85,9 @@ export default async function ChargeTypesPage({
       <DashboardLayout>
         <DashboardSplitGrid>
           <DashboardMain>
-            <DashboardToolbar>
-              <Search placeholder="Rechercher une charge..." />
-            </DashboardToolbar>
+            <div className="mb-md">
+              <ChargeTypesFilters />
+            </div>
             <Suspense fallback={<div className="p-8 text-center">Chargement...</div>}>
               <ChargeTypesTableServer
                 data={listRes.data || []}

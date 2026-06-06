@@ -8,6 +8,7 @@ interface SchedulesTableServerProps {
   pageSize: number;
   search: string;
   status: string;
+  month?: string;
   leaseId?: string;
 }
 
@@ -16,9 +17,10 @@ export async function SchedulesTableServer({
   pageSize,
   search,
   status,
+  month,
   leaseId,
 }: SchedulesTableServerProps): Promise<React.JSX.Element> {
-  const { schedules, totalCount } = await getRentSchedules({ page, pageSize, search, status, leaseId });
+  const { schedules, totalCount } = await getRentSchedules({ page, pageSize, search, status, month, leaseId });
 
   const displaySchedules = (schedules || []).map(serializeSchedule);
 

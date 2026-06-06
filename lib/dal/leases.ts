@@ -80,6 +80,7 @@ export async function getLeases(params?: {
   pageSize?: number;
   search?: string;
   status?: string;
+  paymentFrequency?: PaymentFrequency;
 }): Promise<{
   success: boolean;
   leases: LeaseDTO[];
@@ -95,12 +96,16 @@ export async function getLeases(params?: {
     const pageSize = params?.pageSize || 10;
     const search = params?.search?.trim() || "";
     const statusFilter = params?.status && params.status !== "all" ? params.status : undefined;
+    const frequencyFilter = params?.paymentFrequency;
 
     // Constuire le filtre `where` de base
     const whereClause: Prisma.LeaseWhereInput = { organizationId: orgId };
     
     if (statusFilter) {
       whereClause.status = statusFilter as LeaseStatus;
+    }
+    if (frequencyFilter) {
+      whereClause.paymentFrequency = frequencyFilter;
     }
     
     if (search) {

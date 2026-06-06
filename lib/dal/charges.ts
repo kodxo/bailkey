@@ -42,6 +42,8 @@ export async function getChargeTypesPaginated(params: {
   page: number;
   pageSize: number;
   search?: string;
+  accountingMode?: string;
+  isDefault?: string;
 }): Promise<{
   success: boolean;
   data?: ChargeTypeDTO[];
@@ -50,13 +52,22 @@ export async function getChargeTypesPaginated(params: {
 }> {
   try {
     const { orgId } = await getAuthContext();
-    const { page, pageSize, search } = params;
+    const { page, pageSize, search, accountingMode, isDefault } = params;
     const skip = (page - 1) * pageSize;
 
-    const where = {
+    const where: any = {
       organizationId: orgId,
-      ...(search ? { name: { contains: search, mode: "insensitive" as const } } : {}),
     };
+
+    if (search) {
+      where.name = { contains: search, mode: "insensitive" };
+    }
+    if (accountingMode && accountingMode !== "all") {
+      where.accountingMode = accountingMode;
+    }
+    if (isDefault && isDefault !== "all") {
+      where.isDefault = isDefault === "true";
+    }
 
     const [total, items] = await prisma.$transaction([
       prisma.chargeType.count({ where }),

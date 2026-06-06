@@ -188,6 +188,7 @@ export async function getRentSchedules(params?: {
   pageSize?: number;
   search?: string;
   status?: string;
+  month?: string;
   leaseId?: string;
 }): Promise<{ 
   success: boolean; 
@@ -206,11 +207,28 @@ export async function getRentSchedules(params?: {
     const pageSize = params?.pageSize || 10;
     const search = params?.search?.trim() || "";
     const statusFilter = params?.status && params.status !== "all" ? params.status : undefined;
+    const month = params?.month;
 
     const whereClause: Prisma.RentScheduleWhereInput = { organizationId: orgId };
 
     if (statusFilter) {
       whereClause.status = statusFilter as ScheduleStatus;
+    }
+    
+    if (month && month !== "all") {
+      const now = new Date();
+      let targetMonth = now.getMonth();
+      let targetYear = now.getFullYear();
+      
+      if (month === "last") {
+        targetMonth -= 1;
+      } else if (month === "next") {
+        targetMonth += 1;
+      }
+      
+      const startOfMonth = new Date(Date.UTC(targetYear, targetMonth, 1));
+      const endOfMonth = new Date(Date.UTC(targetYear, targetMonth + 1, 0, 23, 59, 59));
+      whereClause.dueDate = { gte: startOfMonth, lte: endOfMonth };
     }
 
     if (params?.leaseId) {
