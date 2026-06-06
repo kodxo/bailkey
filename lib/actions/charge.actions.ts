@@ -51,6 +51,7 @@ export async function createChargeTypeAction(
     });
 
     revalidatePath("/dashboard/gestion/charges");
+    revalidatePath("/dashboard/configuration/operations/types-charge");
     return { success: true };
   } catch (error) {
     console.error("Erreur createChargeTypeAction:", error);
@@ -100,6 +101,7 @@ export async function updateChargeTypeAction(
     });
 
     revalidatePath("/dashboard/gestion/charges");
+    revalidatePath("/dashboard/configuration/operations/types-charge");
     return { success: true };
   } catch (error) {
     console.error("Erreur updateChargeTypeAction:", error);
