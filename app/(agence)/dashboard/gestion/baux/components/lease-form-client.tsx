@@ -110,7 +110,7 @@ export function LeaseFormClient({
         </Button>
       </CardHeader>
       <CardContent className="pt-md max-h-[calc(100vh-220px)] overflow-y-auto">
-        {lease?.status === "DRAFT" && (
+        {lease?.status === LeaseStatus.DRAFT && (
           <div className="mb-4 p-3 bg-orange-50 border border-orange-200 rounded-md text-orange-800 text-sm flex items-center gap-2">
             <span className="material-symbols-outlined">warning</span>
             Ce bail est en brouillon. Passez-le au statut "Actif" pour générer les échéances automatiquement.
@@ -124,11 +124,11 @@ export function LeaseFormClient({
             const newStatus = formData.get("status") as string;
             const currentStatus = lease?.status;
 
-            if (newStatus === "ACTIVE" && currentStatus !== "ACTIVE") {
+            if (newStatus === LeaseStatus.ACTIVE && currentStatus !== LeaseStatus.ACTIVE) {
               if (!window.confirm("Vous êtes sur le point d'activer ce bail. Le système va générer automatiquement les échéances jusqu'à la fin de l'année (ou fin du contrat). Voulez-vous continuer ?")) {
                 e.preventDefault();
               }
-            } else if ((newStatus === "TERMINATED" || newStatus === "EXPIRED") && currentStatus === "ACTIVE") {
+            } else if ((newStatus === LeaseStatus.TERMINATED || newStatus === LeaseStatus.EXPIRED) && currentStatus === LeaseStatus.ACTIVE) {
                if (!window.confirm(`Vous allez passer le bail à ${newStatus}. Toutes les échéances futures non payées seront supprimées. Continuer ?`)) {
                   e.preventDefault();
                }
@@ -341,10 +341,10 @@ export function LeaseFormClient({
               name="status"
               defaultValue={defaultStatus}
               options={[
-                { label: "Brouillon", value: "DRAFT" },
-                { label: "Actif", value: "ACTIVE" },
-                { label: "Résilié", value: "TERMINATED" },
-                { label: "Expiré", value: "EXPIRED" },
+                { label: "Brouillon", value: LeaseStatus.DRAFT },
+                { label: "Actif", value: LeaseStatus.ACTIVE },
+                { label: "Résilié", value: LeaseStatus.TERMINATED },
+                { label: "Expiré", value: LeaseStatus.EXPIRED },
               ].filter(opt => !lease || lease.status === opt.value || VALID_STATUS_TRANSITIONS[lease.status as LeaseStatus]?.includes(opt.value as LeaseStatus))}
               wrapperClassName="w-full"
             />

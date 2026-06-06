@@ -3,6 +3,7 @@
 import React from "react";
 import { SearchPanel, SearchPanelSelect } from "@/components/ui/search-panel";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { LegalEntityType } from "@/lib/generated/prisma/enums";
 import { AdvancedFilterDialog } from "@/components/ui/advanced-filter-dialog";
 
 export function TenantsFilters(): React.JSX.Element {
@@ -45,8 +46,8 @@ export function TenantsFilters(): React.JSX.Element {
         onChange={(e) => updateFilters("type", e.target.value)}
         options={[
           { label: "Tous", value: "all" },
-          { label: "Particuliers", value: "INDIVIDUAL" },
-          { label: "Sociétés", value: "COMPANY" },
+          { label: "Particuliers", value: LegalEntityType.INDIVIDUAL },
+          { label: "Entreprises", value: LegalEntityType.COMPANY },
         ]}
       />
       <AdvancedFilterDialog

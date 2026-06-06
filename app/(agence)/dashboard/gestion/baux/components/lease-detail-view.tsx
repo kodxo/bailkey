@@ -8,6 +8,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { LeaseSchedulesList } from "@/components/schedules/lease-schedules-list";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { RelationalLink } from "@/components/ui/relational-link";
+import { LeaseStatus } from "@/lib/generated/prisma/enums";
 
 interface LeaseDetailViewProps {
   lease: LeaseDTO;
@@ -139,10 +140,10 @@ export function LeaseDetailView({ lease }: LeaseDetailViewProps): React.JSX.Elem
                 <div className="flex justify-between items-center bg-surface-container-lowest p-2.5 rounded-lg border border-outline-variant/40">
                   <span className="text-label-caps uppercase text-on-surface-variant">Statut</span>
                   <span>
-                    {lease.status === "ACTIVE" && <Badge variant="default">Actif</Badge>}
-                    {lease.status === "DRAFT" && <Badge variant="surface">Brouillon</Badge>}
-                    {lease.status === "TERMINATED" && <Badge variant="destructive">Résilié</Badge>}
-                    {lease.status === "EXPIRED" && <Badge variant="surface">Expiré</Badge>}
+                    {lease.status === LeaseStatus.ACTIVE && <Badge variant="default">Actif</Badge>}
+                    {lease.status === LeaseStatus.DRAFT && <Badge variant="surface">Brouillon</Badge>}
+                    {lease.status === LeaseStatus.TERMINATED && <Badge variant="destructive">Résilié</Badge>}
+                    {lease.status === LeaseStatus.EXPIRED && <Badge variant="surface">Expiré</Badge>}
                   </span>
                 </div>
 

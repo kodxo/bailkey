@@ -3,6 +3,7 @@
 import React from "react";
 import type { LeaseDTO } from "@/lib/types/property";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { LeaseStatus } from "@/lib/generated/prisma/enums";
 import {
   Table,
   TableHeader,
@@ -135,10 +136,10 @@ export function LeasesTableClient({
                     </div>
                   </TableCell>
                   <TableCell>
-                    {ls.status === "ACTIVE" && <Badge variant="default" dot>Actif</Badge>}
-                    {ls.status === "DRAFT" && <Badge variant="surface" dot>Brouillon</Badge>}
-                    {ls.status === "TERMINATED" && <Badge variant="destructive">Résilié</Badge>}
-                    {ls.status === "EXPIRED" && <Badge variant="surface">Expiré</Badge>}
+                    {ls.status === LeaseStatus.ACTIVE && <Badge variant="default" dot>Actif</Badge>}
+                    {ls.status === LeaseStatus.DRAFT && <Badge variant="surface" dot>Brouillon</Badge>}
+                    {ls.status === LeaseStatus.TERMINATED && <Badge variant="destructive">Résilié</Badge>}
+                    {ls.status === LeaseStatus.EXPIRED && <Badge variant="surface">Expiré</Badge>}
                   </TableCell>
                   <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                     <Button

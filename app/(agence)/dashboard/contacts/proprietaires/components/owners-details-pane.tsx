@@ -222,13 +222,14 @@ export function OwnersDetailsPane({
                 Type de propriétaire *
               </label>
               <Select
+                name="type"
                 value={formData.type}
                 onChange={(e) =>
                   setFormData({ ...formData, type: e.target.value as LegalEntityType })
                 }
                 options={[
-                  { label: "Personne Physique (Particulier)", value: "INDIVIDUAL" },
-                  { label: "Personne Morale (Entreprise/SCI)", value: "COMPANY" },
+                  { label: "Personne Physique (Particulier)", value: LegalEntityType.INDIVIDUAL },
+                  { label: "Personne Morale (Entreprise)", value: LegalEntityType.COMPANY },
                 ]}
                 wrapperClassName="border border-outline-variant rounded p-1"
               />

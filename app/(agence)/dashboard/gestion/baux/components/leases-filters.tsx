@@ -3,6 +3,7 @@
 import React from "react";
 import { SearchPanel, SearchPanelSelect } from "@/components/ui/search-panel";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { LeaseStatus, PaymentFrequency } from "@/lib/generated/prisma/enums";
 import { AdvancedFilterDialog } from "@/components/ui/advanced-filter-dialog";
 import { Select } from "@/components/ui/select";
 
@@ -60,10 +61,10 @@ export function LeasesFilters({ properties = [], tenants = [] }: LeasesFiltersPr
         onChange={(e) => updateFilters("status", e.target.value)}
         options={[
           { label: "Tous", value: "all" },
-          { label: "Brouillon", value: "DRAFT" },
-          { label: "Actif", value: "ACTIVE" },
-          { label: "Résilié", value: "TERMINATED" },
-          { label: "Expiré", value: "EXPIRED" },
+          { label: "Brouillon", value: LeaseStatus.DRAFT },
+          { label: "Actif", value: LeaseStatus.ACTIVE },
+          { label: "Résilié", value: LeaseStatus.TERMINATED },
+          { label: "Expiré", value: LeaseStatus.EXPIRED },
         ]}
       />
 
@@ -79,10 +80,10 @@ export function LeasesFilters({ properties = [], tenants = [] }: LeasesFiltersPr
               onChange={(e) => updateFilters("frequency", e.target.value)}
               options={[
                 { label: "Toutes", value: "all" },
-                { label: "Mensuelle", value: "MONTHLY" },
-                { label: "Trimestrielle", value: "QUARTERLY" },
-                { label: "Semestrielle", value: "SEMI_ANNUALLY" },
-                { label: "Annuelle", value: "ANNUALLY" },
+                { label: "Mensuelle", value: PaymentFrequency.MONTHLY },
+                { label: "Trimestrielle", value: PaymentFrequency.QUARTERLY },
+                { label: "Semestrielle", value: PaymentFrequency.SEMI_ANNUALLY },
+                { label: "Annuelle", value: PaymentFrequency.ANNUALLY },
               ]}
             />
           </div>

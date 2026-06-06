@@ -20,6 +20,7 @@ import { PropertiesSidebarServer } from "./components/properties-sidebar-server"
 import { PropertiesSidebarSkeleton } from "./components/properties-sidebar-skeleton";
 
 import { getOwners } from "@/lib/dal/owners";
+import { LegalEntityType } from "@/lib/generated/prisma/enums";
 
 export const dynamic = "force-dynamic";
 
@@ -62,7 +63,7 @@ export default async function DashboardPropertiesPage({
 
   const formattedOwners = (owners || []).map(o => ({
     id: o.id,
-    name: o.type === "INDIVIDUAL" ? `${o.firstName} ${o.lastName}` : (o.companyName || o.id)
+    name: o.type === LegalEntityType.INDIVIDUAL ? `${o.firstName} ${o.lastName}` : (o.companyName || o.id)
   }));
 
   return (

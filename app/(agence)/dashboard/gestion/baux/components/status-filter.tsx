@@ -4,6 +4,8 @@ import React from "react";
 import { Select } from "@/components/ui/select";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
+import { LeaseStatus } from "@/lib/generated/prisma/enums";
+
 export function StatusFilter(): React.JSX.Element {
   const router = useRouter();
   const pathname = usePathname();
@@ -27,10 +29,10 @@ export function StatusFilter(): React.JSX.Element {
       onChange={handleStatusChange}
       options={[
         { label: "Tous", value: "all" },
-        { label: "Brouillon", value: "DRAFT" },
-        { label: "Actif", value: "ACTIVE" },
-        { label: "Résilié", value: "TERMINATED" },
-        { label: "Expiré", value: "EXPIRED" },
+        { label: "Brouillon", value: LeaseStatus.DRAFT },
+        { label: "Actif", value: LeaseStatus.ACTIVE },
+        { label: "Résilié", value: LeaseStatus.TERMINATED },
+        { label: "Expiré", value: LeaseStatus.EXPIRED },
       ]}
       wrapperClassName="border-none py-sm"
     />

@@ -3,10 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { LegalEntityType } from "@/lib/generated/prisma/enums";
 
 export default function SignUpPage(): React.JSX.Element {
   const router = useRouter();
-  const [profileType, setProfileType] = useState<"INDIVIDUAL" | "COMPANY">("INDIVIDUAL");
+  const [profileType, setProfileType] = useState<LegalEntityType>(LegalEntityType.INDIVIDUAL);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent): void => {
@@ -70,8 +71,8 @@ export default function SignUpPage(): React.JSX.Element {
             <input
               type="radio"
               name="profile_type"
-              checked={profileType === "INDIVIDUAL"}
-              onChange={() => setProfileType("INDIVIDUAL")}
+              checked={profileType === LegalEntityType.INDIVIDUAL}
+              onChange={() => setProfileType(LegalEntityType.INDIVIDUAL)}
               className="peer hidden"
             />
             <div className="h-14 border border-outline-variant flex items-center justify-center cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary font-semibold text-xs tracking-wider uppercase">
@@ -82,8 +83,8 @@ export default function SignUpPage(): React.JSX.Element {
             <input
               type="radio"
               name="profile_type"
-              checked={profileType === "COMPANY"}
-              onChange={() => setProfileType("COMPANY")}
+              checked={profileType === LegalEntityType.COMPANY}
+              onChange={() => setProfileType(LegalEntityType.COMPANY)}
               className="peer hidden"
             />
             <div className="h-14 border border-outline-variant flex items-center justify-center cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary font-semibold text-xs tracking-wider uppercase">
