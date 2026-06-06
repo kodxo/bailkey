@@ -21,7 +21,9 @@ export interface ScheduleDisplayDTO {
   tenantName: string;
   propertyInfo: string;
   date: string;
-  amount: number;
+  amount: number; // This is totalAmount
+  rentAmount?: number;
+  chargesAmount?: number;
   remaining: number;
   status: "OVERDUE" | "PENDING" | "PARTIAL" | "PAID";
   isLocked: boolean;
@@ -54,6 +56,8 @@ export function serializeSchedule(s: ScheduleDTO): ScheduleDisplayDTO {
     propertyInfo: s.lease?.property?.designation || "Bien Inconnu",
     date: dateFormatter.format(new Date(s.dueDate)),
     amount,
+    rentAmount: Number(s.rentAmount),
+    chargesAmount: Number(s.chargesAmount),
     remaining: amount - amountPaid,
     status: s.status,
     isLocked: s.isLocked,

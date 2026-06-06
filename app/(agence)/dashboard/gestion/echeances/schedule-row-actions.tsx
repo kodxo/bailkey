@@ -30,6 +30,8 @@ export function ScheduleRowActions({
       propertyInfo: schedule.lease?.property ? schedule.lease.property.designation : "Bien Inconnu",
       date: new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(schedule.dueDate)),
       amount: amount,
+      rentAmount: typeof schedule.rentAmount === 'number' ? schedule.rentAmount : Number(schedule.rentAmount),
+      chargesAmount: typeof schedule.chargesAmount === 'number' ? schedule.chargesAmount : Number(schedule.chargesAmount),
       remaining: remaining,
       status: schedule.status,
       isLocked: schedule.isLocked,

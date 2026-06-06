@@ -113,9 +113,26 @@ export function ScheduleDetailsPane({
               Reste à payer :
             </span>
             <span className="font-bold text-h3 text-primary">
-              {selectedSchedule.remaining} €
+              {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XAF', maximumFractionDigits: 0 }).format(selectedSchedule.remaining)}
             </span>
           </div>
+          
+          <details className="mt-2 text-xs text-on-surface-variant group">
+            <summary className="cursor-pointer select-none hover:text-primary transition-colors mb-1 list-none flex items-center gap-1">
+              <span className="material-symbols-outlined text-[14px] group-open:rotate-90 transition-transform">chevron_right</span>
+              Voir le détail du montant attendu ({new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XAF', maximumFractionDigits: 0 }).format(selectedSchedule.amount)})
+            </summary>
+            <div className="pl-5 space-y-1 mt-2">
+              <div className="flex justify-between">
+                <span>Loyer de base :</span>
+                <span className="font-mono">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XAF', maximumFractionDigits: 0 }).format(selectedSchedule.rentAmount || 0)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Total des charges :</span>
+                <span className="font-mono">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XAF', maximumFractionDigits: 0 }).format(selectedSchedule.chargesAmount || 0)}</span>
+              </div>
+            </div>
+          </details>
           <div className="mt-3 pt-3 border-t border-outline-variant/30 flex justify-end">
              <Link href={`/dashboard/gestion/baux?selectedLeaseId=${selectedSchedule.leaseId}`}>
                <Button variant="outline" size="sm" className="w-full flex items-center justify-center gap-2">
@@ -140,7 +157,7 @@ export function ScheduleDetailsPane({
                 >
                   <div>
                     <div className="font-bold text-on-surface">
-                      {p.amount} €{" "}
+                      {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XAF', maximumFractionDigits: 0 }).format(p.amount)}{" "}
                       <span className="font-normal text-on-surface-variant text-xs">
                         le {p.date}
                       </span>
@@ -182,7 +199,7 @@ export function ScheduleDetailsPane({
               </label>
               <Input
                 name="amount"
-                placeholder="€"
+                placeholder="Montant (FCFA)"
                 type="number"
                 step="0.01"
                 defaultValue={selectedSchedule.remaining}

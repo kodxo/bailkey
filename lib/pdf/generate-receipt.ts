@@ -35,14 +35,18 @@ export function generateReceipt(schedule: ScheduleDisplayDTO) {
   doc.text("Résumé Financier", 14, 105);
 
   const totalPaid = schedule.amount - schedule.remaining;
+  const rentAmount = schedule.rentAmount || 0;
+  const chargesAmount = schedule.chargesAmount || 0;
   
   autoTable(doc, {
     startY: 110,
     head: [['Description', 'Montant']],
     body: [
-      ['Loyer total de la période', `${schedule.amount} EUR`],
-      ['Montant déjà encaissé', `${totalPaid} EUR`],
-      ['Reste à payer', `${schedule.remaining} EUR`],
+      ['Loyer de base', `${new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XAF', maximumFractionDigits: 0 }).format(rentAmount)}`],
+      ['Provision pour charges', `${new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XAF', maximumFractionDigits: 0 }).format(chargesAmount)}`],
+      ['Total Quittancé', `${new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XAF', maximumFractionDigits: 0 }).format(schedule.amount)}`],
+      ['Montant encaissé', `${new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XAF', maximumFractionDigits: 0 }).format(totalPaid)}`],
+      ['Reste à payer', `${new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XAF', maximumFractionDigits: 0 }).format(schedule.remaining)}`],
     ],
     theme: 'striped',
     headStyles: { fillColor: [41, 128, 185] },
@@ -59,7 +63,7 @@ export function generateReceipt(schedule: ScheduleDisplayDTO) {
       p.date,
       p.method,
       p.reference || "-",
-      `${p.amount} EUR`
+      `${new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XAF', maximumFractionDigits: 0 }).format(Number(p.amount))}`
     ]);
 
     autoTable(doc, {
