@@ -86,6 +86,7 @@ export async function generateRentSchedulesForLease(leaseId: string, providedOrg
 
       // Calcul du montant (Prorata)
       let amount = rentAmount;
+      let cAmount = totalFixedCharges;
       const periodStartDay = currentPeriodStart.getUTCDate();
       
       // Si la période ne commence pas le 1er jour du cycle OU se termine avant la fin normale du cycle
@@ -93,10 +94,12 @@ export async function generateRentSchedulesForLease(leaseId: string, providedOrg
         const totalDaysInCycle = Math.round((cycleEnd.getTime() - cycleStart.getTime()) / (1000 * 60 * 60 * 24)) + 1;
         const daysOccupied = Math.round((periodEnd.getTime() - currentPeriodStart.getTime()) / (1000 * 60 * 60 * 24)) + 1;
         amount = (rentAmount / totalDaysInCycle) * daysOccupied;
+        cAmount = (totalFixedCharges / totalDaysInCycle) * daysOccupied;
       }
 
       // Arrondir à l'entier supérieur ou décimales
       amount = Math.round(amount * 100) / 100;
+      cAmount = Math.round(cAmount * 100) / 100;
 
       schedulesToCreate.push({
         organizationId: orgId,
@@ -105,8 +108,8 @@ export async function generateRentSchedulesForLease(leaseId: string, providedOrg
         periodEnd: periodEnd,
         dueDate: dueDate,
         rentAmount: amount,
-        chargesAmount: totalFixedCharges,
-        totalAmount: amount + totalFixedCharges,
+        chargesAmount: cAmount,
+        totalAmount: amount + cAmount,
         amountPaid: 0,
         status: ScheduleStatus.PENDING,
         isLocked: false,
@@ -296,5 +299,36 @@ export async function deleteFuturePendingSchedules(leaseId: string): Promise<{ s
   } catch (error: unknown) {
     console.error("Erreur deleteFuturePendingSchedules:", error);
     return { success: false, error: "Erreur lors de la suppression des échéances futures" };
+  }
+}
+
+export async function updateRentScheduleAmounts(
+  id: string,
+  rentAmount: number,
+  chargesAmount: number
+): Promise<{ success: boolean; schedule?: any; error?: string }> {
+  try {
+    const auth = await getAuthContext();
+    const existing = await prisma.rentSchedule.findUnique({ where: { id } });
+    if (!existing || existing.organizationId !== auth.orgId) {
+      return { success: false, error: "Échéance introuvable ou non autorisée" };
+    }
+    if (existing.isLocked || existing.amountPaid.toNumber() > 0) {
+      return { success: false, error: "Impossible de modifier une échéance verrouillée ou avec un paiement" };
+    }
+
+    const updated = await prisma.rentSchedule.update({
+      where: { id },
+      data: {
+        rentAmount,
+        chargesAmount,
+        totalAmount: rentAmount + chargesAmount,
+      },
+    });
+
+    return { success: true, schedule: serializePrisma<ScheduleDTO>(updated) };
+  } catch (error) {
+    console.error("Erreur updateRentScheduleAmounts:", error);
+    return { success: false, error: "Erreur lors de la modification de l'échéance" };
   }
 }
