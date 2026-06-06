@@ -9,7 +9,6 @@ export const ownerSchema = z
     lastName: z.string().optional().nullable(),
     companyName: z.string().optional().nullable(),
     email: z
-      .string()
       .email("Email invalide")
       .optional()
       .or(z.literal(""))

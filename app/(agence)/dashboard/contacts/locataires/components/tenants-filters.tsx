@@ -11,20 +11,38 @@ export function TenantsFilters(): React.JSX.Element {
   const searchParams = useSearchParams();
 
   const currentType = searchParams.get("type") || "all";
+  const hasDocuments = searchParams.get("hasDocuments") || "all";
+  const hasActiveLeases = searchParams.get("hasActiveLeases") || "all";
+  const accountBalance = searchParams.get("accountBalance") || "all";
+
+  const updateFilters = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value && value !== "all") params.set(key, value);
+    else params.delete(key);
+    params.set("page", "1");
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const resetFilters = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("hasDocuments");
+    params.delete("hasActiveLeases");
+    params.delete("accountBalance");
+    params.set("page", "1");
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const activeFiltersCount = 
+    (hasDocuments !== "all" ? 1 : 0) + 
+    (hasActiveLeases !== "all" ? 1 : 0) + 
+    (accountBalance !== "all" ? 1 : 0);
 
   return (
     <SearchPanel searchPlaceholder="Rechercher par nom, email, téléphone...">
       <SearchPanelSelect
         label="Type:"
         value={currentType}
-        onChange={(e) => {
-          const val = e.target.value;
-          const params = new URLSearchParams(searchParams.toString());
-          if (val && val !== "all") params.set("type", val);
-          else params.delete("type");
-          params.set("page", "1");
-          router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-        }}
+        onChange={(e) => updateFilters("type", e.target.value)}
         options={[
           { label: "Tous", value: "all" },
           { label: "Particuliers", value: "INDIVIDUAL" },
@@ -32,31 +50,49 @@ export function TenantsFilters(): React.JSX.Element {
         ]}
       />
       <AdvancedFilterDialog
-        activeFiltersCount={searchParams.get("hasDocuments") ? 1 : 0}
-        onReset={() => {
-          const params = new URLSearchParams(searchParams.toString());
-          params.delete("hasDocuments");
-          params.set("page", "1");
-          router.push(`${pathname}?${params.toString()}`);
-        }}
+        activeFiltersCount={activeFiltersCount}
+        onReset={resetFilters}
       >
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-bold text-on-surface-variant">Documents fournis</label>
-          <select
-            className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            value={searchParams.get("hasDocuments") || "all"}
-            onChange={(e) => {
-              const params = new URLSearchParams(searchParams.toString());
-              if (e.target.value && e.target.value !== "all") params.set("hasDocuments", e.target.value);
-              else params.delete("hasDocuments");
-              params.set("page", "1");
-              router.push(`${pathname}?${params.toString()}`);
-            }}
-          >
-            <option value="all">Tous</option>
-            <option value="yes">Oui</option>
-            <option value="no">Non</option>
-          </select>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-bold text-on-surface-variant">Documents fournis</label>
+            <select
+              className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              value={hasDocuments}
+              onChange={(e) => updateFilters("hasDocuments", e.target.value)}
+            >
+              <option value="all">Tous</option>
+              <option value="yes">Oui</option>
+              <option value="no">Non</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-bold text-on-surface-variant">Baux Actifs</label>
+            <select
+              className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              value={hasActiveLeases}
+              onChange={(e) => updateFilters("hasActiveLeases", e.target.value)}
+            >
+              <option value="all">Tous</option>
+              <option value="yes">A des baux actifs</option>
+              <option value="no">Aucun bail actif</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-bold text-on-surface-variant">Solde Comptable</label>
+            <select
+              className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              value={accountBalance}
+              onChange={(e) => updateFilters("accountBalance", e.target.value)}
+            >
+              <option value="all">Tous</option>
+              <option value="debt">En dette</option>
+              <option value="credit">En crédit</option>
+              <option value="balanced">À jour</option>
+            </select>
+          </div>
         </div>
       </AdvancedFilterDialog>
     </SearchPanel>
