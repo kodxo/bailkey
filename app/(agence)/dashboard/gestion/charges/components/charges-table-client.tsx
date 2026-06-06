@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Plus, Settings2, Droplets } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -14,10 +15,18 @@ import {
 import { ChargeTypeDTO } from "@/lib/dal/charges";
 import { ChargeFormModal } from "./charge-form-modal";
 import { AccountingMode } from "@/lib/generated/prisma/enums";
+import { SearchPanel } from "@/components/ui/search-panel";
 
 export function ChargesTableClient({ charges }: { charges: ChargeTypeDTO[] }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCharge, setSelectedCharge] = useState<ChargeTypeDTO | null>(null);
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search")?.toLowerCase() || "";
+
+  const filteredCharges = charges.filter(c => 
+    !search || 
+    c.name.toLowerCase().includes(search)
+  );
 
   const handleEdit = (charge: ChargeTypeDTO) => {
     setSelectedCharge(charge);
@@ -31,22 +40,14 @@ export function ChargesTableClient({ charges }: { charges: ChargeTypeDTO[] }) {
 
   return (
     <div className="space-y-md">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold font-display text-on-background">
-            Types de Charges
-          </h2>
-          <p className="text-sm text-on-surface-variant">
-            Gérez le catalogue des charges applicables à vos baux.
-          </p>
-        </div>
+      <SearchPanel searchPlaceholder="Rechercher une charge...">
         <Button onClick={handleCreate} className="gap-2">
           <Plus className="w-4 h-4" />
           Nouvelle charge
         </Button>
-      </div>
+      </SearchPanel>
 
-      <div className="border border-outline-variant rounded-xl overflow-hidden bg-surface">
+      <div className="bg-surface border border-outline-variant/30 rounded-xl shadow-sm overflow-hidden flex flex-col">
         <Table>
           <TableHeader>
             <TableRow>
@@ -57,14 +58,14 @@ export function ChargesTableClient({ charges }: { charges: ChargeTypeDTO[] }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {charges.length === 0 ? (
+            {filteredCharges.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={4} className="h-32 text-center text-on-surface-variant">
                   Aucun type de charge configuré. Cliquez sur "Nouvelle charge" pour commencer.
                 </TableCell>
               </TableRow>
             ) : (
-              charges.map((charge) => (
+              filteredCharges.map((charge) => (
                 <TableRow
                   key={charge.id}
                   className="cursor-pointer hover:bg-surface-variant/50"
