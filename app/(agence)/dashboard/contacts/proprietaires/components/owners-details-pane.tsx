@@ -13,6 +13,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import Link from "next/link";
 
 interface OwnersDetailsPaneProps {
   selectedOwner: OwnerDTO | null;
@@ -416,6 +417,16 @@ export function OwnersDetailsPane({
                    <h4 className="font-bold text-on-surface">Activité</h4>
                    <Badge variant="secondary">{selectedOwner.propertiesCount} Bien(s) Immobiliers(s)</Badge>
                 </div>
+                {selectedOwner.propertiesCount > 0 && (
+                  <div className="flex justify-end pt-1">
+                    <Button asChild variant="outline" size="sm" className="gap-2">
+                      <Link href={`/dashboard/gestion/proprietes?ownerId=${selectedOwner.id}`}>
+                        <span className="material-symbols-outlined text-[16px]">apartment</span>
+                        Voir les propriétés
+                      </Link>
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           )

@@ -10,6 +10,7 @@ import { recordPaymentAction } from "@/lib/actions/payments";
 import { toast } from "sonner";
 import { generateReceipt } from "@/lib/pdf/generate-receipt";
 import Link from "next/link";
+import { RelationalLink } from "@/components/ui/relational-link";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
@@ -91,12 +92,22 @@ export function ScheduleDetailsPane({
       </CardHeader>
       <CardContent className="p-md flex flex-col gap-md">
         <div className="bg-surface-container-lowest border border-outline-variant/30 p-4 rounded-none mb-2">
-          <h4 className="font-bold text-on-surface">
-            {selectedSchedule.tenantName}
-          </h4>
-          <p className="text-body-sm text-on-surface-variant mb-2">
-            {selectedSchedule.propertyInfo}
-          </p>
+          <div className="flex items-center gap-2">
+            <h4 className="font-bold text-on-surface">
+              {selectedSchedule.tenantName}
+            </h4>
+            {selectedSchedule.tenantId && (
+              <RelationalLink entityType="tenant" entityId={selectedSchedule.tenantId} />
+            )}
+          </div>
+          <div className="flex items-center gap-2 mb-2">
+            <p className="text-body-sm text-on-surface-variant">
+              {selectedSchedule.propertyInfo}
+            </p>
+            {selectedSchedule.propertyId && (
+              <RelationalLink entityType="property" entityId={selectedSchedule.propertyId} />
+            )}
+          </div>
           <div className="flex justify-between items-end border-t border-outline-variant/30 pt-2 mt-2">
             <span className="text-body-sm text-on-surface-variant">
               Reste à payer :

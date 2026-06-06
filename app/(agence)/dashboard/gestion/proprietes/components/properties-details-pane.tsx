@@ -13,6 +13,7 @@ import { Select } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { RelationalFieldWrapper, RelationalLink } from "@/components/ui/relational-link";
 
 interface FormImageDTO {
   url: string;
@@ -542,17 +543,19 @@ export function PropertiesDetailsPane({
                       <label className="text-xs font-bold text-on-surface-variant">
                         Propriétaire
                       </label>
-                      <Select
-                        value={owner.ownerId}
-                        onChange={(e) =>
-                          handleUpdateOwnerShare(idx, e.target.value, owner.share)
-                        }
-                        options={allOwners.map((o) => ({
-                          label: `${o.firstName} ${o.lastName || ""} ${o.companyName || ""}`.trim(),
-                          value: o.id,
-                        }))}
-                        wrapperClassName="border border-outline-variant rounded p-1 w-full"
-                      />
+                      <RelationalFieldWrapper entityType="owner" entityId={owner.ownerId}>
+                        <Select
+                          value={owner.ownerId}
+                          onChange={(e) =>
+                            handleUpdateOwnerShare(idx, e.target.value, owner.share)
+                          }
+                          options={allOwners.map((o) => ({
+                            label: `${o.firstName} ${o.lastName || ""} ${o.companyName || ""}`.trim(),
+                            value: o.id,
+                          }))}
+                          wrapperClassName="border border-outline-variant rounded p-1 w-full"
+                        />
+                      </RelationalFieldWrapper>
                     </div>
                     <div className="w-24 flex flex-col gap-1">
                       <label className="text-xs font-bold text-on-surface-variant">
@@ -688,7 +691,10 @@ export function PropertiesDetailsPane({
                   <div className="flex flex-col gap-2 animate-fade-in">
                     {selectedProperty.owners.map((o) => (
                       <div key={o.id} className="bg-surface-container-lowest border border-outline-variant/40 p-sm rounded flex justify-between items-center">
-                        <span className="font-bold">{o.fullName}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold">{o.fullName}</span>
+                          <RelationalLink entityType="owner" entityId={o.id} />
+                        </div>
                         <Badge variant="secondary">{o.share}%</Badge>
                       </div>
                     ))}

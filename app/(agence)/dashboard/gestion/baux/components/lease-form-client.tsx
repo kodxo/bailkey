@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { RelationalFieldWrapper } from "@/components/ui/relational-link";
 
 interface LeaseFormClientProps {
   mode: "create" | "edit";
@@ -76,6 +77,9 @@ export function LeaseFormClient({
     : new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString().split("T")[0];
   const defaultStatus = lease?.status || LeaseStatus.ACTIVE;
 
+  const [selectedPropertyId, setSelectedPropertyId] = React.useState<string>(defaultPropertyId);
+  const [selectedTenantId, setSelectedTenantId] = React.useState<string>(defaultTenantId);
+
   return (
     <Card className="border-outline-variant/60 shadow-md rounded-xl overflow-hidden">
       <CardHeader className="bg-surface-container-low border-b border-outline-variant/40 pb-md flex flex-row items-center justify-between">
@@ -116,15 +120,18 @@ export function LeaseFormClient({
             <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
               Bien Immobilier *
             </label>
-            <Select
-              name="propertyId"
-              defaultValue={defaultPropertyId}
-              options={properties.map((p) => ({
-                label: `${p.designation} (${p.reference})`,
-                value: p.id,
-              }))}
-              wrapperClassName="w-full"
-            />
+            <RelationalFieldWrapper entityType="property" entityId={selectedPropertyId}>
+              <Select
+                name="propertyId"
+                defaultValue={defaultPropertyId}
+                onChange={(e) => setSelectedPropertyId(e.target.value)}
+                options={properties.map((p) => ({
+                  label: `${p.designation} (${p.reference})`,
+                  value: p.id,
+                }))}
+                wrapperClassName="w-full"
+              />
+            </RelationalFieldWrapper>
             {state?.errors?.propertyId && <p className="text-xs text-error">{state.errors.propertyId[0]}</p>}
           </div>
 
@@ -132,15 +139,18 @@ export function LeaseFormClient({
             <label className="text-label-caps uppercase text-on-surface-variant font-semibold">
               Locataire *
             </label>
-            <Select
-              name="tenantId"
-              defaultValue={defaultTenantId}
-              options={tenants.map((t) => ({
-                label: `${t.firstName || ""} ${t.lastName || ""} ${t.companyName ? `(${t.companyName})` : ""}`.trim() || t.id,
-                value: t.id,
-              }))}
-              wrapperClassName="w-full"
-            />
+            <RelationalFieldWrapper entityType="tenant" entityId={selectedTenantId}>
+              <Select
+                name="tenantId"
+                defaultValue={defaultTenantId}
+                onChange={(e) => setSelectedTenantId(e.target.value)}
+                options={tenants.map((t) => ({
+                  label: `${t.firstName || ""} ${t.lastName || ""} ${t.companyName ? `(${t.companyName})` : ""}`.trim() || t.id,
+                  value: t.id,
+                }))}
+                wrapperClassName="w-full"
+              />
+            </RelationalFieldWrapper>
             {state?.errors?.tenantId && <p className="text-xs text-error">{state.errors.tenantId[0]}</p>}
           </div>
 

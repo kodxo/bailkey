@@ -7,7 +7,7 @@ import ws from "ws";
 neonConfig.webSocketConstructor = ws;
 
 const adapter = new PrismaNeon({
-  connectionString: process.env.DIRECT_URL || process.env.DATABASE_URL!,
+  connectionString: process.env.DATABASE_URL!,
 });
 
 export const prisma = new PrismaClient({ adapter });

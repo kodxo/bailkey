@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PropertyFormClient } from "./property-form-client";
 import { PropertyEditButton } from "./property-edit-button";
+import { RelationalLink } from "@/components/ui/relational-link";
 
 export async function PropertiesSidebarServer({
   selectedId,
@@ -143,8 +144,11 @@ export async function PropertiesSidebarServer({
               </span>
               {selectedProperty.owners && selectedProperty.owners.length > 0 ? (
                 selectedProperty.owners.map((o) => (
-                  <div key={o.id} className="flex justify-between text-body-sm">
-                    <span className="font-semibold">{o.fullName}</span>
+                  <div key={o.id} className="flex justify-between items-center text-body-sm">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-semibold">{o.fullName}</span>
+                      <RelationalLink entityType="owner" entityId={o.id} />
+                    </div>
                     <span className="text-on-surface-variant">{o.share}%</span>
                   </div>
                 ))

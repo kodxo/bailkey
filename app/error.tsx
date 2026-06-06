@@ -4,8 +4,21 @@
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
-export default function Error() {
+import { useEffect } from "react";
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useEffect(() => {
+    console.error("Application error:", error);
+  }, [error]);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -40,25 +53,29 @@ export default function Error() {
             problème avec la précision requise.
           </p>
           <div className="flex flex-col sm:flex-row items-center gap-sm mt-lg">
-            <button className="bg-primary text-primary-foreground font-label-caps text-label-caps px-lg py-sm rounded-full shadow-[0_4px_12px_rgba(0,105,106,0.2)] hover:-translate-y-0.5 transition-transform duration-200 uppercase tracking-wider">
+            <Button onClick={() => reset()} className="shadow-[0_4px_12px_rgba(0,105,106,0.2)] hover:-translate-y-0.5 px-lg">
               Réessayer
-            </button>
-            <a
-              className="text-on-surface-variant font-label-caps text-label-caps px-lg py-sm rounded-full border border-outline-variant/50 hover:bg-surface-variant/30 transition-colors duration-200 uppercase tracking-wider flex items-center gap-xs"
-              href="#"
-            >
-              Support technique
-              <span className="material-symbols-outlined text-[16px]">
-                arrow_forward
-              </span>
-            </a>
+            </Button>
+            <Button asChild variant="outline" className="px-lg">
+              <a href="/support">
+                Support technique
+                <span className="material-symbols-outlined text-[16px]">
+                  arrow_forward
+                </span>
+              </a>
+            </Button>
           </div>
-          <div className="mt-xl text-center">
-            <span className="font-body-md text-body-md text-outline">
-              ID de référence:
-              <span className="font-mono text-sm opacity-70">
-                BK-ERR-948A2C
+          <div className="mt-xl text-center flex flex-col gap-1 items-center">
+            {error.digest && (
+              <span className="font-body-md text-body-md text-outline">
+                ID de référence:{" "}
+                <span className="font-mono text-sm opacity-70">
+                  {error.digest}
+                </span>
               </span>
+            )}
+            <span className="font-body-sm text-body-sm text-outline/50 font-mono mt-2 break-all">
+              {error.message}
             </span>
           </div>
         </div>

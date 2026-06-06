@@ -218,3 +218,21 @@ useEffect(() => {
   }
 }, [state]);
 ```
+
+---
+
+## 6. Navigation Relationnelle et Filtres Avancés
+
+### 6.1. Liens Inter-Entités (Relational Links)
+Pour faciliter la navigation transversale, tout champ de formulaire ou affichage textuel référençant une autre entité doit intégrer un lien relationnel.
+
+- **Composants d'UI :** Utilisez `RelationalLink` (bouton icône) et `RelationalFieldWrapper` (encapsuleur pour les Selects) depuis `@/components/ui/relational-link`.
+- **Mécanisme :** Ces composants mettent à jour l'URL (ex: `?selectedId=...` ou en ajoutant un paramètre relationnel spécifique comme `ownerId=...`) pour basculer la vue latérale ou filtrer le tableau principal, sans rechargement lourd.
+- **Paramètres croisés :** Lors de l'implémentation de relations (ex: "Voir les propriétés d'un propriétaire"), ajoutez un paramètre de filtre dédié (ex: `ownerId`) lu par le composant serveur de la page ciblée (ici `properties-table-server.tsx`).
+
+### 6.2. Filtres Avancés (AdvancedFilterDialog)
+Afin d'éviter de surcharger la barre de recherche (`SearchPanel`), regroupez les filtres secondaires (ex: type, propriétaire, plage de dates) dans le composant `AdvancedFilterDialog`.
+
+- **Utilisation :** Placez le composant dans le `SearchPanel`.
+- **État URL :** Comme tout composant client, la modale modifie directement les paramètres de recherche de l'URL (`searchParams.set()`) lors de l'application des filtres.
+- **Interface Globale :** L'indicateur dynamique (pastille numérique) renseigne l'utilisateur sur le nombre de filtres actifs cachés.

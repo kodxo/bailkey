@@ -16,6 +16,8 @@ export interface SchedulePaymentDTO {
 export interface ScheduleDisplayDTO {
   id: string;
   leaseId: string;
+  tenantId?: string;
+  propertyId?: string;
   tenantName: string;
   propertyInfo: string;
   date: string;
@@ -46,6 +48,8 @@ export function serializeSchedule(s: ScheduleDTO): ScheduleDisplayDTO {
   return {
     id: s.id,
     leaseId: s.leaseId,
+    tenantId: tenant?.id,
+    propertyId: s.lease?.property?.id,
     tenantName,
     propertyInfo: s.lease?.property?.designation || "Bien Inconnu",
     date: dateFormatter.format(new Date(s.dueDate)),

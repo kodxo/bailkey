@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { LeaseSchedulesList } from "@/components/schedules/lease-schedules-list";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { RelationalLink } from "@/components/ui/relational-link";
 
 interface LeaseDetailViewProps {
   lease: LeaseDTO;
@@ -70,15 +71,21 @@ export function LeaseDetailView({ lease }: LeaseDetailViewProps): React.JSX.Elem
           {activeTab === "details" ? (
             <>
               <div className="border-b border-outline-variant/40 pb-sm">
-                <span className="text-body-sm font-mono text-primary font-bold">
-                  {lease.propertyReference}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-body-sm font-mono text-primary font-bold">
+                    {lease.propertyReference}
+                  </span>
+                  <RelationalLink entityType="property" entityId={lease.propertyId} />
+                </div>
                 <h4 className="text-h2 font-bold text-on-surface mb-xs mt-1">
                   {lease.propertyDesignation}
                 </h4>
-                <p className="text-body-sm text-on-surface-variant font-medium bg-surface-container px-2.5 py-1 rounded-lg inline-block mt-1">
-                  Locataire : {lease.tenantFullName}
-                </p>
+                <div className="flex items-center gap-2 mt-1">
+                  <p className="text-body-sm text-on-surface-variant font-medium bg-surface-container px-2.5 py-1 rounded-lg inline-block">
+                    Locataire : {lease.tenantFullName}
+                  </p>
+                  <RelationalLink entityType="tenant" entityId={lease.tenantId} />
+                </div>
               </div>
 
               <div className="flex flex-col gap-2 text-left">

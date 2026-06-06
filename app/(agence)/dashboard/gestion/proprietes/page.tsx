@@ -37,6 +37,7 @@ export default async function DashboardPropertiesPage({
     type?: string;
     selectedId?: string;
     mode?: string;
+    ownerId?: string;
   }>;
 }): Promise<React.JSX.Element> {
   const params = await searchParams;
@@ -47,6 +48,7 @@ export default async function DashboardPropertiesPage({
   const type = params?.type || "all";
   const selectedId = params?.selectedId;
   const mode = params?.mode;
+  const ownerId = params?.ownerId;
 
   return (
     <DashboardPageContainer>
@@ -92,6 +94,7 @@ export default async function DashboardPropertiesPage({
                 search={search}
                 status={status}
                 type={type}
+                ownerId={ownerId}
               />
             </Suspense>
           </DashboardMain>

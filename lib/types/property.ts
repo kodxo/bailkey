@@ -145,11 +145,13 @@ export interface ScheduleDTO {
   payments?: PaymentDTO[];
   lease?: {
     tenant: {
+      id: string;
       firstName: string | null;
       lastName: string | null;
       companyName: string | null;
     };
     property: {
+      id: string;
       designation: string;
     };
   };

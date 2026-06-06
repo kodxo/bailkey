@@ -9,6 +9,7 @@ interface PropertiesTableServerProps {
   search: string;
   status: string;
   type: string;
+  ownerId?: string;
 }
 
 export async function PropertiesTableServer({
@@ -17,6 +18,7 @@ export async function PropertiesTableServer({
   search,
   status,
   type,
+  ownerId,
 }: PropertiesTableServerProps): Promise<React.JSX.Element> {
   const { properties, totalCount } = await getProperties({
     status: status !== "all" ? (status as PropertyStatus) : undefined,
@@ -26,7 +28,12 @@ export async function PropertiesTableServer({
 
   // Local filtering
   if (type !== "all") {
-    displayProperties = displayProperties.filter((p) => p.propertyType === type);
+    displayProperties = displayProperties.filter(
+      (p) => p.propertyType === type,
+    );
+  }
+  if (ownerId) {
+    displayProperties = displayProperties.filter((p) => p.owners?.some(o => o.id === ownerId));
   }
   if (search) {
     const s = search.toLowerCase();
@@ -34,15 +41,18 @@ export async function PropertiesTableServer({
       (p) =>
         p.designation.toLowerCase().includes(s) ||
         p.reference.toLowerCase().includes(s) ||
-        p.city.toLowerCase().includes(s)
+        p.city.toLowerCase().includes(s),
     );
   }
 
   const finalTotalCount = displayProperties.length;
-  
+
   // Pagination
   const startIndex = (page - 1) * pageSize;
-  displayProperties = displayProperties.slice(startIndex, startIndex + pageSize);
+  displayProperties = displayProperties.slice(
+    startIndex,
+    startIndex + pageSize,
+  );
 
   return (
     <PropertiesTableClient
