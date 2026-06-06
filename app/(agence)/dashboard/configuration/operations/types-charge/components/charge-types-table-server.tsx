@@ -12,6 +12,7 @@ import {
 import { TablePagination } from "@/components/ui/pagination";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import type { ChargeTypeDTO } from "@/lib/dal/charges";
 
 interface ChargeTypesTableServerProps {
@@ -63,9 +64,10 @@ export function ChargeTypesTableServer({
         <Table>
           <TableHeader className="sticky top-0 bg-surface-container z-10 shadow-sm">
             <TableRow>
-              <TableHead>Nom</TableHead>
-              <TableHead>Type Comptable</TableHead>
-              <TableHead>Options</TableHead>
+              <TableHead className="text-xs font-bold text-on-surface-variant uppercase">Nom de la charge</TableHead>
+              <TableHead className="text-xs font-bold text-on-surface-variant uppercase">Mode Comptable</TableHead>
+              <TableHead className="text-xs font-bold text-on-surface-variant uppercase">Options</TableHead>
+              <TableHead className="text-xs font-bold text-on-surface-variant uppercase text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -79,9 +81,8 @@ export function ChargeTypesTableServer({
               data.map((charge) => (
                 <TableRow
                   key={charge.id}
-                  onClick={() => handleRowClick(charge.id)}
-                  className={`cursor-pointer transition-colors ${
-                    selectedId === charge.id ? "bg-primary/5" : "hover:bg-surface-variant/50"
+                  className={`transition-colors ${
+                    selectedId === charge.id ? "bg-primary/5" : "hover:bg-surface-variant/20"
                   }`}
                 >
                   <TableCell className="font-medium text-on-surface">
@@ -103,12 +104,25 @@ export function ChargeTypesTableServer({
                   <TableCell>
                     <div className="flex gap-1">
                       {charge.isDefault && (
-                        <Badge variant="default" className="text-[10px] px-1.5 py-0">Par défaut</Badge>
+                        <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-primary text-primary flex gap-1 items-center">
+                          <span className="material-symbols-outlined text-[10px]">share</span>
+                          Par défaut
+                        </Badge>
                       )}
                       {charge.isUtility && (
-                        <Badge variant="secondary" className="text-[10px] px-1.5 py-0">Utilitaire</Badge>
+                        <Badge variant="outline" className="text-[10px] px-1.5 py-0">Utilitaire</Badge>
                       )}
                     </div>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleRowClick(charge.id)}
+                    >
+                      <span className="material-symbols-outlined text-sm mr-1 select-none" data-icon="edit">edit</span>
+                      ÉDITER
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))
