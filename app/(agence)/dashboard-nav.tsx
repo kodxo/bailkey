@@ -400,6 +400,13 @@ export function DashboardNav(): React.JSX.Element {
                 "/dashboard/configuration/operations/categories-recu"
               ),
             },
+            {
+              label: "Types de Charges",
+              href: "/dashboard/configuration/operations/types-charges",
+              isActive: pathname.startsWith(
+                "/dashboard/configuration/operations/types-charges"
+              ),
+            },
           ],
         },
         {

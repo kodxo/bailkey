@@ -1,4 +1,6 @@
 import React from "react";
+import { getChargeTypes } from "@/lib/dal/charges";
+import { ChargesTableClient } from "./components/charges-table-client";
 import { BreadcrumbNav } from "@/components/ui/breadcrumb";
 import {
   DashboardPageContainer,
@@ -11,10 +13,12 @@ import {
 } from "@/components/layout/dashboard-split-pane";
 
 export const metadata = {
-  title: "Lignes de Charges | Bailkey",
+  title: "Catalogue des Charges | Bailkey",
 };
 
-export default function LeaseChargesPage() {
+export default async function ChargesPage() {
+  const { data: charges = [] } = await getChargeTypes();
+
   return (
     <DashboardPageContainer>
       <DashboardPageHeader>
@@ -22,15 +26,15 @@ export default function LeaseChargesPage() {
           items={[
             { label: "Tableau de bord", href: "/dashboard" },
             { label: "Gestion Immobilière", href: "/dashboard/gestion" },
-            { label: "Lignes de Charges" },
+            { label: "Types de Charges" },
           ]}
         />
         <div>
           <h1 className="text-h1 text-on-background mb-xs font-bold font-display">
-            Lignes de Charges
+            Types de Charges
           </h1>
           <p className="text-body-lg font-body-lg text-on-surface-variant">
-            Visualisez et gérez les charges associées à vos différents baux.
+            Gérez le catalogue des charges applicables à vos baux.
           </p>
         </div>
       </DashboardPageHeader>
@@ -38,15 +42,7 @@ export default function LeaseChargesPage() {
       <DashboardLayout>
         <DashboardSplitGrid>
           <DashboardMain>
-            <div className="bg-surface border border-outline-variant/30 rounded-xl shadow-sm p-12 text-center">
-              <span className="material-symbols-outlined text-[48px] text-primary/30 mb-4">
-                construction
-              </span>
-              <h2 className="text-xl font-bold text-on-surface mb-2">Page en construction</h2>
-              <p className="text-on-surface-variant">
-                Le suivi des lignes de charges de baux sera disponible très prochainement.
-              </p>
-            </div>
+            <ChargesTableClient charges={charges} />
           </DashboardMain>
         </DashboardSplitGrid>
       </DashboardLayout>
